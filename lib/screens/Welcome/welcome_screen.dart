@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:gas_gameappstore/screens/HomePage/home_screen.dart';
+import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/screens/Welcome/Components/body.dart';
 import 'package:gas_gameappstore/size_config.dart';
 
