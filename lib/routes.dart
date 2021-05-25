@@ -13,5 +13,6 @@ final Map<String, WidgetBuilder> routes = {
   HomeScreen.routeName: (context) => HomeScreen(),
   LoginScreen.routeName: (context) => LoginScreen(),
   CartScreen.routeName: (context) => CartScreen(),
-  ProfileScreen.routeName: (context) => ProfileScreen(),
-};
+  ProfileScreen.routeName: (context) => ProfileScreent(),
+  SignupScreen.routeName: (context) => SignupScreent(),
+}
