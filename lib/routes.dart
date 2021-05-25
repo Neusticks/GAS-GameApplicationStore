@@ -13,11 +13,6 @@ final Map<String, WidgetBuilder> routes = {
   HomeScreen.routeName: (context) => HomeScreen(),
   LoginScreen.routeName: (context) => LoginScreen(),
   CartScreen.routeName: (context) => CartScreen(),
-<<<<<<< HEAD
-  ProfileScreen.routeName: (context) => ProfileScreent(),
-  SignupScreen.routeName: (context) => SignupScreent(),
-}
-=======
-
+  ProfileScreen.routeName: (context) => ProfileScreen(),
+  SignUpScreen.routeName: (context) => SignUpScreen(),
 };
->>>>>>> parent of ec94331 (commit)
