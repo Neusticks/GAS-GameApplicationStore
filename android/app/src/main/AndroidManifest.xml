@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="GAS_APP.gas_gameappstore">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="gas_gameappstore"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

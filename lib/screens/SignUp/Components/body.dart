@@ -1,5 +1,6 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/models/Users/services.dart';
 import 'package:gas_gameappstore/screens/SignUp/Components/background.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/components/have_an_account_check.dart';
@@ -10,6 +11,30 @@ import 'package:gas_gameappstore/screens/SignUp/Components/or_divider.dart';
 import 'package:gas_gameappstore/screens/SignUp/Components/social_icon.dart';
 
 class Body extends StatelessWidget {
+  final _emailController = TextEditingController();
+  final _userNameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  _createTable() {
+    Services.createTable();
+  }
+
+  _addUser() {
+    if (_emailController.text.isEmpty ||
+        _userNameController.text.isEmpty ||
+        _passwordController.text.isEmpty) {
+      print("Empty Fields");
+      return;
+    }
+    Services.addUser(_emailController.text, _userNameController.text,
+            _passwordController.text)
+        .then((result) {
+      if ('Success' == result) {
+        print("Success Register Account");
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -28,15 +53,30 @@ class Body extends StatelessWidget {
               height: size.height * 0.35,
             ),
             RoundedInputField(
-              hintText: "Your Email",
-              onChanged: (value) {},
+              controller: _emailController,
+              hintText: "Email",
+              onChanged: (value) {
+                _emailController.text = value;
+              },
+            ),
+            RoundedInputField(
+              controller: _userNameController,
+              hintText: "User Name",
+              onChanged: (value) {
+                _userNameController.text = value;
+              },
             ),
             RoundedPasswordField(
-              onChanged: (value) {},
+              controller: _passwordController,
+              onChanged: (value) {
+                _passwordController.text = value;
+              },
             ),
             RoundedButton(
               text: "SIGNUP",
-              press: () {},
+              press: () {
+                _addUser();
+              },
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
