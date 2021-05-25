@@ -4,10 +4,9 @@ import 'package:gas_gameappstore/constants.dart';
 
 class RoundedPasswordField extends StatelessWidget {
   final ValueChanged<String> onChanged;
-  final TextEditingController controller;
   const RoundedPasswordField({
     Key key,
-    this.onChanged, this.controller,
+    this.onChanged,
   }) : super(key: key);
 
   @override
