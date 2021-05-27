@@ -81,19 +81,16 @@ class _Body extends State<Body>{
                       password: _passwordController.text
                   );
                 } on FirebaseAuthException catch (e) {
-                  if (e.code == 'weak-password') {
-                    print('The password provided is too weak.');
-                  } else if (e.code == 'email-already-in-use') {
-                    print('The account already exists for that email.');
+                    if (e.code == 'weak-password') {
+                      print('The password provided is too weak.');
+                    } else if (e.code == 'email-already-in-use') {
+                      print('The account already exists for that email.');
+                    }
+                }catch (e) {
+                    print(e);
                   }
-                } catch (e) {
-                  print(e);
                 }
-
-              press: () {
-
-              },
-            ),
+              ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
               login: false,
