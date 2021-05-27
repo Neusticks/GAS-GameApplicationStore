@@ -1,11 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/screens/Welcome/welcome_screen.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/models/Users/services.dart';
 
-void main() {
-  
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Login/Components/background.dart';
 import 'package:gas_gameappstore/screens/SignUp/signup_screen.dart';
@@ -7,9 +9,9 @@ import 'package:gas_gameappstore/components/rounded_input_field.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:flutter_svg/svg.dart';
-import 'dart:convert';
+import 'package:gas_gameappstore/screens/Home/home_screen.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 
 class Body extends StatefulWidget {
   @override
@@ -19,42 +21,60 @@ class Body extends StatefulWidget {
 class _Body extends State<Body> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
 
-  Future loginUser(String userEmail, String userPassword) async {
-    var url = "http://10.0.2.2/UsersDB/User_Login.php";
-    var response = await http.post(Uri.parse(url), body: {
-      "UserEmail": userEmail,
-      "UserPassword": userPassword,
-    });
-      var loginData = json.encode(response.body);
 
-    if (loginData == null) {
-      setState(() {
-        print("Login Fail");
-      });
-    } else {
-      if (loginData == 'Success') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return HomeScreen();
-            },
-          ),
-        );
-      } else if (loginData == 'Admin') {
-        print("blom jadi");
-      }
-      // setState(() {
-      //   userEmail = loginData[0]['UserEmail'];
-      // });
-    }
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth = await googleUser
+        .authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+
+// Future<FirebaseUser> signInWithGoogle(SignInViewModel model) async {
+//   model.state = ViewState.Busy;
+//
+//   GoogleSignInAccount googleSignInAccount = await _googleSign.signIn();
+//
+//   GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+//
+//   AuthCredential credential = GoogleAuthProvider().getCredential(
+//     accessToken: googleSignInAuthentication.accessToken,
+//     idToken: googleSignInAuthentication.idToken,
+//   );
+//
+//   AuthResult authResult = await _auth.signInWithCredential(credential);
+//
+//   _user = authResult.user;
+//
+//   assert(!_user.isAnonymous);
+//
+//   assert(await _user.getIdToken() != null);
+//
+//   FirebaseUser currentUser = await _auth.currentUser();
+//
+//   assert(_user.uid == currentUser.uid);
+//
+//   model.state = ViewState.Idle;
+//   print("User Name: ${_user.displayName}");
+//   print("User Email ${_user.email}");
+
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Background(
       child: SingleChildScrollView(
         child: Column(
@@ -86,7 +106,9 @@ class _Body extends State<Body> {
             RoundedButton(
                 text: "LOGIN",
                 press: () {
-                  loginUser(_emailController.text, _passwordController.text);
+
+                  signInWithGoogle();
+
                 }),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(

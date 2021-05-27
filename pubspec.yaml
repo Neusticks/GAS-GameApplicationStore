@@ -28,6 +28,7 @@ dependencies:
   cloud_firestore: ^0.14.4
   enum_to_string: ^1.0.14
   firebase_auth: ^0.18.4+1
+  google_sign_in: ^4.4.4
   firebase_core: ^0.5.3
   firebase_storage: ^5.2.0
   flutter_launcher_icons: ^0.8.1
