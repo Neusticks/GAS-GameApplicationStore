@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "199335234856",
+    "project_id": "gas-gameapplicationstore",
+    "storage_bucket": "gas-gameapplicationstore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199335234856:android:61171b6746c0fad69a941d",
+        "android_client_info": {
+          "package_name": "GAS_APP.gas_gameappstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199335234856-4orhlnb4772pbm30kj6325pjaq23lq69.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "GAS_APP.gas_gameappstore",
+            "certificate_hash": "ea3d775ec1db165b06142c25ba0104c850e2d8c9"
+          }
+        },
+        {
+          "client_id": "199335234856-jih55a58vbel3b8ig9nd31eg4no6l7ek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8ObFqSUd1GgObKRvhSOvcmJvBH3PoIJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199335234856-jih55a58vbel3b8ig9nd31eg4no6l7ek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,7 +7,7 @@ import 'package:gas_gameappstore/components/have_an_account_check.dart';
 import 'package:gas_gameappstore/components/rounded_password_field.dart';
 import 'package:gas_gameappstore/components/rounded_input_field.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
-
+import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,6 +21,7 @@ class Body extends StatefulWidget {
 class _Body extends State<Body> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
 
   Future<UserCredential> signInWithGoogle() async {
     // Trigger the authentication flow
@@ -68,6 +69,7 @@ class _Body extends State<Body> {
 //   print("User Name: ${_user.displayName}");
 //   print("User Email ${_user.email}");
 
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery
@@ -89,16 +91,24 @@ class _Body extends State<Body> {
             ),
             SizedBox(height: size.height * 0.03),
             RoundedInputField(
-              hintText: "Your Email",
-              onChanged: (value) {},
+              controller: _emailController,
+              hintText: "Email",
+              onChanged: (value) {
+                _emailController.text = value;
+              },
             ),
             RoundedPasswordField(
-              onChanged: (value) {},
+              controller: _passwordController,
+              onChanged: (value) {
+                _passwordController.text = value;
+              },
             ),
             RoundedButton(
                 text: "LOGIN",
                 press: () {
+
                   signInWithGoogle();
+
                 }),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
