@@ -1,40 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gas_gameappstore/constants.dart';
+import 'package:gas_gameappstore/screens/SignUp/Components/body.dart';
+import 'package:gas_gameappstore/size_config.dart';
 
 class Background extends StatelessWidget {
-  final Widget child;
-  const Background({
-    Key key,
-    @required this.child,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height,
-      width: double.infinity,
+    return SafeArea(
       // Here i can use size.width but use double.infinity because both work as a same
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Image.asset(
-              "assets/images/signup_top.png",
-              width: size.width * 0.35,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Image.asset(
-              "assets/images/main_bottom.png",
-              width: size.width * 0.25,
-            ),
-          ),
-          child,
-        ],
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              SizedBox(height: SizeConfig.screenHeight * 0.02),
+              Text(
+                "Register Account",
+                style: headingStyle,
+              ),
+              Text(
+                "Complete your details or register \nwith social media",
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: getProportionScreenHeight(30)),
+              Body(),
+              SizedBox(height: getProportionScreenHeight(20)),
+              Text(
+                "By continuing your confirm that you agree \nwith our Terms and Conditions",
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: getProportionScreenHeight(20)),
+            ],),
+        )
       ),
     );
   }

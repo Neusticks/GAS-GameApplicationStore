@@ -115,7 +115,7 @@ class AuthentificationService {
       if (userCredential.user.emailVerified == false) {
         await userCredential.user.sendEmailVerification();
       }
-      await UserDatabaseHelper().createNewUser(uid);
+      await UserDatabaseHelper().createNewUser(uid, email, password);
       return true;
     } on MessagedFirebaseAuthException {
       rethrow;

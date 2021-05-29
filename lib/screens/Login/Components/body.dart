@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
@@ -11,11 +12,13 @@ import 'package:gas_gameappstore/components/rounded_password_field.dart';
 import 'package:gas_gameappstore/components/rounded_input_field.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:gas_gameappstore/size_config.dart';
 import 'dart:async';
 import 'package:logger/logger.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/signin_exceptions.dart';
+import 'package:gas_gameappstore/constants.dart';
+
 
 class Body extends StatefulWidget {
   @override
@@ -78,42 +81,31 @@ class _Body extends State<Body> {
     Size size = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "LOGIN",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/login.svg",
-              height: size.height * 0.35,
-            ),
-            SizedBox(height: size.height * 0.03),
-            buildEmailField(),
-            buildPasswordField(),
-            RoundedButton(
-                text: "LOGIN",
-                press: () {
-                  signInCallback();
-                }),
-            SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
+      child: Column(
+        children: [
+          buildEmailField(),
+          SizedBox(height: getProportionScreenHeight(30)),
+          buildPasswordField(),
+          SizedBox(height: getProportionScreenHeight(30)),
+          RoundedButton(
+              text: "Sign In",
               press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SignUpScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+                signInCallback();
+              }),
+          SizedBox(height: size.height * 0.03),
+          AlreadyHaveAnAccountCheck(
+            press: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return SignUpScreen();
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -125,6 +117,9 @@ class _Body extends State<Body> {
         hintText: "Enter Your Email",
         labelText: "Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/Mail.svg",
+        ),
       ),
       validator: (value) {
         if (_emailController.text.isEmpty) {
@@ -146,6 +141,9 @@ class _Body extends State<Body> {
         hintText: "Enter Your Password",
         labelText: "Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/Lock.svg",
+        ),
       ),
       validator: (value) {
         if (_passwordController.text.isEmpty) {

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/signup_exceptions.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
@@ -39,27 +40,20 @@ class _Body extends State<Body> {
     Size size = MediaQuery.of(context).size;
     return Form(
       key: _formKey,
-      child: SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: getProportionScreenWidth(screenPadding),
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "SIGNUP",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/signup.svg",
-              height: size.height * 0.35,
-            ),
+          children: [
             buildEmailField(),
             SizedBox(height: getProportionScreenHeight(30)),
             buildPasswordField(),
             SizedBox(height: getProportionScreenHeight(30)),
             buildConfirmPasswordField(),
-            SizedBox(height: getProportionScreenHeight(40)),
+            SizedBox(height: getProportionScreenHeight(30)),
             RoundedButton(
-              text: "SIGNUP",
+              text: "Sign Up",
               press: () {
                 signUpCallback();
               },
@@ -122,6 +116,9 @@ class _Body extends State<Body> {
         hintText: "Enter Your Email",
         labelText: "Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/Mail.svg",
+        ),
       ),
       validator: (value) {
         if (_emailController.text.isEmpty) {
@@ -143,6 +140,9 @@ class _Body extends State<Body> {
         hintText: "Enter Your Password",
         labelText: "Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/Lock.svg",
+        ),
       ),
       validator: (value) {
         if (_passwordController.text.isEmpty) {
@@ -164,6 +164,9 @@ class _Body extends State<Body> {
         hintText: "Re-enter your password",
         labelText: "Confirm Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/Lock.svg",
+        ),
       ),
       validator: (value) {
         if (_confirmPasswordController.text.isEmpty) {
