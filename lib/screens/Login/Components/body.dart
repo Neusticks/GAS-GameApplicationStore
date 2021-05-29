@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:gas_gameappstore/constants.dart';
+import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Login/Components/background.dart';
 import 'package:gas_gameappstore/screens/SignUp/signup_screen.dart';
@@ -9,9 +12,10 @@ import 'package:gas_gameappstore/components/rounded_input_field.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:gas_gameappstore/screens/Home/home_screen.dart';
-import 'package:flutter_svg/svg.dart';
 import 'dart:async';
+import 'package:logger/logger.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:gas_gameappstore/exceptions/firebaseauth/signin_exceptions.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -19,27 +23,27 @@ class Body extends StatefulWidget {
 }
 
 class _Body extends State<Body> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  // Future<UserCredential> signInWithGoogle() async {
+  //   // Trigger the authentication flow
+  //   final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-  Future<UserCredential> signInWithGoogle() async {
-    // Trigger the authentication flow
-    final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+  //   // Obtain the auth details from the request
+  //   final GoogleSignInAuthentication googleAuth =
+  //       await googleUser.authentication;
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication googleAuth = await googleUser
-        .authentication;
+  //   // Create a new credential
+  //   final credential = GoogleAuthProvider.credential(
+  //     accessToken: googleAuth.accessToken,
+  //     idToken: googleAuth.idToken,
+  //   );
 
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
-  }
+  //   // Once signed in, return the UserCredential
+  //   return await FirebaseAuth.instance.signInWithCredential(credential);
+  // }
 
 // Future<FirebaseUser> signInWithGoogle(SignInViewModel model) async {
 //   model.state = ViewState.Busy;
@@ -69,12 +73,9 @@ class _Body extends State<Body> {
 //   print("User Name: ${_user.displayName}");
 //   print("User Email ${_user.email}");
 
-
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Column(
@@ -90,25 +91,12 @@ class _Body extends State<Body> {
               height: size.height * 0.35,
             ),
             SizedBox(height: size.height * 0.03),
-            RoundedInputField(
-              controller: _emailController,
-              hintText: "Email",
-              onChanged: (value) {
-                _emailController.text = value;
-              },
-            ),
-            RoundedPasswordField(
-              controller: _passwordController,
-              onChanged: (value) {
-                _passwordController.text = value;
-              },
-            ),
+            buildEmailField(),
+            buildPasswordField(),
             RoundedButton(
                 text: "LOGIN",
                 press: () {
-
-                  signInWithGoogle();
-
+                  signInCallback();
                 }),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
@@ -127,5 +115,87 @@ class _Body extends State<Body> {
         ),
       ),
     );
+  }
+
+  Widget buildEmailField() {
+    return TextFormField(
+      controller: _emailController,
+      decoration: InputDecoration(
+        hintText: "Enter Your Email",
+        labelText: "Email",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+      validator: (value) {
+        if (_emailController.text.isEmpty) {
+          return kEmailNullError;
+        } else if (!emailValidatorRegExp.hasMatch(_emailController.text)) {
+          return kInvalidEmailError;
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget buildPasswordField() {
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: "Enter Your Password",
+        labelText: "Password",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+      validator: (value) {
+        if (_passwordController.text.isEmpty) {
+          return kPassNullError;
+        } else if (_passwordController.text.length < 8) {
+          return kShortPassError;
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Future<void> signInCallback() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      final AuthentificationService authService = AuthentificationService();
+      bool signInStatus = false;
+      String snackbarMessage;
+      try {
+        final signInFuture = authService.signIn(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+        signInFuture.then((value) => signInStatus = value);
+        signInStatus = await showDialog(
+          context: context,
+          builder: (context) {
+            return FutureProgressDialog(
+              signInFuture,
+              message: Text("Signing in to account"),
+            );
+          },
+        );
+        if (signInStatus == true) {
+          snackbarMessage = "Signed In Successfully";
+        } else {
+          throw FirebaseSignInAuthUnknownReasonFailure();
+        }
+      } on MessagedFirebaseAuthException catch (e) {
+        snackbarMessage = e.message;
+      } catch (e) {
+        snackbarMessage = e.toString();
+      } finally {
+        Logger().i(snackbarMessage);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(snackbarMessage),
+          ),
+        );
+      }
+    }
   }
 }
