@@ -4,13 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/signup_exceptions.dart';
-import 'package:gas_gameappstore/models/Users/services.dart';
-import 'package:gas_gameappstore/screens/SignUp/Components/background.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/components/have_an_account_check.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
-import 'package:gas_gameappstore/components/rounded_input_field.dart';
-import 'package:gas_gameappstore/components/rounded_password_field.dart';
 import 'package:gas_gameappstore/screens/SignUp/Components/or_divider.dart';
 import 'package:gas_gameappstore/screens/SignUp/Components/social_icon.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
@@ -69,10 +65,7 @@ class _Body extends State<Body> {
               },
               // press: () async {
               // try {
-              //   UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-              //       email: _emailController.text,
-              //       password: _passwordController.text
-              //   );
+              //   await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
               // } on FirebaseAuthException catch (e) {
               //     if (e.code == 'weak-password') {
               //       print('The password provided is too weak.');
@@ -81,7 +74,7 @@ class _Body extends State<Body> {
               //     }
               // }catch (e) {
               //     print(e);
-              // }
+              //   }
               // }
             ),
             SizedBox(height: size.height * 0.03),

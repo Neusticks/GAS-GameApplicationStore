@@ -1,9 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  @override
+  _Body createState() => _Body();
+}
+
+class _Body extends State<Body>{
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -34,10 +45,20 @@ class Body extends StatelessWidget {
           ProfileMenu(
             text: "Log Out",
             icon: "assets/icons/Log out.svg",
-            press: () {},
+            press: () {
+              _signOut();
+            },
           ),
         ],
       ),
+    );
+  }
+  Future<void> _signOut() async{
+    await FirebaseAuth.instance.signOut();
+    return Navigator.push(
+      context, MaterialPageRoute(builder: (context){
+        return LoginScreen();
+      })
     );
   }
 }
