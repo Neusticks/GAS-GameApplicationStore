@@ -1,4 +1,15 @@
-class User {
+import 'package:gas_gameappstore/models/base.dart';
+
+class User extends Model {
+  static const String USER_EMAIL_KEY = "userEmail";
+  static const String USER_NAME_KEY = "userName";
+  static const String USER_PASSWORD_KEY = "userPassword";
+  static const String USER_PHONE_NUMBER_KEY = "userPhoneNumber";
+  static const String USER_ADDRESS_KEY = "userAddress";
+  static const String USER_TRANSACTION_PIN_KEY = "userTransactionPIN";
+  static const String USER_ROLE_KEY = "userRole";
+  static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
+
   BigInt userId;
   String userEmail;
   String userName;
@@ -10,8 +21,7 @@ class User {
   String userProfilePicture;
 
   User(
-      {
-      this.userId,
+      {String id,
       this.userEmail,
       this.userName,
       this.userPassword,
@@ -19,21 +29,66 @@ class User {
       this.userAddress,
       this.userTransactionPIN,
       this.userRole,
-      this.userProfilePicture});
+      this.userProfilePicture})
+      : super(id);
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fronMap(Map<String, dynamic> map, {String id}) {
     return User(
-      userId: json['UserId'] as BigInt,
-      userEmail: json['UserEmail'] as String,
-      userName: json['UserName'] as String,
-      userPassword: json['UserPassword'] as String,
-      userPhoneNumber: json['UserPhoneNumber'] as String,
-      userAddress: json['UserAddress'] as String,
-      userTransactionPIN: json['UserTransactionPIN'] as String,
-      userRole: json['UserRole'] as String,
-      userProfilePicture: json['UserProfilePicture'] as String,
-    );
+        id: id,
+        userEmail: map[USER_EMAIL_KEY],
+        userName: map[USER_NAME_KEY],
+        userPassword: map[USER_PASSWORD_KEY],
+        userPhoneNumber: map[USER_PHONE_NUMBER_KEY],
+        userAddress: map[USER_ADDRESS_KEY],
+        userTransactionPIN: map[USER_TRANSACTION_PIN_KEY],
+        userRole: map[USER_ROLE_KEY],
+        userProfilePicture: map[USER_PROFILE_PICTURE_KEY]);
   }
+
+  @override
+  Map<String, dynamic> toMap() {
+    final map = <String, dynamic>{
+      USER_EMAIL_KEY: userEmail,
+      USER_NAME_KEY: userName,
+      USER_PASSWORD_KEY: userPassword,
+      USER_PHONE_NUMBER_KEY: userPhoneNumber,
+      USER_ADDRESS_KEY: userAddress,
+      USER_TRANSACTION_PIN_KEY: userTransactionPIN,
+      USER_ROLE_KEY: userRole,
+      USER_PROFILE_PICTURE_KEY: userProfilePicture,
+    };
+
+    return map;
+  }
+
+  @override
+  Map<String, dynamic> toUpdateMap() {
+    final map = <String, dynamic>{};
+    if (userEmail != null) map[USER_EMAIL_KEY] = userEmail;
+    if (userName != null) map[USER_NAME_KEY] = userName;
+    if (userPassword != null) map[USER_PASSWORD_KEY] = userPassword;
+    if (userPhoneNumber != null) map[USER_PHONE_NUMBER_KEY] = userPhoneNumber;
+    if (userAddress != null) map[USER_ADDRESS_KEY] = userAddress;
+    if (userTransactionPIN != null) map[USER_TRANSACTION_PIN_KEY] = userRole;
+    if (userRole != null) map[USER_ROLE_KEY] = userRole;
+    if (userProfilePicture != null) map[USER_PROFILE_PICTURE_KEY] = userProfilePicture;
+    return map;
+  }
+}
+
+  // factory User.fromJson(Map<String, dynamic> json) {
+  //   return User(
+  //     userId: json['UserId'] as BigInt,
+  //     userEmail: json['UserEmail'] as String,
+  //     userName: json['UserName'] as String,
+  //     userPassword: json['UserPassword'] as String,
+  //     userPhoneNumber: json['UserPhoneNumber'] as String,
+  //     userAddress: json['UserAddress'] as String,
+  //     userTransactionPIN: json['UserTransactionPIN'] as String,
+  //     userRole: json['UserRole'] as String,
+  //     userProfilePicture: json['UserProfilePicture'] as String,
+  //   );
+  // }
 
   // User.WithId(
   //     this._userId,
@@ -117,4 +172,3 @@ class User {
   //   this._userProfilePicture = o["userProfilePicture"];
   // }
 
-}

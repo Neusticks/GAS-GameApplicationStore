@@ -1,39 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gas_gameappstore/size_config.dart';
+import 'package:gas_gameappstore/screens/Login/Components/body.dart';
+import 'package:gas_gameappstore/constants.dart';
 
 class Background extends StatelessWidget {
-  final Widget child;
-  const Background({
-    Key key,
-    @required this.child,
-  }) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
-      height: size.height,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Image.asset(
-              "assets/images/main_top.png",
-              width: size.width * 0.35,
-            ),
+    return SafeArea(
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionScreenWidth(screenPadding)
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Image.asset(
-              "assets/images/login_bottom.png",
-              width: size.width * 0.4,
-            ),
-          ),
-          child,
-        ],
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                SizedBox(height: SizeConfig.screenHeight * 0.05),
+                Text(
+                  "Login",
+                  style: headingStyle,
+                ),
+                Text(
+                  "Sign in with your email and password",
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: SizeConfig.screenHeight * 0.05),
+                Body(),
+              ],),),),
       ),
     );
   }

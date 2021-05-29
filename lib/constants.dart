@@ -20,6 +20,8 @@ final headingStyle = TextStyle(
   height: 1.5,
 );
 
+const double screenPadding = 10;
+
 const defaultDuration = Duration(milliseconds: 250);
 
 // Form Error

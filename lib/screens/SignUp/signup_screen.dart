@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/SignUp/Components/background.dart';
 import 'package:gas_gameappstore/screens/SignUp/Components/body.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -6,7 +7,7 @@ class SignUpScreen extends StatelessWidget {
   static String routeName = "/signup";
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Body(),
+      body: Background(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:gas_gameappstore/models/Address.dart';
 // import 'package:gas_gameappstore/models/CartItem.dart';
 // import 'package:gas_gameappstore/models/OrderedProduct.dart';
@@ -10,10 +11,17 @@ class UserDatabaseHelper {
   // static const String ADDRESSES_COLLECTION_NAME = "addresses";
   // static const String CART_COLLECTION_NAME = "cart";
   // static const String ORDERED_PRODUCTS_COLLECTION_NAME = "ordered_products";
-
-  static const String PHONE_KEY = 'phone';
-  static const String DP_KEY = "display_picture";
-  static const String FAV_PRODUCTS_KEY = "favourite_products";
+  // static const String PHONE_KEY = 'phone';
+  // static const String DP_KEY = "display_picture";
+  // static const String FAV_PRODUCTS_KEY = "favourite_products";
+  static const String USER_EMAIL_KEY = "userEmail";
+  static const String USER_NAME_KEY = "userName";
+  static const String USER_PASSWORD_KEY = "userPassword";
+  static const String USER_PHONE_NUMBER_KEY = "userPhoneNumber";
+  static const String USER_ADDRESS_KEY = "userAddress";
+  static const String USER_TRANSACTION_PIN_KEY = "userTransactionPIN";
+  static const String USER_ROLE_KEY = "userRole";
+  static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
 
   UserDatabaseHelper._privateConstructor();
   static UserDatabaseHelper _instance =
@@ -29,11 +37,16 @@ class UserDatabaseHelper {
     return _firebaseFirestore;
   }
 
-  Future<void> createNewUser(String uid) async {
+  Future<void> createNewUser(String uid, String email, String password) async {
     await firestore.collection(USERS_COLLECTION_NAME).doc(uid).set({
-      DP_KEY: null,
-      PHONE_KEY: null,
-      FAV_PRODUCTS_KEY: List<String>(),
+     USER_EMAIL_KEY: email,
+     USER_NAME_KEY : null,
+     USER_PASSWORD_KEY: password,
+     USER_PHONE_NUMBER_KEY: null,
+     USER_ADDRESS_KEY: null,
+     USER_TRANSACTION_PIN_KEY: null,
+     USER_ROLE_KEY : 'Customer',
+     USER_PROFILE_PICTURE_KEY: null,
     });
   }
 
