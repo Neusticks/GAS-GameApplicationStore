@@ -76,7 +76,8 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Background(
+    return Form(
+      key: _formKey,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -195,6 +196,13 @@ class _Body extends State<Body> {
             content: Text(snackbarMessage),
           ),
         );
+        if(signInStatus == true){
+          Navigator.push(
+            context, MaterialPageRoute(builder: (context){
+              return HomeScreen();
+          })
+          );
+        }
       }
     }
   }
