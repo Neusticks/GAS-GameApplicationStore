@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gas_gameappstore/models/Cart.dart';
 // import 'package:gas_gameappstore/models/Address.dart';
 // import 'package:gas_gameappstore/models/CartItem.dart';
 // import 'package:gas_gameappstore/models/OrderedProduct.dart';
@@ -8,12 +9,10 @@ import 'package:gas_gameappstore/services/database/product_database_helper.dart'
 
 class UserDatabaseHelper {
   static const String USERS_COLLECTION_NAME = "users";
+  static const String CART_COLLECTION_NAME = "cart";
   // static const String ADDRESSES_COLLECTION_NAME = "addresses";
-  // static const String CART_COLLECTION_NAME = "cart";
   // static const String ORDERED_PRODUCTS_COLLECTION_NAME = "ordered_products";
   // static const String PHONE_KEY = 'phone';
-  // static const String DP_KEY = "display_picture";
-  // static const String FAV_PRODUCTS_KEY = "favourite_products";
   static const String USER_EMAIL_KEY = "userEmail";
   static const String USER_NAME_KEY = "userName";
   static const String USER_PASSWORD_KEY = "userPassword";
@@ -22,6 +21,8 @@ class UserDatabaseHelper {
   static const String USER_TRANSACTION_PIN_KEY = "userTransactionPIN";
   static const String USER_ROLE_KEY = "userRole";
   static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
+  static const String FAV_PRODUCTS_KEY = "favourite_products";
+  
 
   UserDatabaseHelper._privateConstructor();
   static UserDatabaseHelper _instance =
@@ -74,45 +75,45 @@ class UserDatabaseHelper {
   //   await docRef.delete();
   // }
 
-  // Future<bool> isProductFavourite(String productId) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final userDocSnapshot =
-  //   firestore.collection(USERS_COLLECTION_NAME).doc(uid);
-  //   final userDocData = (await userDocSnapshot.get()).data();
-  //   final favList = userDocData[FAV_PRODUCTS_KEY].cast<String>();
-  //   if (favList.contains(productId)) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  Future<bool> isProductFavourite(String productId) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocData = (await userDocSnapshot.get()).data();
+    final favList = userDocData[FAV_PRODUCTS_KEY].cast<String>();
+    if (favList.contains(productId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  // Future<List> get usersFavouriteProductsList async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final userDocSnapshot =
-  //   firestore.collection(USERS_COLLECTION_NAME).doc(uid);
-  //   final userDocData = (await userDocSnapshot.get()).data();
-  //   final favList = userDocData[FAV_PRODUCTS_KEY];
-  //   return favList;
-  // }
+  Future<List> get usersFavouriteProductsList async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    final userDocData = (await userDocSnapshot.get()).data();
+    final favList = userDocData[FAV_PRODUCTS_KEY];
+    return favList;
+  }
 
-  // Future<bool> switchProductFavouriteStatus(
-  //     String productId, bool newState) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final userDocSnapshot =
-  //   firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+  Future<bool> switchProductFavouriteStatus(
+      String productId, bool newState) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
 
-  //   if (newState == true) {
-  //     userDocSnapshot.update({
-  //       FAV_PRODUCTS_KEY: FieldValue.arrayUnion([productId])
-  //     });
-  //   } else {
-  //     userDocSnapshot.update({
-  //       FAV_PRODUCTS_KEY: FieldValue.arrayRemove([productId])
-  //     });
-  //   }
-  //   return true;
-  // }
+    if (newState == true) {
+      userDocSnapshot.update({
+        FAV_PRODUCTS_KEY: FieldValue.arrayUnion([productId])
+      });
+    } else {
+      userDocSnapshot.update({
+        FAV_PRODUCTS_KEY: FieldValue.arrayRemove([productId])
+      });
+    }
+    return true;
+  }
 
   // Future<List<String>> get addressesList async {
   //   String uid = AuthentificationService().currentUser.uid;
@@ -173,117 +174,117 @@ class UserDatabaseHelper {
   //   return true;
   // }
 
-  // Future<CartItem> getCartItemFromId(String id) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final cartCollectionRef = firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME);
-  //   final docRef = cartCollectionRef.doc(id);
-  //   final docSnapshot = await docRef.get();
-  //   final cartItem = CartItem.fromMap(docSnapshot.data(), id: docSnapshot.id);
-  //   return cartItem;
-  // }
+  Future<Cart> getCartItemFromId(String id) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final cartCollectionRef = firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME);
+    final docRef = cartCollectionRef.doc(id);
+    final docSnapshot = await docRef.get();
+    final cartItem = Cart.fromMap(docSnapshot.data(), id: docSnapshot.id);
+    return cartItem;
+  }
 
-  // Future<bool> addProductToCart(String productId) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final cartCollectionRef = firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME);
-  //   final docRef = cartCollectionRef.doc(productId);
-  //   final docSnapshot = await docRef.get();
-  //   bool alreadyPresent = docSnapshot.exists;
-  //   if (alreadyPresent == false) {
-  //     docRef.set(CartItem(itemCount: 1).toMap());
-  //   } else {
-  //     docRef.update({CartItem.ITEM_COUNT_KEY: FieldValue.increment(1)});
-  //   }
-  //   return true;
-  // }
+  Future<bool> addProductToCart(String productId) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final cartCollectionRef = firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME);
+    final docRef = cartCollectionRef.doc(productId);
+    final docSnapshot = await docRef.get();
+    bool alreadyPresent = docSnapshot.exists;
+    if (alreadyPresent == false) {
+      docRef.set(Cart(itemQty: 1).toMap());
+    } else {
+      docRef.update({Cart.ITEM_QTY_KEY: FieldValue.increment(1)});
+    }
+    return true;
+  }
 
-  // Future<List<String>> emptyCart() async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final cartItems = await firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME)
-  //       .get();
-  //   List orderedProductsUid = List<String>();
-  //   for (final doc in cartItems.docs) {
-  //     orderedProductsUid.add(doc.id);
-  //     await doc.reference.delete();
-  //   }
-  //   return orderedProductsUid;
-  // }
+  Future<List<String>> emptyCart() async {
+    String uid = AuthentificationService().currentUser.uid;
+    final cartItems = await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME)
+        .get();
+    List orderedProductsUid = List<String>();
+    for (final doc in cartItems.docs) {
+      orderedProductsUid.add(doc.id);
+      await doc.reference.delete();
+    }
+    return orderedProductsUid;
+  }
 
-  // Future<num> get cartTotal async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final cartItems = await firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME)
-  //       .get();
-  //   num total = 0.0;
-  //   for (final doc in cartItems.docs) {
-  //     num itemsCount = doc.data()[CartItem.ITEM_COUNT_KEY];
-  //     final product = await ProductDatabaseHelper().getProductWithID(doc.id);
-  //     total += (itemsCount * product.discountPrice);
-  //   }
-  //   return total;
-  // }
+  Future<num> get cartTotal async {
+    String uid = AuthentificationService().currentUser.uid;
+    final cartItems = await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME)
+        .get();
+    num total = 0.0;
+    for (final doc in cartItems.docs) {
+      num itemsCount = doc.data()[Cart.ITEM_QTY_KEY];
+      final product = await ProductDatabaseHelper().getProductWithID(doc.id);
+      total += (itemsCount * product.productDiscountPrice);
+    }
+    return total;
+  }
 
-  // Future<bool> removeProductFromCart(String cartItemID) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final cartCollectionReference = firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME);
-  //   await cartCollectionReference.doc(cartItemID).delete();
-  //   return true;
-  // }
+  Future<bool> removeProductFromCart(String cartItemID) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final cartCollectionReference = firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME);
+    await cartCollectionReference.doc(cartItemID).delete();
+    return true;
+  }
 
-  // Future<bool> increaseCartItemCount(String cartItemID) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final cartCollectionRef = firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME);
-  //   final docRef = cartCollectionRef.doc(cartItemID);
-  //   docRef.update({CartItem.ITEM_COUNT_KEY: FieldValue.increment(1)});
-  //   return true;
-  // }
+  Future<bool> increaseCartItemCount(String cartItemID) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final cartCollectionRef = firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME);
+    final docRef = cartCollectionRef.doc(cartItemID);
+    docRef.update({Cart.ITEM_QTY_KEY: FieldValue.increment(1)});
+    return true;
+  }
 
-  // Future<bool> decreaseCartItemCount(String cartItemID) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final cartCollectionRef = firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME);
-  //   final docRef = cartCollectionRef.doc(cartItemID);
-  //   final docSnapshot = await docRef.get();
-  //   int currentCount = docSnapshot.data()[CartItem.ITEM_COUNT_KEY];
-  //   if (currentCount <= 1) {
-  //     return removeProductFromCart(cartItemID);
-  //   } else {
-  //     docRef.update({CartItem.ITEM_COUNT_KEY: FieldValue.increment(-1)});
-  //   }
-  //   return true;
-  // }
+  Future<bool> decreaseCartItemCount(String cartItemID) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final cartCollectionRef = firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME);
+    final docRef = cartCollectionRef.doc(cartItemID);
+    final docSnapshot = await docRef.get();
+    int currentCount = docSnapshot.data()[Cart.ITEM_QTY_KEY];
+    if (currentCount <= 1) {
+      return removeProductFromCart(cartItemID);
+    } else {
+      docRef.update({Cart.ITEM_QTY_KEY: FieldValue.increment(-1)});
+    }
+    return true;
+  }
 
-  // Future<List<String>> get allCartItemsList async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final querySnapshot = await firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(CART_COLLECTION_NAME)
-  //       .get();
-  //   List itemsId = List<String>();
-  //   for (final item in querySnapshot.docs) {
-  //     itemsId.add(item.id);
-  //   }
-  //   return itemsId;
-  // }
+  Future<List<String>> get allCartItemsList async {
+    String uid = AuthentificationService().currentUser.uid;
+    final querySnapshot = await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(CART_COLLECTION_NAME)
+        .get();
+    List itemsId = List<String>();
+    for (final item in querySnapshot.docs) {
+      itemsId.add(item.id);
+    }
+    return itemsId;
+  }
 
   // Future<List<String>> get orderedProductsList async {
   //   String uid = AuthentificationService().currentUser.uid;
@@ -340,37 +341,37 @@ class UserDatabaseHelper {
   //   return true;
   // }
 
-  // String getPathForCurrentUserDisplayPicture() {
-  //   final String currentUserUid = AuthentificationService().currentUser.uid;
-  //   return "user/display_picture/$currentUserUid";
-  // }
+  String getPathForCurrentUserDisplayPicture() {
+    final String currentUserUid = AuthentificationService().currentUser.uid;
+    return "user/userProfilePicture/$currentUserUid";
+  }
 
-  // Future<bool> uploadDisplayPictureForCurrentUser(String url) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final userDocSnapshot =
-  //   firestore.collection(USERS_COLLECTION_NAME).doc(uid);
-  //   await userDocSnapshot.update(
-  //     {DP_KEY: url},
-  //   );
-  //   return true;
-  // }
+  Future<bool> uploadDisplayPictureForCurrentUser(String url) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    await userDocSnapshot.update(
+      {USER_PROFILE_PICTURE_KEY: url},
+    );
+    return true;
+  }
 
-  // Future<bool> removeDisplayPictureForCurrentUser() async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final userDocSnapshot =
-  //   firestore.collection(USERS_COLLECTION_NAME).doc(uid);
-  //   await userDocSnapshot.update(
-  //     {
-  //       DP_KEY: FieldValue.delete(),
-  //     },
-  //   );
-  //   return true;
-  // }
+  Future<bool> removeDisplayPictureForCurrentUser() async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    await userDocSnapshot.update(
+      {
+        USER_PROFILE_PICTURE_KEY: FieldValue.delete(),
+      },
+    );
+    return true;
+  }
 
-  // Future<String> get displayPictureForCurrentUser async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final userDocSnapshot =
-  //   await firestore.collection(USERS_COLLECTION_NAME).doc(uid).get();
-  //   return userDocSnapshot.data()[DP_KEY];
-  // }
+  Future<String> get displayPictureForCurrentUser async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+    await firestore.collection(USERS_COLLECTION_NAME).doc(uid).get();
+    return userDocSnapshot.data()[USER_PROFILE_PICTURE_KEY];
+  }
 }
