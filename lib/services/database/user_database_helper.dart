@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
 // import 'package:gas_gameappstore/models/Address.dart';
 // import 'package:gas_gameappstore/models/CartItem.dart';
-// import 'package:gas_gameappstore/models/OrderedProduct.dart';
+import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 
@@ -11,7 +11,7 @@ class UserDatabaseHelper {
   static const String USERS_COLLECTION_NAME = "users";
   static const String CART_COLLECTION_NAME = "cart";
   // static const String ADDRESSES_COLLECTION_NAME = "addresses";
-  // static const String ORDERED_PRODUCTS_COLLECTION_NAME = "ordered_products";
+  static const String ORDERED_PRODUCTS_COLLECTION_NAME = "ordered_products";
   // static const String PHONE_KEY = 'phone';
   static const String USER_EMAIL_KEY = "userEmail";
   static const String USER_NAME_KEY = "userName";
@@ -300,17 +300,17 @@ class UserDatabaseHelper {
   //   return orderedProductsId;
   // }
 
-  // Future<bool> addToMyOrders(List<OrderedProduct> orders) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final orderedProductsCollectionRef = firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(ORDERED_PRODUCTS_COLLECTION_NAME);
-  //   for (final order in orders) {
-  //     await orderedProductsCollectionRef.add(order.toMap());
-  //   }
-  //   return true;
-  // }
+  Future<bool> addToMyOrders(List<OrderedProduct> orders) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final orderedProductsCollectionRef = firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(ORDERED_PRODUCTS_COLLECTION_NAME);
+    for (final order in orders) {
+      await orderedProductsCollectionRef.add(order.toMap());
+    }
+    return true;
+  }
 
   // Future<OrderedProduct> getOrderedProductFromId(String id) async {
   //   String uid = AuthentificationService().currentUser.uid;
