@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
+import 'package:gas_gameappstore/screens/Profile/profile_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
@@ -197,7 +198,7 @@ class _Body extends State<Body> {
         if(signInStatus == true){
           Navigator.push(
             context, MaterialPageRoute(builder: (context){
-              return HomeScreen();
+              return ProfileScreen();
           })
           );
         }
