@@ -42,13 +42,13 @@ class ProductCard extends StatelessWidget {
                   ),
                   child: Hero(
                     tag: product.id.toString(),
-                    child: Image.asset(product.images[0]),
+                    child: Image.asset(product.productImages[0]),
                   ),
                 ),
               ),
               const SizedBox(height: 10),
               Text(
-                product.title,
+                product.productName,
                 style: TextStyle(color: Colors.black),
                 maxLines: 2,
               ),
@@ -56,7 +56,7 @@ class ProductCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "\$${product.price}",
+                    "\$${product.productOriginalPrice}",
                     style: TextStyle(
                       fontSize: getProportionScreenWidth(18),
                       fontWeight: FontWeight.w600,
