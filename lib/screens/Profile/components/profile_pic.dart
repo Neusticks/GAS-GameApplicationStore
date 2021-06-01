@@ -1,34 +1,58 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gas_gameappstore/components/rounded_button.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/image_picking_exceptions.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/local_file_handling_exception.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
+import 'package:gas_gameappstore/services/database/user_database_helper.dart';
+import 'package:gas_gameappstore/services/firestore_files_access/firestore_files_access_service.dart';
 import 'package:gas_gameappstore/services/local_files_access/local_files_access_service.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
-import '../provider_models/body_model.dart';
+import '../../../constants.dart';
+import 'package:gas_gameappstore/screens/Profile/provider_models/body_model.dart';
 
 class ProfilePic extends StatelessWidget {
+  
+
   const ProfilePic({
-    Key key,
+    Key key, this.bodyState,
   }) : super(key: key);
-
-  ChosenImage get bodyState => null;
-
+  final ChosenImage bodyState;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ChosenImage(),
       child: SizedBox(
-        height: 115,
-        width: 115,
+        height: 200,
+        width: 200,
         child: Stack(
           fit: StackFit.expand,
           overflow: Overflow.visible,
           children: [
-            CircleAvatar(
-              backgroundImage: AssetImage("assets/images/Profile Image.png"),
-            ),
+            StreamBuilder<User>(
+                stream: AuthentificationService().userChanges,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final user = snapshot.data;
+                    return buildUserProfilePicture(user);
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return Center(
+                      child: Icon(Icons.error),
+                    );
+                  }
+                }),
+            // CircleAvatar(
+            //   backgroundImage: AssetImage("assets/images/Profile Image.png"),
+            // ),
+
             Positioned(
               right: -16,
               bottom: 0,
@@ -44,8 +68,8 @@ class ProfilePic extends StatelessWidget {
                   onPressed: () {
                     getImageFromUser(context, bodyState);
                   },
-                  child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
-                ),
+                  child: SvgPicture.asset("assets/icons/Camera Icon.svg")
+                  ),
               ),
             )
           ],
@@ -82,5 +106,69 @@ class ProfilePic extends StatelessWidget {
       return;
     }
     bodyState.setChosenImage = File(path);
+  }
+
+  Widget buildUserProfilePicture(User user) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 1,
+      ),
+      child: FutureBuilder(
+        future: UserDatabaseHelper().displayPictureForCurrentUser,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return CircleAvatar(
+              backgroundImage: NetworkImage(snapshot.data),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            final error = snapshot.error;
+            Logger().w(error.toString());
+          } else if (snapshot.data == null) {
+            return CircleAvatar(
+              backgroundImage: AssetImage("assets/images/profileimage.png"),
+            );
+          }
+          return CircleAvatar(
+            backgroundColor: kTextColor,
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> uploadImageToFirestorage(
+      BuildContext context, ChosenImage bodyState) async {
+    bool uploadDisplayPictureStatus = false;
+    String snackbarMessage;
+    try {
+      final downloadUrl = await FirestoreFilesAccess().uploadFileToPath(
+          bodyState.chosenImage,
+          UserDatabaseHelper().getPathForCurrentUserDisplayPicture());
+
+      uploadDisplayPictureStatus = await UserDatabaseHelper()
+          .uploadDisplayPictureForCurrentUser(downloadUrl);
+      if (uploadDisplayPictureStatus == true) {
+        snackbarMessage = "Display Picture updated successfully";
+      } else {
+        throw "Coulnd't update display picture due to unknown reason";
+      }
+    } on FirebaseException catch (e) {
+      Logger().w("Firebase Exception: $e");
+      snackbarMessage = "Something went wrong";
+    } catch (e) {
+      Logger().w("Unknown Exception: $e");
+      snackbarMessage = "Something went wrong";
+    } finally {
+      Logger().i(snackbarMessage);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(snackbarMessage),
+        ),
+      );
+    }
   }
 }

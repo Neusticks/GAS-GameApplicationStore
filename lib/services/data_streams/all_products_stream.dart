@@ -1,10 +1,11 @@
-import 'package:gas_gameappstore/services/data_streams/data_stream.dart';
-import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 
-class CartItemStream extends DataStream<List<String>> {
+import 'package:gas_gameappstore/services/data_streams/data_stream.dart';
+import 'package:gas_gameappstore/services/database/product_database_helper.dart';
+
+class AllProductsStream extends DataStream<List<String>> {
   @override
   void reload() {
-    final allProductsFuture = UserDatabaseHelper().allCartItemsList;
+    final allProductsFuture = ProductDatabaseHelper().allProductsList;
     allProductsFuture.then((favProducts) {
       addData(favProducts);
     }).catchError((e) {

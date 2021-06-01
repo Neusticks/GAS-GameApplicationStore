@@ -9,7 +9,7 @@ import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/screens/Details/details_screen.dart';
-import 'package:gas_gameappstore/services/data_streams/cart_item_stream.dart';
+import 'package:gas_gameappstore/services/data_streams/cart_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:logger/logger.dart';
@@ -26,70 +26,68 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final CartItemStream cartItemStream = CartItemStream();
+  final CartStream cartStream = CartStream();
   PersistentBottomSheetController bottomSheetController;
 
   @override
   void initState() {
     super.initState();
-    cartItemStream.init();
+    cartStream.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    cartItemStream.dispose();
+    cartStream.dispose();
+  }
+
+  Future<void> refreshPage() {
+    cartStream.reload();
+    return Future<void>.value();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding:
-          EdgeInsets.symmetric(horizontal: getProportionScreenWidth(20)),
-      child: ListView.builder(
-        itemCount: demoCarts.length,
-        itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Dismissible(
-            key: Key(demoCarts[index].product.id.toString()),
-            direction: DismissDirection.endToStart,
-            onDismissed: (direction) {
-              setState(() {
-                demoCarts.removeAt(index);
-              });
-            },
-            background: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: Color(0xFFFFE6E6),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Row(
+    return SafeArea(
+      child: RefreshIndicator(
+        onRefresh: refreshPage,
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionScreenWidth(screenPadding)),
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
                 children: [
-                  Spacer(),
-                  SvgPicture.asset("assets/icons/Trash.svg"),
+                  SizedBox(height: getProportionScreenHeight(10)),
+                  Text(
+                    "Your Cart",
+                    style: headingStyle,
+                  ),
+                  SizedBox(height: getProportionScreenHeight(20)),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.75,
+                    child: Center(
+                      child: buildCartItemsList(),
+                    ),
+                  ),
                 ],
               ),
             ),
-            child: CartCard(cart: demoCarts[index]),
           ),
         ),
       ),
     );
   }
 
-  Future<void> refreshPage() {
-    cartItemStream.reload();
-    return Future<void>.value();
-  }
-
   Widget buildCartItemsList() {
     return StreamBuilder<List<String>>(
-      stream: cartItemStream.stream,
+      stream: cartStream.stream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<String> cartItemsId = snapshot.data;
-          if (cartItemsId.length == 0) {
+          List<String> itemsCartId = snapshot.data;
+          if (itemsCartId.length == 0) {
             return Center(
               child: NothingToShowContainer(
                 iconPath: "assets/icons/empty_cart.svg",
@@ -104,7 +102,7 @@ class _BodyState extends State<Body> {
                 text: "Proceed to Payment",
                 press: () {
                   bottomSheetController = Scaffold.of(context).showBottomSheet(
-                        (context) {
+                    (context) {
                       return CheckoutCard(
                         onCheckoutPressed: checkoutButtonCallback,
                       );
@@ -117,13 +115,13 @@ class _BodyState extends State<Body> {
                 child: ListView.builder(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   physics: BouncingScrollPhysics(),
-                  itemCount: cartItemsId.length,
+                  itemCount: itemsCartId.length,
                   itemBuilder: (context, index) {
-                    if (index >= cartItemsId.length) {
+                    if (index >= itemsCartId.length) {
                       return SizedBox(height: getProportionScreenHeight(80));
                     }
                     return buildCartItemDismissible(
-                        context, cartItemsId[index], index);
+                        context, itemsCartId[index], index);
                   },
                 ),
               ),
@@ -373,13 +371,13 @@ class _BodyState extends State<Body> {
             "${dateTime.day}-${dateTime.month}-${dateTime.year}";
         List<OrderedProduct> orderedProducts = orderedProductsUid
             .map((e) => OrderedProduct(null,
-            productUid: e, orderDate: formatedDateTime))
+                productUid: e, orderDate: formatedDateTime))
             .toList();
         bool addedProductsToMyProducts = false;
         String snackbarmMessage;
         try {
           addedProductsToMyProducts =
-          await UserDatabaseHelper().addToMyOrders(orderedProducts);
+              await UserDatabaseHelper().addToMyOrders(orderedProducts);
           if (addedProductsToMyProducts) {
             snackbarmMessage = "Products ordered Successfully";
           } else {
