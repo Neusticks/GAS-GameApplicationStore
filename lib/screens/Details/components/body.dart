@@ -10,8 +10,12 @@ import 'product_images.dart';
 
 class Body extends StatelessWidget {
   final Product product;
+  final String productId;
 
-  const Body({Key key, @required this.product}) : super(key: key);
+  const Body({
+    Key key, @required this.product,
+    @required this.productId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
