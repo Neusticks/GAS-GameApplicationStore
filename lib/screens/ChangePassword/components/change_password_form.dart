@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/constants.dart';
@@ -147,6 +148,9 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               newPassword: newPasswordController.text);
           if (updationStatus == true) {
             snackbarMessage = "Password changed successfully";
+            String uid = AuthentificationService().currentUser.uid;
+            final userDocSnapshot = FirebaseFirestore.instance.collection('users').doc(uid);
+            await userDocSnapshot.update({"userPassword" : newPasswordController.text});
           } else {
             throw FirebaseCredentialActionAuthUnknownReasonFailureException(
                 message:
