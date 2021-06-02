@@ -18,10 +18,9 @@ import '../../../constants.dart';
 import 'package:gas_gameappstore/screens/Profile/provider_models/body_model.dart';
 
 class ProfilePic extends StatelessWidget {
-  
-
   const ProfilePic({
-    Key key, this.bodyState,
+    Key key,
+    this.bodyState,
   }) : super(key: key);
   final ChosenImage bodyState;
   @override
@@ -48,13 +47,13 @@ class ProfilePic extends StatelessWidget {
                         //   getImageFromUser(context, bodyState);
                         // },
                       ),
-                       Positioned(
-                          right: 5,
-                          bottom: 5,
-                          child: SizedBox(
-                            height: 55,
-                            width: 55,
-                            child: FlatButton(
+                      Positioned(
+                        right: 5,
+                        bottom: 5,
+                        child: SizedBox(
+                          height: 55,
+                          width: 55,
+                          child: FlatButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(40),
                               side: BorderSide(color: Colors.white),
@@ -63,7 +62,8 @@ class ProfilePic extends StatelessWidget {
                             onPressed: () {
                               getImageFromUser(context, bodyState);
                             },
-                            child: SvgPicture.asset("assets/icons/Camera Icon.svg"),
+                            child: SvgPicture.asset(
+                                "assets/icons/Camera Icon.svg"),
                           ),
                         ),
                       )
@@ -136,7 +136,8 @@ class ProfilePic extends StatelessWidget {
         if (bodyState.chosenImage != null) {
           backImage = MemoryImage(bodyState.chosenImage.readAsBytesSync());
         } else if (snapshot.hasData && snapshot.data != null) {
-          final String url = snapshot.data.data()[UserDatabaseHelper.USER_PROFILE_PICTURE_KEY];
+          final String url =
+              snapshot.data.data()[UserDatabaseHelper.USER_PROFILE_PICTURE_KEY];
           if (url != null) backImage = NetworkImage(url);
         }
         return CircleAvatar(
@@ -176,6 +177,7 @@ class ProfilePic extends StatelessWidget {
       return;
     }
     bodyState.setChosenImage = File(path);
+    uploadImageToFirestorage(context, bodyState);
   }
 
   Widget buildUserProfilePicture(User user) {
