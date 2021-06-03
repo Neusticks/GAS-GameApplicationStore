@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 
 import '../constants.dart';
 import '../size_config.dart';
+import 'package:pecahan_rupiah/pecahan_rupiah.dart';
 
 class ProductShortDetailCard extends StatelessWidget {
   final String productId;
@@ -60,7 +61,7 @@ class ProductShortDetailCard extends StatelessWidget {
                       SizedBox(height: 10),
                       Text.rich(
                         TextSpan(
-                            text: "\₹${snapshot.data.productDiscountPrice}    ",
+                            text: Text(Pecahan.rupiah(value: snapshot.data.productDiscountPrice, withRp: true)).toString(),
                             style: TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.w700,
@@ -68,7 +69,7 @@ class ProductShortDetailCard extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                text: "\₹${snapshot.data.productOriginalPrice}",
+                                text: Text(Pecahan.rupiah(value: snapshot.data.productOriginalPrice, withRp: true)).toString(),
                                 style: TextStyle(
                                   color: kTextColor,
                                   decoration: TextDecoration.lineThrough,

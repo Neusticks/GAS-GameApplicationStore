@@ -1,5 +1,4 @@
 import 'package:enum_to_string/enum_to_string.dart';
-import 'package:flutter/material.dart';
 
 import 'Base.dart';
 
@@ -129,7 +128,7 @@ class Product extends Model {
   String productVariant;
   num productDiscountPrice;
   num productOriginalPrice;
-  num productRating;
+  String productRating;
   String productHighlights;
   String productDescription;
   String sellerId;
@@ -147,7 +146,7 @@ class Product extends Model {
     this.productType,
     this.productDiscountPrice,
     this.productOriginalPrice,
-    this.productRating = 0.0,
+    this.productRating,
     this.productHighlights,
     this.productDescription,
     this.sellerId,

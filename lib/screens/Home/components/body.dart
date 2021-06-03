@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gas_gameappstore/components/rounded_button.dart';
-import 'package:gas_gameappstore/screens/My_Product/my_product_screen.dart';
-import 'package:gas_gameappstore/screens/edit_product/edit_product_screen.dart';
 import 'package:gas_gameappstore/services/data_streams/all_products_stream.dart';
 import 'package:gas_gameappstore/services/data_streams/favourite_products_stream.dart';
 import 'package:gas_gameappstore/size_config.dart';
@@ -21,6 +18,12 @@ class _BodyState extends State<Body> {
   final FavouriteProductsStream favouriteProductsStream =
       FavouriteProductsStream();
   final AllProductsStream allProductsStream = AllProductsStream();
+
+  void initState(){
+    super.initState();
+    favouriteProductsStream.init();
+    allProductsStream.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +50,15 @@ class _BodyState extends State<Body> {
                 SpecialOffers(),
                 SizedBox(height: getProportionScreenWidth(30)),
                 // PopularProducts(),
-                ProductsSection(
+                SizedBox(
+                  height: SizeConfig.screenHeight * 0.8,
+                  child: PopularProducts(
                     sectionTitle: "Products You Like",
                     productsStreamController: allProductsStream,
-                emptyListMessage: "Add Product to Favourites",
-                onProductCardTapped: onProductCardTapped,
-                ),
+                    emptyListMessage: "Add Product to Favourites",
+                    onProductCardTapped: onProductCardTapped,
+                  ),
+                )
           ],
         ),
       ),
