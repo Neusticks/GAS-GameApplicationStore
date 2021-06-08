@@ -7,11 +7,6 @@ import 'package:gas_gameappstore/screens/ChangeDisplayName/change_display_name_s
 import 'package:gas_gameappstore/screens/ChangeEmail/change_email_screen.dart';
 
 import 'package:gas_gameappstore/screens/ChangePhoneNumber/change_phone_screen.dart';
-import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
-
-import 'package:gas_gameappstore/screens/ChangePassword/change_password_screen.dart';
-import 'package:gas_gameappstore/screens/ChangePhoneNumber/change_phone_screen.dart';
-import 'package:gas_gameappstore/screens/ManageAddresses/manage_addresses_screen.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -19,48 +14,83 @@ class Body extends StatefulWidget {
 }
 
 class _Body extends State<Body> {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  var userName, userDOB, userGender, userEmail, userPhoneNumber;
-
   @override
   Widget build(BuildContext context) {
-    String uid = AuthentificationService().currentUser.uid;
-    FirebaseFirestore.instance.collection("users").doc(uid).snapshots().listen((event) {
-      userName = event.get("userName").toString();
-      userEmail = event.get("userEmail").toString();
-      userPhoneNumber = event.get("userPhoneNumber").toString();
-    });
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var userName, userDOB, userGender, userEmail, userPhoneNumber;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
           SizedBox(height: 20),
-          AccountInformationMenu(
-            text: "Nama: \n${userName}",
-            press: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ChangeDisplayNameScreen();
-            })),
+          StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore.instance.collection("users").doc(auth.currentUser.uid).snapshots(),
+            builder: (context, snapshot){
+              if(snapshot.hasData && snapshot.data != null){
+                Map<String, dynamic> docFields = snapshot.data.data();
+                userName = docFields["userName"].toString();
+              }
+              return AccountInformationMenu(
+                text: "Nama: \n${userName}",
+                press: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ChangeDisplayNameScreen();
+                })),
+              );
+            }
           ),
-          SpecificInformationMenu(
-            text: "Tanggal Lahir: \ntanggallahir",
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance.collection("users").doc(auth.currentUser.uid).snapshots(),
+              builder: (context, snapshot){
+                if(snapshot.hasData && snapshot.data != null){
+                  Map<String, dynamic> docFields = snapshot.data.data();
+                  userDOB = docFields["userDOB"].toString();
+                }
+                return SpecificInformationMenu(
+                  text: "Date of Birth: \n${userDOB}",
+                );
+              }
           ),
-          SpecificInformationMenu(
-            text: "Jenis Kelamin: \njeniskelamin saya",
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance.collection("users").doc(auth.currentUser.uid).snapshots(),
+              builder: (context, snapshot){
+                if(snapshot.hasData && snapshot.data != null){
+                  Map<String, dynamic> docFields = snapshot.data.data();
+                  userGender = docFields["userGender"].toString();
+                }
+                return SpecificInformationMenu(
+                  text: "Gender: \n${userGender}",
+                );
+              }
           ),
-          AccountInformationMenu(
-            text: "Email: \n${userEmail}",
-            press: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ChangeEmailScreen();
-            })),
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance.collection("users").doc(auth.currentUser.uid).snapshots(),
+              builder: (context, snapshot){
+                if(snapshot.hasData && snapshot.data != null){
+                  Map<String, dynamic> docFields = snapshot.data.data();
+                  userEmail = docFields["userEmail"].toString();
+                }
+                return AccountInformationMenu(
+                  text: "Email: \n${userEmail}",
+                  press: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ChangeEmailScreen();
+                  })),
+                );
+              }
           ),
-          AccountInformationMenu(
-            text: "Phone Number: \n${userPhoneNumber}",
-            press: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ChangePhoneScreen();
-            })),
+          StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance.collection("users").doc(auth.currentUser.uid).snapshots(),
+              builder: (context, snapshot){
+                if(snapshot.hasData && snapshot.data != null){
+                  Map<String, dynamic> docFields = snapshot.data.data();
+                  userPhoneNumber = docFields["userPhoneNumber"].toString();
+                }
+                return AccountInformationMenu(
+                  text: "Phone Number: \n${userPhoneNumber}",
+                  press: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ChangePhoneScreen();
+                  })),
+                );
+              }
           ),
         ],
       ),

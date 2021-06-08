@@ -1,5 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
@@ -26,10 +24,11 @@ class _Body extends State<Body> {
   final _emailController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _genderController = TextEditingController();
+  final _DOBController = TextEditingController();
   final format = DateFormat("yyyy-MM-dd");
   final formKey = new GlobalKey<FormState>();
   DateTime _selectedDate;
-  TextEditingController _textEditingController = TextEditingController();
 
   @override
   void dispose() {
@@ -119,7 +118,7 @@ class _Body extends State<Body> {
 
   Widget buildGenderField() {
     return TextFormField(
-      controller: _emailController,
+      controller: _genderController,
       decoration: InputDecoration(
         hintText: "Enter Your Gender",
         labelText: "Gender",
@@ -129,10 +128,8 @@ class _Body extends State<Body> {
         ),
       ),
       validator: (value) {
-        if (_emailController.text.isEmpty) {
-          return kEmailNullError;
-        } else if (!emailValidatorRegExp.hasMatch(_emailController.text)) {
-          return kInvalidEmailError;
+        if (_genderController.text.isEmpty) {
+          return kGenderNullError;
         }
         return null;
       },
@@ -142,7 +139,7 @@ class _Body extends State<Body> {
 
   Widget buildDateField() {
     return TextFormField(
-      controller: _textEditingController,
+      controller: _DOBController,
       decoration: InputDecoration(
         hintText: "Enter Your DOB",
         labelText: "DOB",
@@ -181,10 +178,10 @@ class _Body extends State<Body> {
 
     if (newSelectedDate != null) {
       _selectedDate = newSelectedDate;
-      _textEditingController
+      _DOBController
         ..text = DateFormat.yMMMd().format(_selectedDate)
         ..selection = TextSelection.fromPosition(TextPosition(
-            offset: _textEditingController.text.length,
+            offset: _DOBController.text.length,
             affinity: TextAffinity.upstream));
     }
   }
@@ -273,6 +270,8 @@ class _Body extends State<Body> {
         final signUpFuture = authService.signUp(
           email: _emailController.text,
           password: _passwordController.text,
+          gender: _genderController.text,
+          dob: _DOBController.text,
         );
         signUpFuture.then((value) => signUpStatus = value);
         signUpStatus = await showDialog(

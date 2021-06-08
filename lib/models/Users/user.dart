@@ -4,6 +4,8 @@ class User extends Model {
   static const String USER_EMAIL_KEY = "userEmail";
   static const String USER_NAME_KEY = "userName";
   static const String USER_PASSWORD_KEY = "userPassword";
+  static const String USER_DATE_OF_BIRTH_KEY = "userDOB";
+  static const String USER_GENDER_KEY = "userGender";
   static const String USER_PHONE_NUMBER_KEY = "userPhoneNumber";
   static const String USER_ADDRESS_KEY = "userAddress";
   static const String USER_TRANSACTION_PIN_KEY = "userTransactionPIN";
@@ -14,6 +16,8 @@ class User extends Model {
   String userEmail;
   String userName;
   String userPassword;
+  String userDOB;
+  String userGender;
   String userPhoneNumber;
   String userAddress;
   String userTransactionPIN;
@@ -25,6 +29,8 @@ class User extends Model {
       this.userEmail,
       this.userName,
       this.userPassword,
+      this.userGender,
+      this.userDOB,
       this.userPhoneNumber,
       this.userAddress,
       this.userTransactionPIN,
@@ -32,12 +38,14 @@ class User extends Model {
       this.userProfilePicture})
       : super(id);
 
-  factory User.fronMap(Map<String, dynamic> map, {String id}) {
+  factory User.fromMap(Map<String, dynamic> map, {String id}) {
     return User(
         id: id,
         userEmail: map[USER_EMAIL_KEY],
         userName: map[USER_NAME_KEY],
         userPassword: map[USER_PASSWORD_KEY],
+        userDOB: map[USER_DATE_OF_BIRTH_KEY],
+        userGender: map[USER_GENDER_KEY],
         userPhoneNumber: map[USER_PHONE_NUMBER_KEY],
         userAddress: map[USER_ADDRESS_KEY],
         userTransactionPIN: map[USER_TRANSACTION_PIN_KEY],
@@ -51,6 +59,8 @@ class User extends Model {
       USER_EMAIL_KEY: userEmail,
       USER_NAME_KEY: userName,
       USER_PASSWORD_KEY: userPassword,
+      USER_DATE_OF_BIRTH_KEY : userDOB,
+      USER_GENDER_KEY : userGender,
       USER_PHONE_NUMBER_KEY: userPhoneNumber,
       USER_ADDRESS_KEY: userAddress,
       USER_TRANSACTION_PIN_KEY: userTransactionPIN,
@@ -67,6 +77,8 @@ class User extends Model {
     if (userEmail != null) map[USER_EMAIL_KEY] = userEmail;
     if (userName != null) map[USER_NAME_KEY] = userName;
     if (userPassword != null) map[USER_PASSWORD_KEY] = userPassword;
+    if (userDOB != null) map[USER_DATE_OF_BIRTH_KEY] = userDOB;
+    if (userGender != null) map[USER_GENDER_KEY] = userGender;
     if (userPhoneNumber != null) map[USER_PHONE_NUMBER_KEY] = userPhoneNumber;
     if (userAddress != null) map[USER_ADDRESS_KEY] = userAddress;
     if (userTransactionPIN != null) map[USER_TRANSACTION_PIN_KEY] = userRole;

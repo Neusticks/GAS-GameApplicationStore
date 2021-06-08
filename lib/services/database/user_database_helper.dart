@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gas_gameappstore/models/Address.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
@@ -14,13 +13,14 @@ class UserDatabaseHelper {
   static const String USER_EMAIL_KEY = "userEmail";
   static const String USER_NAME_KEY = "userName";
   static const String USER_PASSWORD_KEY = "userPassword";
+  static const String USER_DATE_OF_BIRTH_KEY = "userDOB";
+  static const String USER_GENDER_KEY = "userGender";
   static const String USER_PHONE_NUMBER_KEY = "userPhoneNumber";
   static const String USER_ADDRESS_KEY = "userAddress";
   static const String USER_TRANSACTION_PIN_KEY = "userTransactionPIN";
   static const String USER_ROLE_KEY = "userRole";
   static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
   static const String FAV_PRODUCTS_KEY = "favourite_products";
-  
 
   UserDatabaseHelper._privateConstructor();
   static UserDatabaseHelper _instance =
@@ -36,11 +36,13 @@ class UserDatabaseHelper {
     return _firebaseFirestore;
   }
 
-  Future<void> createNewUser(String uid, String email, String password) async {
+  Future<void> createNewUser(String uid, String email, String password, String gender, String dob) async {
     await firestore.collection(USERS_COLLECTION_NAME).doc(uid).set({
      USER_EMAIL_KEY: email,
      USER_NAME_KEY : null,
      USER_PASSWORD_KEY: password,
+     USER_DATE_OF_BIRTH_KEY : dob,
+     USER_GENDER_KEY : gender,
      USER_PHONE_NUMBER_KEY: null,
      USER_ADDRESS_KEY: null,
      USER_TRANSACTION_PIN_KEY: null,
@@ -120,6 +122,7 @@ class UserDatabaseHelper {
         .doc(uid)
         .collection(ADDRESSES_COLLECTION_NAME)
         .get();
+    // ignore: deprecated_member_use
     final addresses = List<String>();
     snapshot.docs.forEach((doc) {
       addresses.add(doc.id);
@@ -208,6 +211,7 @@ class UserDatabaseHelper {
         .doc(uid)
         .collection(CART_COLLECTION_NAME)
         .get();
+    // ignore: deprecated_member_use
     List orderedProductsUid = List<String>();
     for (final doc in cartItems.docs) {
       orderedProductsUid.add(doc.id);
@@ -277,6 +281,7 @@ class UserDatabaseHelper {
         .doc(uid)
         .collection(CART_COLLECTION_NAME)
         .get();
+    // ignore: deprecated_member_use
     List itemsId = List<String>();
     for (final item in querySnapshot.docs) {
       itemsId.add(item.id);
