@@ -107,7 +107,7 @@ class AuthentificationService {
     }
   }
 
-  Future<bool> signUp({String email, String password}) async {
+  Future<bool> signUp({String email, String password, String gender, String dob}) async {
     try {
       final UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -115,7 +115,7 @@ class AuthentificationService {
       if (userCredential.user.emailVerified == false) {
         await userCredential.user.sendEmailVerification();
       }
-      await UserDatabaseHelper().createNewUser(uid, email, password);
+      await UserDatabaseHelper().createNewUser(uid, email, password, gender, dob);
       return true;
     } on MessagedFirebaseAuthException {
       rethrow;
