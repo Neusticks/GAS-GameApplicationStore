@@ -331,13 +331,13 @@ class UserDatabaseHelper {
         .asStream();
   }
 
-  // Future<bool> updatePhoneForCurrentUser(String phone) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final userDocSnapshot =
-  //   firestore.collection(USERS_COLLECTION_NAME).doc(uid);
-  //   await userDocSnapshot.update({PHONE_KEY: phone});
-  //   return true;
-  // }
+  Future<bool> updatePhoneForCurrentUser(String phone) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+    await userDocSnapshot.update({USER_PHONE_NUMBER_KEY: phone});
+    return true;
+  }
 
   String getPathForCurrentUserDisplayPicture() {
     final String currentUserUid = AuthentificationService().currentUser.uid;

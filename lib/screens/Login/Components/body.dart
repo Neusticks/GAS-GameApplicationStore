@@ -198,7 +198,7 @@ class _Body extends State<Body> {
         if(signInStatus == true){
           Navigator.push(
             context, MaterialPageRoute(builder: (context){
-              return ProfileScreen();
+              return HomeScreen();
           })
           );
         }

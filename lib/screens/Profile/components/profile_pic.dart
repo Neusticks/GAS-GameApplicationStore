@@ -2,20 +2,17 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gas_gameappstore/components/rounded_button.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/image_picking_exceptions.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/local_file_handling_exception.dart';
-import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:gas_gameappstore/services/firestore_files_access/firestore_files_access_service.dart';
 import 'package:gas_gameappstore/services/local_files_access/local_files_access_service.dart';
-import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+
 import '../provider_models/body_model.dart';
 import '../../../size_config.dart';
 import '../../../constants.dart';
-import 'package:gas_gameappstore/screens/Profile/provider_models/body_model.dart';
 
 class ProfilePic extends StatelessWidget {
   
@@ -44,9 +41,6 @@ class ProfilePic extends StatelessWidget {
                       SizedBox(height: getProportionScreenHeight(0)),
                       GestureDetector(
                         child: buildDisplayPictureAvatar(context, bodyState),
-                        // onTap: () {
-                        //   getImageFromUser(context, bodyState);
-                        // },
                       ),
                        Positioned(
                           right: 5,
@@ -70,51 +64,6 @@ class ProfilePic extends StatelessWidget {
                     ],
                   );
                 },
-//       child: SizedBox(
-//         height: 200,
-//         width: 200,
-//         child: Stack(
-//           fit: StackFit.expand,
-//           overflow: Overflow.visible,
-//           children: [
-//             StreamBuilder<User>(
-//                 stream: AuthentificationService().userChanges,
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData) {
-//                     final user = snapshot.data;
-//                     return buildUserProfilePicture(user);
-//                   } else if (snapshot.connectionState ==
-//                       ConnectionState.waiting) {
-//                     return Center(
-//                       child: CircularProgressIndicator(),
-//                     );
-//                   } else {
-//                     return Center(
-//                       child: Icon(Icons.error),
-//                     );
-//                   }
-//                 }),
-//             // CircleAvatar(
-//             //   backgroundImage: AssetImage("assets/images/Profile Image.png"),
-//             // ),
-
-//             Positioned(
-//               right: -16,
-//               bottom: 0,
-//               child: SizedBox(
-//                 height: 46,
-//                 width: 46,
-//                 child: FlatButton(
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(50),
-//                     side: BorderSide(color: Colors.white),
-//                   ),
-//                   color: Color(0xFFF5F6F9),
-//                   onPressed: () {
-//                     getImageFromUser(context, bodyState);
-//                   },
-//                   child: SvgPicture.asset("assets/icons/Camera Icon.svg")
-//                   ),
               ),
             ),
           ),
