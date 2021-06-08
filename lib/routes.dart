@@ -1,6 +1,8 @@
 import 'dart:js';
 
 import 'package:flutter/widgets.dart';
+import 'package:gas_gameappstore/screens/ChangeDisplayName/change_display_name_screen.dart';
+import 'package:gas_gameappstore/screens/ChangeEmail/change_email_screen.dart';
 import 'package:gas_gameappstore/screens/ChangePassword/change_password_screen.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/ManageAddresses/manage_addresses_screen.dart';
@@ -10,6 +12,7 @@ import 'package:gas_gameappstore/screens/Cart/cart_screen.dart';
 import 'package:gas_gameappstore/screens/home/home_screen.dart';
 import 'package:gas_gameappstore/screens/profile/profile_screen.dart';
 import 'package:gas_gameappstore/screens/settings/profile_settings.dart';
+import 'package:gas_gameappstore/screens/accountinformation/account_information.dart';
 
 final Map<String, WidgetBuilder> routes = {
   SplashScreen.routeName: (context) => SplashScreen(),
@@ -21,4 +24,7 @@ final Map<String, WidgetBuilder> routes = {
   ProfileSettings.routeName: (context) => ProfileSettings(),
   ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
   ManageAddressesScreen.routeName: (context) => ManageAddressesScreen(),
+  AccountInformationScreen.routeName: (context) => AccountInformationScreen(),
+  ChangeDisplayNameScreen.routeName: (context) => ChangeDisplayNameScreen(),
+  ChangeEmailScreen.routeName: (context) => ChangeEmailScreen(),
 };

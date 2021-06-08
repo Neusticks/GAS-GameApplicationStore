@@ -9,6 +9,7 @@ import 'package:gas_gameappstore/services/firestore_files_access/firestore_files
 import 'package:gas_gameappstore/services/local_files_access/local_files_access_service.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
+
 import '../provider_models/body_model.dart';
 import '../../../size_config.dart';
 import '../../../constants.dart';
@@ -39,9 +40,6 @@ class ProfilePic extends StatelessWidget {
                       SizedBox(height: getProportionScreenHeight(0)),
                       GestureDetector(
                         child: buildDisplayPictureAvatar(context, bodyState),
-                        // onTap: () {
-                        //   getImageFromUser(context, bodyState);
-                        // },
                       ),
                       Positioned(
                         right: 5,
@@ -66,51 +64,6 @@ class ProfilePic extends StatelessWidget {
                     ],
                   );
                 },
-//       child: SizedBox(
-//         height: 200,
-//         width: 200,
-//         child: Stack(
-//           fit: StackFit.expand,
-//           overflow: Overflow.visible,
-//           children: [
-//             StreamBuilder<User>(
-//                 stream: AuthentificationService().userChanges,
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasData) {
-//                     final user = snapshot.data;
-//                     return buildUserProfilePicture(user);
-//                   } else if (snapshot.connectionState ==
-//                       ConnectionState.waiting) {
-//                     return Center(
-//                       child: CircularProgressIndicator(),
-//                     );
-//                   } else {
-//                     return Center(
-//                       child: Icon(Icons.error),
-//                     );
-//                   }
-//                 }),
-//             // CircleAvatar(
-//             //   backgroundImage: AssetImage("assets/images/Profile Image.png"),
-//             // ),
-
-//             Positioned(
-//               right: -16,
-//               bottom: 0,
-//               child: SizedBox(
-//                 height: 46,
-//                 width: 46,
-//                 child: FlatButton(
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(50),
-//                     side: BorderSide(color: Colors.white),
-//                   ),
-//                   color: Color(0xFFF5F6F9),
-//                   onPressed: () {
-//                     getImageFromUser(context, bodyState);
-//                   },
-//                   child: SvgPicture.asset("assets/icons/Camera Icon.svg")
-//                   ),
               ),
             ),
           ),
