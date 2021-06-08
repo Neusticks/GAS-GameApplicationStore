@@ -147,10 +147,10 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
           updationStatus = await authService.changePasswordForCurrentUser(
               newPassword: newPasswordController.text);
           if (updationStatus == true) {
-            snackbarMessage = "Password changed successfully";
             String uid = AuthentificationService().currentUser.uid;
             final userDocSnapshot = FirebaseFirestore.instance.collection('users').doc(uid);
             await userDocSnapshot.update({"userPassword" : newPasswordController.text});
+            snackbarMessage = "Password changed successfully";
           } else {
             throw FirebaseCredentialActionAuthUnknownReasonFailureException(
                 message:

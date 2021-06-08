@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -115,6 +116,9 @@ class _ChangeDisplayNameFormState extends State<ChangeDisplayNameForm> {
       _formKey.currentState.save();
       await AuthentificationService()
           .updateCurrentUserDisplayName(newDisplayNameController.text);
+      String uid = AuthentificationService().currentUser.uid;
+      final userDocSnapshot = FirebaseFirestore.instance.collection('users').doc(uid);
+      await userDocSnapshot.update({"userName" : newDisplayNameController.text});
       print("Display Name updated to ${newDisplayNameController.text} ...");
     }
   }
