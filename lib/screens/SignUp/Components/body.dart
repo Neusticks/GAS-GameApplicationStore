@@ -14,6 +14,7 @@ import 'package:gas_gameappstore/services/authentification/authentification_serv
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:logger/logger.dart';
 import '../../../constants.dart';
+import 'package:intl/intl.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -22,10 +23,13 @@ class Body extends StatefulWidget {
 
 class _Body extends State<Body> {
   final _formKey = GlobalKey<FormState>();
-
   final _emailController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
+  final format = DateFormat("yyyy-MM-dd");
+  final formKey = new GlobalKey<FormState>();
+  DateTime _selectedDate;
+  TextEditingController _textEditingController = TextEditingController();
 
   @override
   void dispose() {
@@ -51,6 +55,10 @@ class _Body extends State<Body> {
             buildPasswordField(),
             SizedBox(height: getProportionScreenHeight(30)),
             buildConfirmPasswordField(),
+            SizedBox(height: getProportionScreenHeight(30)),
+            buildDateField(),
+            SizedBox(height: getProportionScreenHeight(30)),
+            buildGenderField(),
             SizedBox(height: getProportionScreenHeight(30)),
             RoundedButton(
               text: "Sign Up",
@@ -107,6 +115,78 @@ class _Body extends State<Body> {
         ),
       ),
     );
+  }
+
+  Widget buildGenderField() {
+    return TextFormField(
+      controller: _emailController,
+      decoration: InputDecoration(
+        hintText: "Enter Your Gender",
+        labelText: "Gender",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/Mail.svg",
+        ),
+      ),
+      validator: (value) {
+        if (_emailController.text.isEmpty) {
+          return kEmailNullError;
+        } else if (!emailValidatorRegExp.hasMatch(_emailController.text)) {
+          return kInvalidEmailError;
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget buildDateField() {
+    return TextFormField(
+      controller: _textEditingController,
+      decoration: InputDecoration(
+        hintText: "Enter Your DOB",
+        labelText: "DOB",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/Mail.svg",
+        ),
+      ),
+      onTap: () {
+        _selectDate(context);
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+    );
+  }
+
+  _selectDate(BuildContext context) async {
+    DateTime newSelectedDate = await showDatePicker(
+        context: context,
+        initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2040),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: ColorScheme.dark(
+                primary: Colors.orangeAccent[700],
+                onPrimary: Colors.white,
+                surface: Colors.orangeAccent[700],
+                onSurface: Colors.black,
+              ),
+              dialogBackgroundColor: Colors.white,
+            ),
+            child: child,
+          );
+        });
+
+    if (newSelectedDate != null) {
+      _selectedDate = newSelectedDate;
+      _textEditingController
+        ..text = DateFormat.yMMMd().format(_selectedDate)
+        ..selection = TextSelection.fromPosition(TextPosition(
+            offset: _textEditingController.text.length,
+            affinity: TextAffinity.upstream));
+    }
   }
 
   Widget buildEmailField() {
