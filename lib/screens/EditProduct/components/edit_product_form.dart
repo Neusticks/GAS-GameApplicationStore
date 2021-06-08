@@ -9,7 +9,7 @@ import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/image_picking_exceptions.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/local_file_handling_exception.dart';
 import 'package:gas_gameappstore/models/Product.dart';
-import 'package:gas_gameappstore/screens/edit_product/provider_models/ProductDetails.dart';
+import 'package:gas_gameappstore/screens/EditProduct/provider_models/ProductDetails.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/firestore_files_access/firestore_files_access_service.dart';
 import 'package:gas_gameappstore/services/local_files_access/local_files_access_service.dart';

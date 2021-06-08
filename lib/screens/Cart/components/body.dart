@@ -8,7 +8,7 @@ import 'package:gas_gameappstore/components/product_short_detail_card.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/Product.dart';
-import 'package:gas_gameappstore/screens/Details/details_screen.dart';
+import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
 import 'package:gas_gameappstore/services/data_streams/cart_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
@@ -28,6 +28,8 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final CartStream cartStream = CartStream();
   PersistentBottomSheetController bottomSheetController;
+  List<bool> checked = [false];
+  int totalAmount = 0;
 
   @override
   void initState() {
@@ -87,6 +89,7 @@ class _BodyState extends State<Body> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<String> itemsCartId = snapshot.data;
+
           if (itemsCartId.length == 0) {
             return Center(
               child: NothingToShowContainer(
@@ -104,6 +107,7 @@ class _BodyState extends State<Body> {
                   bottomSheetController = Scaffold.of(context).showBottomSheet(
                     (context) {
                       return CheckoutCard(
+                        
                         onCheckoutPressed: checkoutButtonCallback,
                       );
                     },
@@ -249,7 +253,20 @@ class _BodyState extends State<Body> {
             return Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
+                for (var i = 0; i <= index; i++)
+                  new Checkbox(
+                    value: checked[i],
+                    onChanged: (bool value) {
+                      setState(() {
+                        checked[i] = value;
+                        getTotalAmount();
+                      });
+                    },
+                    // tristate: i == 1,
+                    // value: checked[i],
+                    // activeColor: Color(0xFF6200EE),
+                  ),
                 Expanded(
                   flex: 8,
                   child: ProductShortDetailCard(
@@ -258,7 +275,7 @@ class _BodyState extends State<Body> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetailsScreen(
+                          builder: (context) => ProductDetailsScreen(
                             productId: product.id,
                           ),
                         ),
@@ -484,5 +501,19 @@ class _BodyState extends State<Body> {
         );
       },
     );
+  }
+
+  getTotalAmount() {
+    var count = 0;
+    for (int i = 0; i < checked.length; i++) {
+      if (checked[i]) {
+        count = count + 1;
+      }
+      if (i == checked.length - 1) {
+        setState(() {
+          totalAmount = 248 * count;
+        });
+      }
+    }
   }
 }

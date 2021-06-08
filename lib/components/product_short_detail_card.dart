@@ -2,6 +2,7 @@ import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:indonesia/indonesia.dart';
 
 import '../constants.dart';
 import '../size_config.dart';
@@ -35,7 +36,7 @@ class ProductShortDetailCard extends StatelessWidget {
                       padding: EdgeInsets.all(10),
                       child: snapshot.data.productImages.length > 0
                           ? Image.network(
-                        snapshot.data.productImages[0],
+                        product.productImages[0],
                         fit: BoxFit.contain,
                       )
                           : Text("No Image"),
@@ -48,7 +49,7 @@ class ProductShortDetailCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        snapshot.data.productName,
+                        product.productName,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -61,7 +62,7 @@ class ProductShortDetailCard extends StatelessWidget {
                       SizedBox(height: 10),
                       Text.rich(
                         TextSpan(
-                            text: Text(Pecahan.rupiah(value: snapshot.data.productDiscountPrice, withRp: true)).toString(),
+                            text: "${rupiah(product.productDiscountPrice)}",
                             style: TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.w700,
@@ -69,7 +70,7 @@ class ProductShortDetailCard extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                text: Text(Pecahan.rupiah(value: snapshot.data.productOriginalPrice, withRp: true)).toString(),
+                                text: "${rupiah(product.productOriginalPrice)}",
                                 style: TextStyle(
                                   color: kTextColor,
                                   decoration: TextDecoration.lineThrough,

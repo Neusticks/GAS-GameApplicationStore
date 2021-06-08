@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/services/data_streams/all_products_stream.dart';
 import 'package:gas_gameappstore/services/data_streams/favourite_products_stream.dart';
 import 'package:gas_gameappstore/size_config.dart';
-import 'package:gas_gameappstore/screens/Details/details_screen.dart';
+import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
 import 'categories.dart';
 import 'discount_banner.dart';
 import 'home_header.dart';
@@ -74,7 +74,7 @@ class _BodyState extends State<Body> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DetailsScreen(productId: productId),
+        builder: (context) => ProductDetailsScreen(productId: productId),
       ),
     ).then((_) async {
       await refreshPage();

@@ -5,8 +5,8 @@ import 'package:gas_gameappstore/components/nothingtoshow_container.dart';
 import 'package:gas_gameappstore/components/product_short_detail_card.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
 import 'package:gas_gameappstore/models/Product.dart';
-import 'package:gas_gameappstore/screens/Details/details_screen.dart';
-import 'package:gas_gameappstore/screens/edit_product/edit_product_screen.dart';
+import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
+import 'package:gas_gameappstore/screens/EditProduct/edit_product_screen.dart';
 import 'package:gas_gameappstore/services/data_streams/users_products_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/firestore_files_access/firestore_files_access_service.dart';
@@ -167,7 +167,7 @@ class _BodyState extends State<Body> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DetailsScreen(
+              builder: (context) => ProductDetailsScreen(
                 productId: product.id,
               ),
             ),

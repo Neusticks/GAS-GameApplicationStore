@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
+import 'package:indonesia/indonesia.dart';
 import 'package:logger/logger.dart';
-
+import 'body.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 
@@ -21,6 +22,7 @@ class CartCard extends StatelessWidget {
       future: ProductDatabaseHelper().getProductWithID(cart.id),
       builder: (context, snapshot){
         if(snapshot.hasData){
+          final product = snapshot.data;
           return Row(
             children: [
               SizedBox(
@@ -33,7 +35,7 @@ class CartCard extends StatelessWidget {
                       color: Color(0xFFF5F6F9),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Image.asset(snapshot.data.productImages[0]),
+                    child: Image.asset(product.productImages[0]),
                   ),
                 ),
               ),
@@ -42,14 +44,14 @@ class CartCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    snapshot.data.productName,
+                    product.productName,
                     style: TextStyle(color: Colors.black, fontSize: 16),
                     maxLines: 2,
                   ),
                   SizedBox(height: 10),
                   Text.rich(
                     TextSpan(
-                      text: "\$${snapshot.data.productOriginalPrice}",
+                      text: "${rupiah(product.productOriginalPrice)}",
                       style: TextStyle(
                           fontWeight: FontWeight.w600, color: kPrimaryColor),
                       children: [

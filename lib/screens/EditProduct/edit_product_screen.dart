@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/models/Product.dart';
-import 'package:gas_gameappstore/screens/edit_product/provider_models/ProductDetails.dart';
+import 'provider_models/ProductDetails.dart';
 import 'package:provider/provider.dart';
 import 'components/body.dart';
 

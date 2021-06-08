@@ -128,7 +128,7 @@ class Product extends Model {
   String productVariant;
   num productDiscountPrice;
   num productOriginalPrice;
-  String productRating;
+  num productRating;
   String productHighlights;
   String productDescription;
   String sellerId;
@@ -146,7 +146,7 @@ class Product extends Model {
     this.productType,
     this.productDiscountPrice,
     this.productOriginalPrice,
-    this.productRating,
+    this.productRating = 0.0,
     this.productHighlights,
     this.productDescription,
     this.sellerId,
