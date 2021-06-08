@@ -5,6 +5,7 @@ import 'package:gas_gameappstore/screens/AccountInformation/components/specific_
 import 'package:gas_gameappstore/screens/ChangeDisplayName/change_display_name_screen.dart';
 import 'package:gas_gameappstore/screens/ChangeEmail/change_email_screen.dart';
 import 'package:gas_gameappstore/screens/ChangePassword/change_password_screen.dart';
+import 'package:gas_gameappstore/screens/ChangePhoneNumber/change_phone_screen.dart';
 import 'package:gas_gameappstore/screens/ManageAddresses/manage_addresses_screen.dart';
 
 class Body extends StatefulWidget {
@@ -46,7 +47,7 @@ class _Body extends State<Body> {
             text: "Phone Number: \nNomor hp Saya",
             press: () =>
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return ChangeDisplayNameScreen();
+              return ChangePhoneScreen();
             })),
           ),
         ],

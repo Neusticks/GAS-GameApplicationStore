@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/AccountInformation/account_information.dart';
 import 'package:gas_gameappstore/screens/ChangePassword/change_password_screen.dart';
 import 'package:gas_gameappstore/screens/ManageAddresses/manage_addresses_screen.dart';
 import 'package:gas_gameappstore/screens/profile/components/profile_menu.dart';
@@ -22,7 +23,10 @@ class _Body extends State<Body> {
           ProfileMenu(
             text: "Account Information",
             icon: "assets/icons/User Icon.svg",
-            press: () => {},
+            press: () =>
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return AccountInformationScreen();
+                  })),
           ),
           ProfileMenu(
             text: "My Address",
