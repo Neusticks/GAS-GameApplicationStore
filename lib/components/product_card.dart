@@ -99,8 +99,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:logger/logger.dart';
-import 'package:pecahan_rupiah/pecahan_rupiah.dart';
 import '../constants.dart';
+import 'package:indonesia/indonesia.dart';
 
 class ProductCard extends StatelessWidget {
   final String productId;
@@ -196,17 +196,15 @@ class ProductCard extends StatelessWidget {
                       flex: 5,
                       child: Text.rich(
                         TextSpan(
-                          //text: "\R\p.${product.productDiscountPrice}\n",
-                          text: "${Pecahan.rupiah(value: product.productDiscountPrice.toInt(), withRp: true).toString()}\n",
+                          text: "${rupiah(product.productDiscountPrice)}\n",
                           style: TextStyle(
                             color: kPrimaryColor,
                             fontWeight: FontWeight.w700,
                             fontSize: 12,
                           ),
                           children: [
-                            TextSpan(
-                              // text: "\R\p.${product.productOriginalPrice}",
-                              text: "${Pecahan.rupiah(value: product.productOriginalPrice.toInt(), withRp: true).toString()}\n",
+                            TextSpan(                              
+                              text: "${rupiah(product.productOriginalPrice)}\n",
                               style: TextStyle(
                                 color: kTextColor,
                                 decoration: TextDecoration.lineThrough,

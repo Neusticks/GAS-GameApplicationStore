@@ -46,6 +46,7 @@ class UserDatabaseHelper {
      USER_TRANSACTION_PIN_KEY: null,
      USER_ROLE_KEY : 'Customer',
      USER_PROFILE_PICTURE_KEY: null,
+     FAV_PRODUCTS_KEY: List<String>(),
     });
   }
 
