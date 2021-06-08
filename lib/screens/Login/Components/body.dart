@@ -1,16 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
-import 'package:gas_gameappstore/screens/Profile/profile_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
-import 'package:gas_gameappstore/screens/Login/Components/background.dart';
 import 'package:gas_gameappstore/screens/SignUp/signup_screen.dart';
 import 'package:gas_gameappstore/components/have_an_account_check.dart';
-import 'package:gas_gameappstore/components/rounded_password_field.dart';
-import 'package:gas_gameappstore/components/rounded_input_field.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/size_config.dart';
@@ -18,7 +12,6 @@ import 'dart:async';
 import 'package:logger/logger.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/signin_exceptions.dart';
-import 'package:gas_gameappstore/constants.dart';
 
 
 class Body extends StatefulWidget {

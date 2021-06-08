@@ -366,6 +366,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.4"
+  pecahan_rupiah:
+    dependency: "direct main"
+    description:
+      name: pecahan_rupiah
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   pedantic:
     dependency: transitive
     description:
