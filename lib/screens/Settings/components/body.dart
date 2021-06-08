@@ -24,9 +24,11 @@ class _Body extends State<Body> {
             text: "Account Information",
             icon: "assets/icons/User Icon.svg",
             press: () =>
+
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return AccountInformationScreen();
                 })),
+                  
           ),
           ProfileMenu(
             text: "My Address",

@@ -5,8 +5,13 @@ import 'package:gas_gameappstore/screens/AccountInformation/components/account_i
 import 'package:gas_gameappstore/screens/AccountInformation/components/specific_information_menu.dart';
 import 'package:gas_gameappstore/screens/ChangeDisplayName/change_display_name_screen.dart';
 import 'package:gas_gameappstore/screens/ChangeEmail/change_email_screen.dart';
+
 import 'package:gas_gameappstore/screens/ChangePhoneNumber/change_phone_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
+
+import 'package:gas_gameappstore/screens/ChangePassword/change_password_screen.dart';
+import 'package:gas_gameappstore/screens/ChangePhoneNumber/change_phone_screen.dart';
+import 'package:gas_gameappstore/screens/ManageAddresses/manage_addresses_screen.dart';
 
 class Body extends StatefulWidget {
   @override
