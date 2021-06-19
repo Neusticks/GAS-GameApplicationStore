@@ -31,7 +31,7 @@ class _Body extends State<Body> {
                 userName = docFields["userName"].toString();
               }
               return AccountInformationMenu(
-                text: "Nama: \n${userName}",
+                text: "Nama: \n$userName",
                 press: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return ChangeDisplayNameScreen();
                 })),
@@ -46,7 +46,7 @@ class _Body extends State<Body> {
                   userDOB = docFields["userDOB"].toString();
                 }
                 return SpecificInformationMenu(
-                  text: "Date of Birth: \n${userDOB}",
+                  text: "Date of Birth: \n$userDOB",
                 );
               }
           ),
@@ -58,7 +58,7 @@ class _Body extends State<Body> {
                   userGender = docFields["userGender"].toString();
                 }
                 return SpecificInformationMenu(
-                  text: "Gender: \n${userGender}",
+                  text: "Gender: \n$userGender",
                 );
               }
           ),
@@ -70,7 +70,7 @@ class _Body extends State<Body> {
                   userEmail = docFields["userEmail"].toString();
                 }
                 return AccountInformationMenu(
-                  text: "Email: \n${userEmail}",
+                  text: "Email: \n$userEmail",
                   press: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ChangeEmailScreen();
                   })),
@@ -85,7 +85,7 @@ class _Body extends State<Body> {
                   userPhoneNumber = docFields["userPhoneNumber"].toString();
                 }
                 return AccountInformationMenu(
-                  text: "Phone Number: \n${userPhoneNumber}",
+                  text: "Phone Number: \n$userPhoneNumber",
                   press: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ChangePhoneScreen();
                   })),

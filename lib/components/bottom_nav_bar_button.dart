@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
+import 'package:gas_gameappstore/screens/Mystore/mystore_screen.dart';
 import 'package:gas_gameappstore/screens/profile/profile_screen.dart';
 
 import '../constants.dart';
@@ -42,21 +43,23 @@ class CustomBottomNavBar extends StatelessWidget {
                 icon: SvgPicture.asset(
                   "assets/icons/Shop Icon.svg",
                   color: MenuState.home == selectedMenu
-                      ? kPrimaryColor
-                      : inActiveIconColor,
+                  ? kPrimaryColor
+                  : inActiveIconColor,
                 ),
                 onPressed: () =>
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return HomeScreen();
-            }))
+                    return HomeScreen();
+                }))
               ),
               IconButton(
                 icon: SvgPicture.asset("assets/icons/Heart Icon.svg"),
                 onPressed: () {},
               ),
               IconButton(
-                icon: SvgPicture.asset("assets/icons/Chat bubble Icon.svg"),
-                onPressed: () {},
+                  icon: SvgPicture.asset("assets/icons/Chat bubble Icon.svg"),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return CreateStoreFormScreen();
+                })),
               ),
               IconButton(
                 icon: SvgPicture.asset(

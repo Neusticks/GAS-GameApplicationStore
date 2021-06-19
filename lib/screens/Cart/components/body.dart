@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/components/nothingtoshow_container.dart';
@@ -17,7 +16,6 @@ import 'package:logger/logger.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 import '../../../utils.dart';
-import 'cart_card.dart';
 import 'check_out_card.dart';
 
 class Body extends StatefulWidget {
