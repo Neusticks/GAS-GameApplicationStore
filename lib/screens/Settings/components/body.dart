@@ -21,6 +21,16 @@ class _Body extends State<Body> {
         children: [
           SizedBox(height: 20),
           ProfileMenu(
+            text: "Create Store",
+            icon: "assets/icons/game-store.svg",
+            press: () =>
+
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return AccountInformationScreen();
+                })),
+                  
+          ),
+          ProfileMenu(
             text: "Account Information",
             icon: "assets/icons/User Icon.svg",
             press: () =>

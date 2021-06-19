@@ -6,7 +6,6 @@ import 'package:indonesia/indonesia.dart';
 
 import '../constants.dart';
 import '../size_config.dart';
-import 'package:pecahan_rupiah/pecahan_rupiah.dart';
 
 class ProductShortDetailCard extends StatelessWidget {
   final String productId;

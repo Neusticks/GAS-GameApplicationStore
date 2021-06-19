@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:gas_gameappstore/screens/Login/Components/body.dart';
 import 'package:gas_gameappstore/constants.dart';

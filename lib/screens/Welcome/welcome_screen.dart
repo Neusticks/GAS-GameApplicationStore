@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/Welcome/Components/body.dart';
 import 'package:gas_gameappstore/size_config.dart';
-import 'package:gas_gameappstore/models/Users/services.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = "/welcome";

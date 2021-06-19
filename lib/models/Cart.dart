@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-
-import 'Product.dart';
 import 'Base.dart';
 
 class Cart extends Model {

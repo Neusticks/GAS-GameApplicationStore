@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../../size_config.dart';
 import 'components/body.dart';
 
-class ChangeEmailScreen extends StatelessWidget {
-  static String routeName = "/changeemail";
+class CreateStoreFormScreen extends StatelessWidget {
+  static String routeName = "/mystorescreen";
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
