@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/credential_actions_exceptions.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/reauth_exceptions.dart';
@@ -215,7 +216,8 @@ class AuthentificationService {
       }
       if (isPasswordProvidedCorrect) {
         await currentUser.verifyBeforeUpdateEmail(newEmail);
-
+        final userDocSnapshot = FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
+        userDocSnapshot.update({"userEmail" : newEmail.toString()});
         return true;
       } else {
         throw FirebaseReauthWrongPasswordException();
