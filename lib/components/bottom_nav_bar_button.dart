@@ -41,7 +41,7 @@ class CustomBottomNavBar extends StatelessWidget {
             children: [
               IconButton(
                 icon: SvgPicture.asset(
-                  "assets/icons/Shop Icon.svg",
+                  "assets/icons/homeicon.svg",
                   color: MenuState.home == selectedMenu
                   ? kPrimaryColor
                   : inActiveIconColor,
@@ -56,7 +56,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 onPressed: () {},
               ),
               IconButton(
-                  icon: SvgPicture.asset("assets/icons/Chat bubble Icon.svg"),
+                  icon: SvgPicture.asset("assets/icons/Shop Icon.svg"),
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return CreateStoreFormScreen();
                 })),

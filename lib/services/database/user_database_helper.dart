@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/models/Address.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
+import 'package:gas_gameappstore/models/Store.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
@@ -10,6 +11,7 @@ class UserDatabaseHelper {
   static const String ADDRESSES_COLLECTION_NAME = "addresses";
   static const String CART_COLLECTION_NAME = "cart";
   static const String ORDERED_PRODUCTS_COLLECTION_NAME = "ordered_products";
+
   static const String USER_EMAIL_KEY = "userEmail";
   static const String USER_NAME_KEY = "userName";
   static const String USER_PASSWORD_KEY = "userPassword";
@@ -20,11 +22,20 @@ class UserDatabaseHelper {
   static const String USER_TRANSACTION_PIN_KEY = "userTransactionPIN";
   static const String USER_ROLE_KEY = "userRole";
   static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
+  static const String USER_STORE_ID_KEY = "userStoreId";
   static const String FAV_PRODUCTS_KEY = "favourite_products";
+
+  static const String STORE_COLLECTION_NAME = "stores";
+  static const String STORE_NAME_KEY = "storeName";
+  static const String STORE_OWNER_NAME_KEY = "storeOwnerName";
+  static const String STORE_ADDRESS_KEY = "storeAddress";
+  static const String STORE_DESCRIPTION_KEY = "storeDescription";
+  static const String STORE_RATING_KEY = "storeRating";
+  static const String STORE_PICTURE_KEY = "storePicture";
 
   UserDatabaseHelper._privateConstructor();
   static UserDatabaseHelper _instance =
-  UserDatabaseHelper._privateConstructor();
+      UserDatabaseHelper._privateConstructor();
   factory UserDatabaseHelper() {
     return _instance;
   }
@@ -36,19 +47,21 @@ class UserDatabaseHelper {
     return _firebaseFirestore;
   }
 
-  Future<void> createNewUser(String uid, String email, String password, String gender, String dob) async {
+  Future<void> createNewUser(String uid, String email, String password,
+      String gender, String dob) async {
     await firestore.collection(USERS_COLLECTION_NAME).doc(uid).set({
-     USER_EMAIL_KEY: email,
-     USER_NAME_KEY : null,
-     USER_PASSWORD_KEY: password,
-     USER_DATE_OF_BIRTH_KEY : dob,
-     USER_GENDER_KEY : gender,
-     USER_PHONE_NUMBER_KEY: null,
-     USER_ADDRESS_KEY: null,
-     USER_TRANSACTION_PIN_KEY: null,
-     USER_ROLE_KEY : 'Customer',
-     USER_PROFILE_PICTURE_KEY: null,
-     FAV_PRODUCTS_KEY: List<String>(),
+      USER_EMAIL_KEY: email,
+      USER_NAME_KEY: null,
+      USER_PASSWORD_KEY: password,
+      USER_DATE_OF_BIRTH_KEY: dob,
+      USER_GENDER_KEY: gender,
+      USER_PHONE_NUMBER_KEY: null,
+      USER_STORE_ID_KEY: null,
+      USER_ADDRESS_KEY: null,
+      USER_TRANSACTION_PIN_KEY: null,
+      USER_ROLE_KEY: 'Customer',
+      USER_PROFILE_PICTURE_KEY: null,
+      FAV_PRODUCTS_KEY: List<String>(),
     });
   }
 
@@ -79,7 +92,7 @@ class UserDatabaseHelper {
   Future<bool> isProductFavourite(String productId) async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     final userDocData = (await userDocSnapshot.get()).data();
     final favList = userDocData[FAV_PRODUCTS_KEY].cast<String>();
     if (favList.contains(productId)) {
@@ -92,7 +105,7 @@ class UserDatabaseHelper {
   Future<List> get usersFavouriteProductsList async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     final userDocData = (await userDocSnapshot.get()).data();
     final favList = userDocData[FAV_PRODUCTS_KEY];
     return favList;
@@ -102,7 +115,7 @@ class UserDatabaseHelper {
       String productId, bool newState) async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
 
     if (newState == true) {
       userDocSnapshot.update({
@@ -199,6 +212,7 @@ class UserDatabaseHelper {
     bool alreadyPresent = docSnapshot.exists;
     if (alreadyPresent == false) {
       docRef.set(Cart(itemQty: 1).toMap());
+      docRef.set(Cart(itemChecked: true).toMap());
     } else {
       docRef.update({Cart.ITEM_QTY_KEY: FieldValue.increment(1)});
     }
@@ -229,7 +243,7 @@ class UserDatabaseHelper {
         .collection(CART_COLLECTION_NAME)
         .get();
     num total = 0.0;
-    for (final doc in cartItems.docs) {
+    for (final doc in cartItems.docs.where((itemChecked) => true)) {
       num itemsCount = doc.data()[Cart.ITEM_QTY_KEY];
       final product = await ProductDatabaseHelper().getProductWithID(doc.id);
       total += (itemsCount * product.productDiscountPrice);
@@ -340,7 +354,7 @@ class UserDatabaseHelper {
   Future<bool> updatePhoneForCurrentUser(String phone) async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update({USER_PHONE_NUMBER_KEY: phone});
     return true;
   }
@@ -353,7 +367,7 @@ class UserDatabaseHelper {
   Future<bool> uploadDisplayPictureForCurrentUser(String url) async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update(
       {USER_PROFILE_PICTURE_KEY: url},
     );
@@ -363,7 +377,7 @@ class UserDatabaseHelper {
   Future<bool> removeDisplayPictureForCurrentUser() async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-    firestore.collection(USERS_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update(
       {
         USER_PROFILE_PICTURE_KEY: FieldValue.delete(),
@@ -375,7 +389,8 @@ class UserDatabaseHelper {
   Future<String> get displayPictureForCurrentUser async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-    await firestore.collection(USERS_COLLECTION_NAME).doc(uid).get();
+        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).get();
     return userDocSnapshot.data()[USER_PROFILE_PICTURE_KEY];
   }
+
 }
