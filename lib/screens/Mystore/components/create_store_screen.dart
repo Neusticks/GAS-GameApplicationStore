@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/services/database/store_database_helper.dart';
+import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:gas_gameappstore/services/firestore_files_access/firestore_files_access_service.dart';
 import 'package:gas_gameappstore/services/local_files_access/local_files_access_service.dart';
 import 'package:logger/logger.dart';
@@ -369,7 +370,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           StoreDatabaseHelper().createUserStore(storeId, storeNameController.text, storeSellerNameController.text, storeAddressController.text, storeDescriptionController.text);
       storeUploadFuture.then((value) {
         storeId = value;
-        updateUserStoreId(value);
+        UserDatabaseHelper().updateUserStoreId(value);
       });
     //   await showDialog(
     //     context: context,
@@ -463,9 +464,4 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
   //   }
   // }
 
-    Future<void> updateUserStoreId(String storeId) async {
-      String uid = AuthentificationService().currentUser.uid;
-      final userDocSnapshot = FirebaseFirestore.instance.collection('users').doc(uid);
-      await userDocSnapshot.update({"userStoreId" : storeId});
-    }
 }

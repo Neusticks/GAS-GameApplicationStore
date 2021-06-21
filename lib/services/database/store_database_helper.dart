@@ -40,7 +40,7 @@ class StoreDatabaseHelper {
       String storeAddress,
       String storeDescription) async {
     String uid = AuthentificationService().currentUser.uid;
-    await firestore.collection(STORE_COLLECTION_NAME).doc(storeId).set({
+    await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc(storeId).set({
       STORE_NAME_KEY: storeName,
       STORE_SELLER_NAME_KEY: storeSellerName,
       STORE_ADDRESS_KEY: storeAddress,
@@ -54,6 +54,7 @@ class StoreDatabaseHelper {
     });
     return storeId;
   }
+
 
   Future<List<String>> get userStoreWithId async {
     String uid = AuthentificationService().currentUser.uid;
