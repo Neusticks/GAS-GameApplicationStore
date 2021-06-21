@@ -393,4 +393,10 @@ class UserDatabaseHelper {
     return userDocSnapshot.data()[USER_PROFILE_PICTURE_KEY];
   }
 
+  Future<void> updateUserStoreId(String storeId) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final userDocSnapshot =
+        FirebaseFirestore.instance.collection('users').doc(uid);
+    await userDocSnapshot.update({"userStoreId": storeId});
+  }
 }

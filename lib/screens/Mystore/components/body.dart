@@ -89,12 +89,6 @@ class _Body extends State<Body> {
                     Map<String, dynamic> docFields = snapshot.data.data();
                     userStoreId = docFields["userStoreId"].toString();
                     if (userStoreId == "null") {
-                      SizedBox(
-                          height: getProportionScreenHeight(10));
-                      Text(
-                        "Create Store",
-                        style: headingStyle,
-                      );
                       return CreateStoreForm();
                     } else {
                       return MyStore();
