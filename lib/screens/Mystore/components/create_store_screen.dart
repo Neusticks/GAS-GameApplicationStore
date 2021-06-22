@@ -5,6 +5,7 @@ import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/image_picking_exceptions.dart';
 import 'package:gas_gameappstore/exceptions/local_files_handling/local_file_handling_exception.dart';
 import 'package:gas_gameappstore/models/Store.dart';
+import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/screens/Mystore/provider_model/body_model.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,7 +81,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           text: "Create New Store",
           press: () {
             // final uploadFuture = 
-            createStoreButtonCallback(context);
+            createStoreButtonCallback();
             // showDialog(
             //   context: context,
             //   builder: (context) {
@@ -90,8 +91,6 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
             //     );
             //   },
             // );
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Store Created")));
           },
         ),
       ],
@@ -362,7 +361,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
   //   }
   // }
 
-  Future<void> createStoreButtonCallback(BuildContext context) async {
+  Future<void> createStoreButtonCallback() async {
     String snackbarMessage;
     String storeId;
     try {
@@ -372,6 +371,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         storeId = value;
         UserDatabaseHelper().updateUserStoreId(value);
       });
+      snackbarMessage = "Store Created";
     //   await showDialog(
     //     context: context,
     //     builder: (context) {
@@ -432,8 +432,8 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           content: Text(snackbarMessage),
         ),
       );
+      Navigator.pop(context);
     }
-    Navigator.pop(context);
   }
   // Future<void> addImageButtonCallback({int index}) async {
   //   String path;
