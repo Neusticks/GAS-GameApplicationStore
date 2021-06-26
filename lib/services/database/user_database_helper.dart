@@ -200,6 +200,13 @@ class UserDatabaseHelper {
     final cartItem = Cart.fromMap(docSnapshot.data(), id: docSnapshot.id);
     return cartItem;
   }
+  Future<bool> itemChecked(String productId, bool itemChecked) async{
+    String uid = AuthentificationService().currentUser.uid;
+    final cartCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
+    final docRef = cartCollectionRef.doc(productId);
+    docRef.set(Cart(itemChecked: itemChecked).toMap());
+    return true;
+  }
 
   Future<bool> addProductToCart(String productId) async {
     String uid = AuthentificationService().currentUser.uid;
