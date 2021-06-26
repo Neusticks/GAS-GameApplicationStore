@@ -26,7 +26,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final CartStream cartStream = CartStream();
   PersistentBottomSheetController bottomSheetController;
-  List<bool> checked = [false];
+  List<bool> checked = [true];
   int totalAmount = 0;
 
   @override
@@ -257,7 +257,14 @@ class _BodyState extends State<Body> {
                     value: checked[i],
                     onChanged: (bool value) {
                       setState(() {
+                        if(Cart.ITEM_CART_CHECKED == 'true'){
+                          checked[i] = true;
+                        }
+                        else{
+                          checked[i] = false;
+                        }
                         checked[i] = value;
+                        UserDatabaseHelper().itemChecked(product.id, value);
                         getTotalAmount();
                       });
                     },
