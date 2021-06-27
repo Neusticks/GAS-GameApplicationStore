@@ -6,7 +6,6 @@ import 'package:gas_gameappstore/exceptions/local_files_handling/image_picking_e
 import 'package:gas_gameappstore/exceptions/local_files_handling/local_file_handling_exception.dart';
 import 'package:gas_gameappstore/models/Store.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
-import 'package:gas_gameappstore/screens/Mystore/provider_model/body_model.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

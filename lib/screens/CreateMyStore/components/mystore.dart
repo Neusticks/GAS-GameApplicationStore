@@ -3,19 +3,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
-import 'package:gas_gameappstore/screens/MyProduct/my_product_screen.dart';
-import 'package:gas_gameappstore/screens/MyStore/components/shop_pic.dart';
+import 'package:gas_gameappstore/screens/MyStore/components/mystore_menu.dart';
+import 'package:gas_gameappstore/screens/Mystore/components/shop_pic.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
 
-import 'mystore_menu.dart';
 
-
-class Body extends StatefulWidget {
+class MyStore extends StatefulWidget {
   @override
-  _Body createState() => _Body();
+  _MyStore createState() => _MyStore();
 }
 
-class _Body extends State<Body> {
+class _MyStore extends State<MyStore> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -27,7 +25,7 @@ class _Body extends State<Body> {
           ShopPic(),
           SizedBox(height: 20),
           MyStoreMenu(
-              text: "Store Account",
+              text: "My Account",
               icon: "assets/icons/User Icon.svg",
               press: () =>
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -40,18 +38,15 @@ class _Body extends State<Body> {
             press: () {},
           ),
           MyStoreMenu(
-            text: "Add Product",
-            icon: "assets/icons/Question mark.svg",
-            press: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context){
-                return MyProductsScreen();
-              }));
-            },
-          ),
-          MyStoreMenu(
             text: "Help Center",
             icon: "assets/icons/Question mark.svg",
+            press: () {},
+          ),
+          MyStoreMenu(
+            text: "Log Out",
+            icon: "assets/icons/Log out.svg",
             press: () {
+              _signOut();
             },
           ),
         ],
@@ -59,4 +54,10 @@ class _Body extends State<Body> {
     );
   }
 
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
+    return Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return LoginScreen();
+    }));
+  }
 }
