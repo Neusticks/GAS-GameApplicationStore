@@ -1,14 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../size_config.dart';
 import 'components/body.dart';
+import '../../size_config.dart';
 
-class CreateStoreFormScreen extends StatelessWidget {
-  static String routeName = "/mystorescreen";
+class MyStoreScreen extends StatelessWidget {
+  static String routeName = "/profile";
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+            "Profile",
+            style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.w300,
+          ),
+        )
+      ),
       body: Body(),
     );
   }

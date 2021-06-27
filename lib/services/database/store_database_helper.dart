@@ -78,7 +78,7 @@ class StoreDatabaseHelper {
   Future<bool> uploadStoreDisplayPicture(String url) async {
     String uid = AuthentificationService().currentUser.uid;
     final storeDocSnapshot =
-        firestore.collection(STORE_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc();
     await storeDocSnapshot.update(
       {STORE_PICTURE_KEY: url},
     );
@@ -88,7 +88,7 @@ class StoreDatabaseHelper {
   Future<bool> removeStoreDisplayPicture() async {
     String uid = AuthentificationService().currentUser.uid;
     final storeDocSnapshot =
-        firestore.collection(STORE_COLLECTION_NAME).doc(uid);
+        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc();
     await storeDocSnapshot.update(
       {
         STORE_PICTURE_KEY: FieldValue.delete(),
@@ -100,7 +100,18 @@ class StoreDatabaseHelper {
   Future<String> get storeDisplayPicture async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-        await firestore.collection(STORE_COLLECTION_NAME).doc(uid).get();
+        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc().get();
     return userDocSnapshot.data()[STORE_PICTURE_KEY];
+  }
+
+    Stream<DocumentSnapshot> get currentUsertoreDataStream {
+    String userId = AuthentificationService().currentUser.uid;
+    return firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(userId)
+        .collection(STORE_COLLECTION_NAME)
+        .doc()
+        .get()
+        .asStream();
   }
 }
