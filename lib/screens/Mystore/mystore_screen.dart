@@ -1,5 +1,7 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/models/Store.dart';
 import 'components/body.dart';
 import '../../size_config.dart';
 
@@ -11,7 +13,7 @@ class MyStoreScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            "Profile",
+            'Store Profile',
             style: TextStyle(
             fontSize: 24.0,
             fontWeight: FontWeight.w300,
@@ -21,4 +23,5 @@ class MyStoreScreen extends StatelessWidget {
       body: Body(),
     );
   }
+
 }

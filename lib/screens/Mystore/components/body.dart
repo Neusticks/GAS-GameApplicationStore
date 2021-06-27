@@ -3,6 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
+import 'package:gas_gameappstore/screens/MyProduct/my_product_screen.dart';
 import 'package:gas_gameappstore/screens/MyStore/components/shop_pic.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
 
@@ -26,7 +27,7 @@ class _Body extends State<Body> {
           ShopPic(),
           SizedBox(height: 20),
           MyStoreMenu(
-              text: "My Account",
+              text: "Store Account",
               icon: "assets/icons/User Icon.svg",
               press: () =>
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -39,15 +40,18 @@ class _Body extends State<Body> {
             press: () {},
           ),
           MyStoreMenu(
-            text: "Help Center",
+            text: "Add Product",
             icon: "assets/icons/Question mark.svg",
-            press: () {},
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return MyProductsScreen();
+              }));
+            },
           ),
           MyStoreMenu(
-            text: "Log Out",
-            icon: "assets/icons/Log out.svg",
+            text: "Help Center",
+            icon: "assets/icons/Question mark.svg",
             press: () {
-              _signOut();
             },
           ),
         ],
@@ -55,10 +59,4 @@ class _Body extends State<Body> {
     );
   }
 
-  Future<void> _signOut() async {
-    await FirebaseAuth.instance.signOut();
-    return Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return LoginScreen();
-    }));
-  }
 }
