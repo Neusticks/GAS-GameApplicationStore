@@ -7,6 +7,7 @@ import 'package:gas_gameappstore/screens/Mystore/mystore_screen.dart';
 import 'package:gas_gameappstore/screens/profile/profile_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gas_gameappstore/services/database/store_database_helper.dart';
 
 import '../constants.dart';
 import '../enums.dart';
@@ -101,8 +102,8 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
 
   Future<void> storeButtonCallback(BuildContext context) async {
     String uid = AuthentificationService().currentUser.uid;
-    final storeDoc =
-        await firestore.collection('users').doc(uid).collection('stores').get();
+    final storeCollectionRef = firestore.collection('stores');
+    final storeDoc = await storeCollectionRef.where(StoreDatabaseHelper.STORE_OWNER_ID_KEY, isEqualTo: uid).get();
     List storeUid = List<String>();
     for (final doc in storeDoc.docs) {
       storeUid.add(doc.id);

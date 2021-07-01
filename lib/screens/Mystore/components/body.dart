@@ -40,7 +40,7 @@ class _Body extends State<Body> {
             press: () {},
           ),
           MyStoreMenu(
-            text: "Add Product",
+            text: "My Product",
             icon: "assets/icons/Question mark.svg",
             press: () {
               Navigator.push(context, MaterialPageRoute(builder: (context){

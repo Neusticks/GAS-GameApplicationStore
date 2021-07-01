@@ -40,7 +40,7 @@ class StoreDatabaseHelper {
       String storeAddress,
       String storeDescription) async {
     String uid = AuthentificationService().currentUser.uid;
-    await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc(storeId).set({
+    await firestore.collection(STORE_COLLECTION_NAME).doc(storeId).set({
       STORE_NAME_KEY: storeName,
       STORE_SELLER_NAME_KEY: storeSellerName,
       STORE_ADDRESS_KEY: storeAddress,
@@ -55,10 +55,19 @@ class StoreDatabaseHelper {
     return storeId;
   }
 
+  Future<String> addUsersStore(Store store) async {
+    String uid = AuthentificationService().currentUser.uid;
+    store.storeOwnerId = uid;
+    final storeCollectionReference =
+    firestore.collection(STORE_COLLECTION_NAME);
+    final docRef = await storeCollectionReference.add(store.toMap());
+    return docRef.id;
+  }
+
 
   Future<List<String>> get userStoreWithId async {
     String uid = AuthentificationService().currentUser.uid;
-    final storeCollectionRef = firestore.collection(STORE_COLLECTION_NAME);
+    final storeCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME);
     final querySnapshot = await storeCollectionRef
         .where(Store.USER_STORE_OWNER_ID_KEY, isEqualTo: uid)
         .get();
@@ -68,6 +77,21 @@ class StoreDatabaseHelper {
       userStore.add(doc.id);
     });
     return userStore;
+  }
+
+  Future<Store> getStoreWithId(String storeId) async{
+    String uid = AuthentificationService().currentUser.uid;
+    final docSnapshot = await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(STORE_COLLECTION_NAME)
+        .doc(storeId)
+        .get();
+
+    if (docSnapshot.exists) {
+      return Store.fromMap(docSnapshot.data(), id: docSnapshot.id);
+    }
+    return null;
   }
 
   String getPathForCurrentUserStoreDisplayPicture() {
@@ -100,17 +124,16 @@ class StoreDatabaseHelper {
   Future<String> get storeDisplayPicture async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-        await firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc().get();
+        await firestore.collection(STORE_COLLECTION_NAME).doc(uid).get();
+      
     return userDocSnapshot.data()[STORE_PICTURE_KEY];
   }
 
-    Stream<DocumentSnapshot> get currentUsertoreDataStream {
+    Stream<QuerySnapshot> get currentUsertoreDataStream {
     String userId = AuthentificationService().currentUser.uid;
     return firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(userId)
         .collection(STORE_COLLECTION_NAME)
-        .doc()
+        .where(STORE_OWNER_ID_KEY, isEqualTo: userId)
         .get()
         .asStream();
   }

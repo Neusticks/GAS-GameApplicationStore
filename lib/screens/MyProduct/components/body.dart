@@ -50,22 +50,8 @@ class _BodyState extends State<Body> {
               width: double.infinity,
               child: Column(
                 children: [
-                  SizedBox(height: getProportionScreenHeight(20)),
-                  Text("Your Products", style: headingStyle),
-                  Text(
-                    "Swipe LEFT to Edit, Swipe RIGHT to Delete",
-                    style: TextStyle(fontSize: 12),
-                  ),
                   SizedBox(height: getProportionScreenHeight(30)),
-                  SizedBox(
-                    height: SizeConfig.screenHeight * 0.7,
-                    child: StreamBuilder<List<String>>(
-                      stream: usersProductsStream.stream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          final productsIds = snapshot.data;
-                          if (productsIds.length == 0) {
-                            RoundedButton(
+                  RoundedButton(
                             text: "Add Product",
                             press: () {
                               Navigator.push(
@@ -75,7 +61,16 @@ class _BodyState extends State<Body> {
                                 ),
                               );
                             },
-                          );
+                          ),
+                  SizedBox(
+                    height: SizeConfig.screenHeight * 0.7,
+                    child: StreamBuilder<List<String>>(
+                      stream: usersProductsStream.stream,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final productsIds = snapshot.data;
+                          if (productsIds.length == 0) {
+                            
                             return Center(
                               child: NothingToShowContainer(
                                 secondaryMessage:
