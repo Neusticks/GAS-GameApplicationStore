@@ -98,11 +98,13 @@ import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:indonesia/indonesia.dart';
+import 'package:pay/pay.dart';
 import '../../../size_config.dart';
 
 class CheckoutCard extends StatelessWidget {
+  final _paymentItems = <PaymentItem>[];
   final VoidCallback onCheckoutPressed;
-  const CheckoutCard({
+  CheckoutCard({
     Key key,
     @required this.onCheckoutPressed,
   }) : super(key: key);
@@ -141,6 +143,7 @@ class CheckoutCard extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final cartTotal = snapshot.data;
+                      _paymentItems.add(PaymentItem(amount: cartTotal.toString(), label: "GAS Product", status: PaymentItemStatus.final_price));
                       return Text.rich(
                         TextSpan(text: "Total\n", children: [
                           TextSpan(
@@ -159,10 +162,43 @@ class CheckoutCard extends StatelessWidget {
                 ),
                 SizedBox(
                   width: getProportionScreenWidth(190),
-                  child: DefaultButton(
-                    text: "Checkout",
-                    press: onCheckoutPressed,
+                  child: Row(
+                    children: [
+                      ApplePayButton(
+                        paymentConfigurationAsset: 'applePay.json',
+                        paymentItems: _paymentItems,
+                        width: 150,
+                        style: ApplePayButtonStyle.black,
+                        type: ApplePayButtonType.buy,
+                        margin: const EdgeInsets.only(top: 15.0),
+                        onPaymentResult: (data){
+                          print(data);
+                        },
+                        loadingIndicator: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+
+                      GooglePayButton(
+                        paymentConfigurationAsset: 'gpay.json',
+                        paymentItems: _paymentItems,
+                        width: 150,
+                        style: GooglePayButtonStyle.black,
+                        type: GooglePayButtonType.pay,
+                        margin: const EdgeInsets.only(top: 15.0),
+                        onPaymentResult: (data){
+                          print(data);
+                        },
+                        loadingIndicator: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ],
                   ),
+                  // child: DefaultButton(
+                  //   text: "Checkout",
+                  //   press: onCheckoutPressed,
+                  // ),
                 ),
               ],
             ),
