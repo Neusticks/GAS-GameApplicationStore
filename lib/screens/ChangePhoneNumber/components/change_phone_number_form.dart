@@ -126,7 +126,7 @@ class _ChangePhoneNumberFormState extends State<ChangePhoneNumberForm> {
         }
         String currentPhone;
         if (snapshot.hasData && snapshot.data != null)
-          currentPhone = snapshot.data.data()[UserDatabaseHelper.USER_PHONE_NUMBER_KEY];
+          currentPhone = snapshot.data.get(UserDatabaseHelper.USER_PHONE_NUMBER_KEY);
         final textField = TextFormField(
           controller: currentPhoneNumberController,
           decoration: InputDecoration(

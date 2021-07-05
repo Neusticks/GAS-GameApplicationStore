@@ -86,7 +86,7 @@ import 'package:gas_gameappstore/size_config.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pecahan_rupiah/pecahan_rupiah.dart';
+import 'package:indonesia/indonesia.dart';
 
 import '../../../constants.dart';
 import 'expandable_text.dart';
@@ -133,7 +133,7 @@ class ProductDescription extends StatelessWidget {
                     flex: 4,
                     child: Text.rich(
                       TextSpan(
-                        text: "${Pecahan.rupiah(value: product.productDiscountPrice.toInt(), withRp: true).toString()}\n",
+                        text: "${rupiah(product.productDiscountPrice)}\n",
                         style: TextStyle(
                           color: kPrimaryColor,
                           fontWeight: FontWeight.w900,
@@ -141,7 +141,7 @@ class ProductDescription extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: "${Pecahan.rupiah(value: product.productOriginalPrice.toInt(), withRp: true).toString()}\n",
+                            text: "${rupiah(product.productOriginalPrice.toInt())}\n",
                             style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               color: kTextColor,

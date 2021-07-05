@@ -377,13 +377,13 @@ class _BodyState extends State<Body> {
 
   Future<void> checkoutButtonCallback() async {
     shutBottomSheet();
-    final confirmation = await showConfirmationDialog(
-      context,
-      "This is just a Project Testing App so, no actual Payment Interface is available.\nDo you want to proceed for Mock Ordering of Products?",
-    );
-    if (confirmation == false) {
-      return;
-    }
+    // final confirmation = await showConfirmationDialog(
+    //   context,
+    //   "This is just a Project Testing App so, no actual Payment Interface is available.\nDo you want to proceed for Mock Ordering of Products?",
+    // );
+    // if (confirmation == false) {
+    //   return;
+    // }
     final orderFuture = UserDatabaseHelper().emptyCart();
     orderFuture.then((orderedProductsUid) async {
       if (orderedProductsUid != null) {
