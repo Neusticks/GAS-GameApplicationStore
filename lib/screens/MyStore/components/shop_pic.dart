@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:gas_gameappstore/exceptions/local_files_handling/image_picking_e
 import 'package:gas_gameappstore/exceptions/local_files_handling/local_file_handling_exception.dart';
 import 'package:gas_gameappstore/models/Store.dart';
 import 'package:gas_gameappstore/screens/MyStore/provider_model/body_model.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/store_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:gas_gameappstore/services/firestore_files_access/firestore_files_access_service.dart';
@@ -77,7 +79,7 @@ class ShopPic extends StatelessWidget {
   Widget buildDisplayPictureAvatar(
       BuildContext context, ChosenImage bodyState) {
     return StreamBuilder(
-      stream: StoreDatabaseHelper().currentUsertoreDataStream,
+      stream: StoreDatabaseHelper().currentUserStoreDataStream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           final error = snapshot.error;
@@ -170,7 +172,8 @@ class ShopPic extends StatelessWidget {
     try {
       final downloadUrl = await FirestoreFilesAccess().uploadFileToPath(
           bodyState.chosenImage,
-          StoreDatabaseHelper().getPathForCurrentUserStoreDisplayPicture());
+          "store/storePicture/${await FirebaseFirestore.instance.collection("stores").where("storeOwnerID", isEqualTo: AuthentificationService().currentUser.uid).get().then((value) => value.docs[0].id)}"
+      );
 
       uploadDisplayPictureStatus = await StoreDatabaseHelper()
           .uploadStoreDisplayPicture(downloadUrl);

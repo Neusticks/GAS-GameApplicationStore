@@ -79,41 +79,40 @@ class StoreDatabaseHelper {
     return userStore;
   }
 
-  Future<Store> getStoreWithId(String storeId) async{
-    String uid = AuthentificationService().currentUser.uid;
-    final docSnapshot = await firestore
-        .collection(USERS_COLLECTION_NAME)
-        .doc(uid)
-        .collection(STORE_COLLECTION_NAME)
-        .doc(storeId)
-        .get();
-
-    if (docSnapshot.exists) {
-      return Store.fromMap(docSnapshot.data(), id: docSnapshot.id);
-    }
-    return null;
-  }
-
-  String getPathForCurrentUserStoreDisplayPicture() {
-    final String currentUserUid = AuthentificationService().currentUser.uid;
-    return "store/storeDisplayPicture/$currentUserUid";
-  }
+  // Future<String> getStoreId() async{
+  //   String uid = AuthentificationService().currentUser.uid;
+  //   final docSnapshot = await firestore
+  //       .collection(STORE_COLLECTION_NAME)
+  //       .where(STORE_OWNER_ID_KEY, isEqualTo: uid)
+  //       .get();
+  //
+  //   if (docSnapshot.docs[0].exists) {
+  //     return docSnapshot.docs[0].id;
+  //   }
+  //   return null;
+  // }
+  //
+  // String getPathForCurrentUserStoreDisplayPicture() {
+  //   var storeReference;
+  //   getStoreId().then((value) => storeReference = value);
+  //   return "store/storePicture/$storeReference";
+  // }
 
   Future<bool> uploadStoreDisplayPicture(String url) async {
     String uid = AuthentificationService().currentUser.uid;
     final storeDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc();
-    await storeDocSnapshot.update(
-      {STORE_PICTURE_KEY: url},
-    );
+        await firestore.collection(STORE_COLLECTION_NAME).where(STORE_OWNER_ID_KEY, isEqualTo: uid).get();
+    await storeDocSnapshot.docs[0].reference.update({
+      STORE_PICTURE_KEY : url
+    });
     return true;
   }
 
   Future<bool> removeStoreDisplayPicture() async {
     String uid = AuthentificationService().currentUser.uid;
     final storeDocSnapshot =
-        firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(STORE_COLLECTION_NAME).doc();
-    await storeDocSnapshot.update(
+      await firestore.collection(STORE_COLLECTION_NAME).where(STORE_OWNER_ID_KEY, isEqualTo: uid).get();
+    await storeDocSnapshot.docs[0].reference.update(
       {
         STORE_PICTURE_KEY: FieldValue.delete(),
       },
@@ -124,17 +123,17 @@ class StoreDatabaseHelper {
   Future<String> get storeDisplayPicture async {
     String uid = AuthentificationService().currentUser.uid;
     final userDocSnapshot =
-        await firestore.collection(STORE_COLLECTION_NAME).doc(uid).get();
+      await firestore.collection(STORE_COLLECTION_NAME).where(STORE_OWNER_ID_KEY, isEqualTo: uid).get().then((value) => value.docs[0]);
       
     return userDocSnapshot.data()[STORE_PICTURE_KEY];
   }
 
-    Stream<QuerySnapshot> get currentUsertoreDataStream {
+  Stream<QueryDocumentSnapshot> get currentUserStoreDataStream {
     String userId = AuthentificationService().currentUser.uid;
     return firestore
         .collection(STORE_COLLECTION_NAME)
         .where(STORE_OWNER_ID_KEY, isEqualTo: userId)
-        .get()
+        .get().then((value) => value.docs[0])
         .asStream();
   }
 }
