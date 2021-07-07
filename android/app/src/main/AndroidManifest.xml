@@ -2,7 +2,7 @@
     package="GAS_APP.gas_gameappstore">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="gas_gameappstore"
+        android:label="GAS - Game Application Store"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
