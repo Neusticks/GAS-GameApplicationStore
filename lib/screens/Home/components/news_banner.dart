@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/GameNews/game_news_screen.dart';
 
 import '../../../size_config.dart';
 
@@ -25,14 +27,20 @@ class DiscountBanner extends StatelessWidget {
         TextSpan(
           style: TextStyle(color: Colors.white),
           children: [
-            TextSpan(text: "Diskon Game!!!\n"),
             TextSpan(
-              text: "Cashback 20%",
+              text: "Game News",
               style: TextStyle(
                 fontSize: getProportionScreenWidth(24),
                 fontWeight: FontWeight.bold,
+                
               ),
+              recognizer: new TapGestureRecognizer()..onTap = (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return GameNewsScreen();
+                  }));
+              }
             ),
+            
           ],
         ),
       ),

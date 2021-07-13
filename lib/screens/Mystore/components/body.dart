@@ -41,7 +41,7 @@ class _Body extends State<Body> {
           ),
           MyStoreMenu(
             text: "My Product",
-            icon: "assets/icons/Question mark.svg",
+            icon: "assets/icons/empty_box.svg",
             press: () {
               Navigator.push(context, MaterialPageRoute(builder: (context){
                 return MyProductsScreen();
