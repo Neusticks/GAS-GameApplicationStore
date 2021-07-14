@@ -9,7 +9,7 @@ class Cart extends Model {
   int itemQty;
   Cart({
     String id,
-    this.itemQty = 0,
+    this.itemQty = 1,
     this.itemChecked = true,
   }) : super(id);
 

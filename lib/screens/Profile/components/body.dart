@@ -42,8 +42,26 @@ class _Body extends State<Body> {
           ProfileMenu(
             text: "Log Out",
             icon: "assets/icons/Log out.svg",
-            press: () {
-              _signOut();
+            press: () async{
+              await showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Logout'),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: _signOut,
+                      child: const Text('Yes'),
+                    ),
+                    TextButton(
+                      onPressed: () async{
+                        Navigator.pop(context, 'No');
+                      },
+                      child: const Text('No'),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ],
