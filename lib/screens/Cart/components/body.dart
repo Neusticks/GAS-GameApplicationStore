@@ -8,10 +8,13 @@ import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/data_streams/cart_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:logger/logger.dart';
+import 'package:square_in_app_payments/in_app_payments.dart';
+import 'package:square_in_app_payments/models.dart';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -44,6 +47,114 @@ class _BodyState extends State<Body> {
   Future<void> refreshPage() {
     cartStream.reload();
     return Future<void>.value();
+  }
+
+  Future<void> onCardEntryComplete() async{
+    //Success, clear cart
+    await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Success!'),
+        content: const Text('Your order has been paid!'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () async{
+              Navigator.pop(context, 'OK');
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    final orderFuture = UserDatabaseHelper().emptyCart();
+    orderFuture.then((orderedProductsUid) async {
+      if (orderedProductsUid != null) {
+        print(orderedProductsUid);
+        final dateTime = DateTime.now();
+        final formatedDateTime =
+            "${dateTime.day}-${dateTime.month}-${dateTime.year}";
+        List<OrderedProduct> orderedProducts = orderedProductsUid
+            .map((e) => OrderedProduct(null,
+            productUid: e, orderDate: formatedDateTime))
+            .toList();
+        bool addedProductsToMyProducts = false;
+        String snackbarmMessage;
+        try {
+          addedProductsToMyProducts =
+          await UserDatabaseHelper().addToMyOrders(orderedProducts);
+          if (addedProductsToMyProducts) {
+            snackbarmMessage = "Products ordered Successfully";
+          } else {
+            throw "Could not order products due to unknown issue";
+          }
+        } on FirebaseException catch (e) {
+          Logger().e(e.toString());
+          snackbarmMessage = e.toString();
+        } catch (e) {
+          Logger().e(e.toString());
+          snackbarmMessage = e.toString();
+        } finally {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(snackbarmMessage ?? "Something went wrong"),
+            ),
+          );
+        }
+      } else {
+        throw "Something went wrong while clearing cart";
+      }
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return FutureProgressDialog(
+            orderFuture,
+            message: Text("Placing the Order"),
+          );
+        },
+      );
+    }).catchError((e) {
+      Logger().e(e.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Something went wrong"),
+        ),
+      );
+    });
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return FutureProgressDialog(
+          orderFuture,
+          message: Text("Placing the Order"),
+        );
+      },
+    );
+    await refreshPage();
+  }
+
+  Future<bool> onCardNonceRequestSuccess(CardDetails result) async{
+    print(result.nonce);
+    //chargeCard(result);
+
+    InAppPayments.completeCardEntry(onCardEntryComplete: onCardEntryComplete);
+    return true;
+  }
+
+  Future<bool> onCardEntryCancel() async{
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Cancelled'),
+        content: const Text('Input card credential has been cancelled!'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    return false;
   }
 
   @override
@@ -377,6 +488,11 @@ class _BodyState extends State<Body> {
 
   Future<void> checkoutButtonCallback() async {
     shutBottomSheet();
+
+    await InAppPayments.setSquareApplicationId(
+        'sandbox-sq0idb-_F5YicVyQRFBdw0P2orLKA');
+    await InAppPayments.startCardEntryFlow(onCardNonceRequestSuccess: onCardNonceRequestSuccess, onCardEntryCancel: onCardEntryCancel);
+
     // final confirmation = await showConfirmationDialog(
     //   context,
     //   "This is just a Project Testing App so, no actual Payment Interface is available.\nDo you want to proceed for Mock Ordering of Products?",
@@ -384,70 +500,6 @@ class _BodyState extends State<Body> {
     // if (confirmation == false) {
     //   return;
     // }
-    final orderFuture = UserDatabaseHelper().emptyCart();
-    orderFuture.then((orderedProductsUid) async {
-      if (orderedProductsUid != null) {
-        print(orderedProductsUid);
-        final dateTime = DateTime.now();
-        final formatedDateTime =
-            "${dateTime.day}-${dateTime.month}-${dateTime.year}";
-        List<OrderedProduct> orderedProducts = orderedProductsUid
-            .map((e) => OrderedProduct(null,
-                productUid: e, orderDate: formatedDateTime))
-            .toList();
-        bool addedProductsToMyProducts = false;
-        String snackbarmMessage;
-        try {
-          addedProductsToMyProducts =
-              await UserDatabaseHelper().addToMyOrders(orderedProducts);
-          if (addedProductsToMyProducts) {
-            snackbarmMessage = "Products ordered Successfully";
-          } else {
-            throw "Could not order products due to unknown issue";
-          }
-        } on FirebaseException catch (e) {
-          Logger().e(e.toString());
-          snackbarmMessage = e.toString();
-        } catch (e) {
-          Logger().e(e.toString());
-          snackbarmMessage = e.toString();
-        } finally {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(snackbarmMessage ?? "Something went wrong"),
-            ),
-          );
-        }
-      } else {
-        throw "Something went wrong while clearing cart";
-      }
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return FutureProgressDialog(
-            orderFuture,
-            message: Text("Placing the Order"),
-          );
-        },
-      );
-    }).catchError((e) {
-      Logger().e(e.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Something went wrong"),
-        ),
-      );
-    });
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return FutureProgressDialog(
-          orderFuture,
-          message: Text("Placing the Order"),
-        );
-      },
-    );
-    await refreshPage();
   }
 
   void shutBottomSheet() {

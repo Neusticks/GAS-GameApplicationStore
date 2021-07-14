@@ -94,20 +94,87 @@
 // }
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
+import 'package:gas_gameappstore/models/Cart.dart';
+import 'package:gas_gameappstore/screens/Cart/cart_screen.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:indonesia/indonesia.dart';
 import 'package:pay/pay.dart';
 import '../../../size_config.dart';
 
+import 'package:square_in_app_payments/models.dart';
+import 'package:square_in_app_payments/in_app_payments.dart';
+
 class CheckoutCard extends StatelessWidget {
-  final _paymentItems = <PaymentItem>[];
+  //final _paymentItems = <PaymentItem>[];
   final VoidCallback onCheckoutPressed;
+
   CheckoutCard({
     Key key,
     @required this.onCheckoutPressed,
   }) : super(key: key);
+
+  // @override
+  // CheckoutCardState createState() => CheckoutCardState();
+//}
+
+//class CheckoutCardState extends State<CheckoutCard>{
+
+  // Future<void> _pay() async {
+  //   await InAppPayments.setSquareApplicationId(
+  //       'sandbox-sq0idb-_F5YicVyQRFBdw0P2orLKA');
+  //   InAppPayments.startCardEntryFlow(onCardNonceRequestSuccess: onCardNonceRequestSuccess, onCardEntryCancel: onCardEntryCancel);
+  // }
+  //
+  // void onCardEntryCancel(){
+  //   showDialog<String>(
+  //       context: context,
+  //       builder: (BuildContext context) => AlertDialog(
+  //         title: const Text('Cancelled'),
+  //         content: const Text('Input card credential has been cancelled!'),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context, 'OK'),
+  //             child: const Text('OK'),
+  //           ),
+  //         ],
+  //       ),
+  //   );
+  // }
+  //
+  // void onCardNonceRequestSuccess(CardDetails result){
+  //   print(result.nonce);
+  //   //chargeCard(result);
+  //
+  //   InAppPayments.completeCardEntry(onCardEntryComplete: onCardEntryComplete);
+  // }
+  //
+  // void onCardEntryComplete() async{
+  //   //Success, clear cart
+  //   await showDialog<String>(
+  //     context: context,
+  //     builder: (BuildContext context) => AlertDialog(
+  //       title: const Text('Success!'),
+  //       content: const Text('Your order has been paid!'),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: () async{
+  //             await FirebaseFirestore.instance.collection('users').doc(AuthentificationService().currentUser.uid).collection('cart').get().then((snapshot) {
+  //               for (DocumentSnapshot ds in snapshot.docs){
+  //                 ds.reference.delete();
+  //               }
+  //             });
+  //             Navigator.pop(context, 'OK');
+  //           },
+  //           child: const Text('OK'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -138,12 +205,12 @@ class CheckoutCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FutureBuilder<num>(
-                  future: UserDatabaseHelper().cartTotal,
+                StreamBuilder(
+                  stream: UserDatabaseHelper().cartTotal.asStream(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final cartTotal = snapshot.data;
-                      _paymentItems.add(PaymentItem(amount: cartTotal.toString(), label: "GAS Product", status: PaymentItemStatus.final_price));
+                      //_paymentItems.add(PaymentItem(amount: cartTotal.toString(), label: "GAS Product", status: PaymentItemStatus.final_price));
                       return Text.rich(
                         TextSpan(text: "Total\n", children: [
                           TextSpan(
@@ -162,43 +229,47 @@ class CheckoutCard extends StatelessWidget {
                 ),
                 SizedBox(
                   width: getProportionScreenWidth(190),
-                  child: Row(
-                    children: [
-                      ApplePayButton(
-                        paymentConfigurationAsset: 'applePay.json',
-                        paymentItems: _paymentItems,
-                        width: 150,
-                        style: ApplePayButtonStyle.black,
-                        type: ApplePayButtonType.buy,
-                        margin: const EdgeInsets.only(top: 15.0),
-                        onPaymentResult: (data){
-                          print(data);
-                        },
-                        loadingIndicator: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-
-                      GooglePayButton(
-                        paymentConfigurationAsset: 'gpay.json',
-                        paymentItems: _paymentItems,
-                        width: 150,
-                        style: GooglePayButtonStyle.black,
-                        type: GooglePayButtonType.pay,
-                        margin: const EdgeInsets.only(top: 15.0),
-                        onPaymentResult: (data){
-                          print(data);
-                        },
-                        loadingIndicator: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  // child: DefaultButton(
-                  //   text: "Checkout",
-                  //   press: onCheckoutPressed,
+                  // child: ElevatedButton(
+                  //   child: Icon(Icons.payment),
+                  //   onPressed: _pay,
+                  // )
+                  // child: Row(
+                  //   children: [
+                  //     ApplePayButton(
+                  //       paymentConfigurationAsset: 'applePay.json',
+                  //       paymentItems: _paymentItems,
+                  //       width: 150,
+                  //       style: ApplePayButtonStyle.black,
+                  //       type: ApplePayButtonType.buy,
+                  //       margin: const EdgeInsets.only(top: 15.0),
+                  //       onPaymentResult: (data){
+                  //         print(data);
+                  //       },
+                  //       loadingIndicator: const Center(
+                  //         child: CircularProgressIndicator(),
+                  //       ),
+                  //     ),
+                  //
+                  //     GooglePayButton(
+                  //       paymentConfigurationAsset: 'gpay.json',
+                  //       paymentItems: _paymentItems,
+                  //       width: 150,
+                  //       style: GooglePayButtonStyle.black,
+                  //       type: GooglePayButtonType.pay,
+                  //       margin: const EdgeInsets.only(top: 15.0),
+                  //       onPaymentResult: (data){
+                  //         print(data);
+                  //       },
+                  //       loadingIndicator: const Center(
+                  //         child: CircularProgressIndicator(),
+                  //       ),
+                  //     ),
+                  //   ],
                   // ),
+                  child: DefaultButton(
+                    text: "Checkout",
+                    press: onCheckoutPressed,
+                  ),
                 ),
               ],
             ),
