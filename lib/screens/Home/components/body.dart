@@ -4,7 +4,7 @@ import 'package:gas_gameappstore/services/data_streams/favourite_products_stream
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
 import 'categories.dart';
-import 'discount_banner.dart';
+import 'news_banner.dart';
 import 'home_header.dart';
 import 'popular_product.dart';
 import 'special_offers.dart';
@@ -35,7 +35,7 @@ class _BodyState extends State<Body> {
                 SizedBox(height: getProportionScreenHeight(20)),
                 HomeHeader(),
                 SizedBox(height: getProportionScreenWidth(10)),
-                DiscountBanner(),
+                NewsBanner(),
                 Categories(),
                 // RoundedButton(
                 //     text: "Add Product",

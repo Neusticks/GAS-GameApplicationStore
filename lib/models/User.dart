@@ -12,6 +12,7 @@ class User extends Model {
   static const String USER_ROLE_KEY = "userRole";
   static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
   static const String USER_STORE_ID_KEY = "userStoreId";
+  static const String USER_ISBAN_KEY = "userIsBan";
 
   BigInt userId;
   String userStoreId;
@@ -25,6 +26,7 @@ class User extends Model {
   String userTransactionPIN;
   String userRole;
   String userProfilePicture;
+  bool userIsBan;
 
   User(
       {String id,
@@ -38,7 +40,8 @@ class User extends Model {
       this.userAddress,
       this.userTransactionPIN,
       this.userRole,
-      this.userProfilePicture})
+      this.userProfilePicture,
+      this.userIsBan})
       : super(id);
 
   factory User.fromMap(Map<String, dynamic> map, {String id}) {
@@ -54,7 +57,8 @@ class User extends Model {
         userAddress: map[USER_ADDRESS_KEY],
         userTransactionPIN: map[USER_TRANSACTION_PIN_KEY],
         userRole: map[USER_ROLE_KEY],
-        userProfilePicture: map[USER_PROFILE_PICTURE_KEY]);
+        userProfilePicture: map[USER_PROFILE_PICTURE_KEY],
+        userIsBan: map[USER_ISBAN_KEY]);
   }
 
   @override
@@ -71,6 +75,7 @@ class User extends Model {
       USER_TRANSACTION_PIN_KEY: userTransactionPIN,
       USER_ROLE_KEY: userRole,
       USER_PROFILE_PICTURE_KEY: userProfilePicture,
+      USER_ISBAN_KEY: userIsBan,
     };
 
     return map;
@@ -91,6 +96,7 @@ class User extends Model {
     if (userRole != null) map[USER_ROLE_KEY] = userRole;
     if (userProfilePicture != null)
       map[USER_PROFILE_PICTURE_KEY] = userProfilePicture;
+    if (userIsBan != null) map[USER_ISBAN_KEY] = userIsBan;
     return map;
   }
 }

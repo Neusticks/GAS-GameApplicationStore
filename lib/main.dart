@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/ManageUserAdmin/manage_user_screen.dart';
 import 'package:gas_gameappstore/screens/Welcome/welcome_screen.dart';
 import 'package:gas_gameappstore/theme.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter App',
       theme: theme(),
-      home: SplashScreen(),
+      home: ManageUserScreen(),
     );
   }
 }

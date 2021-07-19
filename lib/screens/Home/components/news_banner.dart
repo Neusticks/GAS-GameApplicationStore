@@ -4,8 +4,8 @@ import 'package:gas_gameappstore/screens/GameNews/game_news_screen.dart';
 
 import '../../../size_config.dart';
 
-class DiscountBanner extends StatelessWidget {
-  const DiscountBanner({
+class NewsBanner extends StatelessWidget {
+  const NewsBanner({
     Key key,
   }) : super(key: key);
 
