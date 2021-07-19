@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Cart/cart_screen.dart';
+import 'package:gas_gameappstore/screens/Transaction/transaction_screen.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 
 import '../../../size_config.dart';
 import 'icon_btn_with_counter.dart';
@@ -9,6 +12,14 @@ class HomeHeader extends StatelessWidget {
   const HomeHeader({
     Key key,
   }) : super(key: key);
+
+  Future<int> getTransaction() async {
+    int size;
+    await FirebaseFirestore.instance.collection("users").doc(AuthentificationService().currentUser.uid).collection("ordered_products").get().then((snap) => {
+      size = snap.size,
+    });
+    return size;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +36,17 @@ class HomeHeader extends StatelessWidget {
               return CartScreen();
             })),
           ),
-          IconBtnWithCounter(
-            svgSrc: "assets/icons/Bell.svg",
-            numOfItems: 3,
-            press: () {},
+          FutureBuilder(
+            future: getTransaction(),
+            builder: (context, snapshot){
+              return IconBtnWithCounter(
+                svgSrc: "assets/icons/Bell.svg",
+                numOfItems: snapshot.data,
+                press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return TransactionScreen();
+                })),
+              );
+            }
           ),
         ],
       ),

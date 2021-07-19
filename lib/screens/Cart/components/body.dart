@@ -8,7 +8,6 @@ import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
-import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/data_streams/cart_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
@@ -286,7 +285,7 @@ class _BodyState extends State<Body> {
                   snackbarMessage = "Product removed from cart successfully";
                   await refreshPage();
                 } else {
-                  throw "Coulnd't remove product from cart due to unknown reason";
+                  throw "Couldn't remove product from cart due to unknown reason";
                 }
               } on FirebaseException catch (e) {
                 Logger().w("Firebase Exception: $e");
@@ -363,26 +362,26 @@ class _BodyState extends State<Body> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                for (var i = 0; i <= index; i++)
-                  new Checkbox(
-                    value: checked[i],
-                    onChanged: (bool value) {
-                      setState(() {
-                        if(Cart.ITEM_CART_CHECKED == 'true'){
-                          checked[i] = true;
-                        }
-                        else{
-                          checked[i] = false;
-                        }
-                        checked[i] = value;
-                        UserDatabaseHelper().itemChecked(product.id, value);
-                        getTotalAmount();
-                      });
-                    },
-                    // tristate: i == 1,
-                    // value: checked[i],
-                    // activeColor: Color(0xFF6200EE),
-                  ),
+                // for (var i = 0; i <= index; i++)
+                //   new Checkbox(
+                //     value: checked[i],
+                //     onChanged: (bool value) {
+                //       setState(() {
+                //         if(Cart.ITEM_CART_CHECKED == 'true'){
+                //           checked[i] = true;
+                //         }
+                //         else{
+                //           checked[i] = false;
+                //         }
+                //         checked[i] = value;
+                //         UserDatabaseHelper().itemChecked(product.id, value);
+                //         getTotalAmount();
+                //       });
+                //     },
+                //     // tristate: i == 1,
+                //     // value: checked[i],
+                //     // activeColor: Color(0xFF6200EE),
+                //   ),
                 Expanded(
                   flex: 8,
                   child: ProductShortDetailCard(
@@ -492,14 +491,6 @@ class _BodyState extends State<Body> {
     await InAppPayments.setSquareApplicationId(
         'sandbox-sq0idb-_F5YicVyQRFBdw0P2orLKA');
     await InAppPayments.startCardEntryFlow(onCardNonceRequestSuccess: onCardNonceRequestSuccess, onCardEntryCancel: onCardEntryCancel);
-
-    // final confirmation = await showConfirmationDialog(
-    //   context,
-    //   "This is just a Project Testing App so, no actual Payment Interface is available.\nDo you want to proceed for Mock Ordering of Products?",
-    // );
-    // if (confirmation == false) {
-    //   return;
-    // }
   }
 
   void shutBottomSheet() {
@@ -560,17 +551,17 @@ class _BodyState extends State<Body> {
     );
   }
 
-  getTotalAmount() {
-    var count = 0;
-    for (int i = 0; i < checked.length; i++) {
-      if (checked[i]) {
-        count = count + 1;
-      }
-      if (i == checked.length - 1) {
-        setState(() {
-          totalAmount = 248 * count;
-        });
-      }
-    }
-  }
+  // getTotalAmount() {
+  //   var count = 0;
+  //   for (int i = 0; i < checked.length; i++) {
+  //     if (checked[i]) {
+  //       count = count + 1;
+  //     }
+  //     if (i == checked.length - 1) {
+  //       setState(() {
+  //         totalAmount = 248 * count;
+  //       });
+  //     }
+  //   }
+  // }
 }

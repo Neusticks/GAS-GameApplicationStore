@@ -4,8 +4,8 @@ import 'package:gas_gameappstore/services/data_streams/favourite_products_stream
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
 import 'categories.dart';
-import 'news_banner.dart';
 import 'home_header.dart';
+import 'news_banner.dart';
 import 'popular_product.dart';
 import 'special_offers.dart';
 
@@ -28,6 +28,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     var favouriteProductsStream;
+
         return SafeArea(
           child: SingleChildScrollView(
             child: Column(
@@ -60,10 +61,12 @@ class _BodyState extends State<Body> {
                   ),
                 )
           ],
+
         ),
       ),
     );
   }
+
   Future<void> refreshPage() {
     favouriteProductsStream.reload();
     allProductsStream.reload();

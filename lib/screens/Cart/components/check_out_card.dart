@@ -210,7 +210,6 @@ class CheckoutCard extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final cartTotal = snapshot.data;
-                      //_paymentItems.add(PaymentItem(amount: cartTotal.toString(), label: "GAS Product", status: PaymentItemStatus.final_price));
                       return Text.rich(
                         TextSpan(text: "Total\n", children: [
                           TextSpan(

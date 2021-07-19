@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'components/body.dart';
 
-class CartScreen extends StatelessWidget {
-  static String routeName = "/cart";
+class TransactionScreen extends StatelessWidget {
+  static String routeName = "/favorite_product";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
