@@ -5,6 +5,7 @@ import 'package:gas_gameappstore/screens/ChangeDisplayName/change_display_name_s
 import 'package:gas_gameappstore/screens/ChangeEmail/change_email_screen.dart';
 import 'package:gas_gameappstore/screens/ChangePassword/change_password_screen.dart';
 import 'package:gas_gameappstore/screens/CreateMyStore/create_mystore_screen.dart';
+import 'package:gas_gameappstore/screens/FavoriteProduct/favorite_product_screen.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/ManageAddresses/manage_addresses_screen.dart';
 import 'package:gas_gameappstore/screens/Mystore/mystore_screen.dart';
@@ -31,4 +32,5 @@ final Map<String, WidgetBuilder> routes = {
   ChangeEmailScreen.routeName: (context) => ChangeEmailScreen(),
   CreateStoreFormScreen.routeName: (context) => CreateStoreFormScreen(),
   MyStoreScreen.routeName: (context) => MyStoreScreen(),
+  FavoriteProductScreen.routeName: (context) => FavoriteProductScreen(),
 };

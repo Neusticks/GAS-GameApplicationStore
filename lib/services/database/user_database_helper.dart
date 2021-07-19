@@ -311,19 +311,19 @@ class UserDatabaseHelper {
     return itemsId;
   }
 
-  // Future<List<String>> get orderedProductsList async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final orderedProductsSnapshot = await firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(ORDERED_PRODUCTS_COLLECTION_NAME)
-  //       .get();
-  //   List orderedProductsId = List<String>();
-  //   for (final doc in orderedProductsSnapshot.docs) {
-  //     orderedProductsId.add(doc.id);
-  //   }
-  //   return orderedProductsId;
-  // }
+  Future<List<String>> get orderedProductsList async {
+    String uid = AuthentificationService().currentUser.uid;
+    final orderedProductsSnapshot = await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(ORDERED_PRODUCTS_COLLECTION_NAME)
+        .get();
+    List orderedProductsId = List<String>();
+    for (final doc in orderedProductsSnapshot.docs) {
+      orderedProductsId.add(doc.id);
+    }
+    return orderedProductsId;
+  }
 
   Future<bool> addToMyOrders(List<OrderedProduct> orders) async {
     String uid = AuthentificationService().currentUser.uid;
@@ -337,17 +337,17 @@ class UserDatabaseHelper {
     return true;
   }
 
-  // Future<OrderedProduct> getOrderedProductFromId(String id) async {
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final doc = await firestore
-  //       .collection(USERS_COLLECTION_NAME)
-  //       .doc(uid)
-  //       .collection(ORDERED_PRODUCTS_COLLECTION_NAME)
-  //       .doc(id)
-  //       .get();
-  //   final orderedProduct = OrderedProduct.fromMap(doc.data(), id: doc.id);
-  //   return orderedProduct;
-  // }
+  Future<OrderedProduct> getOrderedProductFromId(String id) async {
+    String uid = AuthentificationService().currentUser.uid;
+    final doc = await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(uid)
+        .collection(ORDERED_PRODUCTS_COLLECTION_NAME)
+        .doc(id)
+        .get();
+    final orderedProduct = OrderedProduct.fromMap(doc.data(), id: doc.id);
+    return orderedProduct;
+  }
 
   Stream<DocumentSnapshot> get currentUserDataStream {
     String userId = AuthentificationService().currentUser.uid;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gas_gameappstore/models/Store.dart';
 import 'package:gas_gameappstore/screens/CreateMyStore/create_mystore_screen.dart';
+import 'package:gas_gameappstore/screens/FavoriteProduct/favorite_product_screen.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/screens/Mystore/mystore_screen.dart';
 import 'package:gas_gameappstore/screens/profile/profile_screen.dart';
@@ -71,11 +72,13 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
                   onPressed: () => Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return HomeScreen();
-                      }))),
+                    }))),
               IconButton(
                 icon: SvgPicture.asset("assets/icons/Heart Icon.svg"),
-                onPressed: () {},
-              ),
+                onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
+                      return FavoriteProductScreen();
+                    }))),
               IconButton(
                 icon: SvgPicture.asset("assets/icons/Shop Icon.svg"),
                 onPressed: () => storeButtonCallback(context),
