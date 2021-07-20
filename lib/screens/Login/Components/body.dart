@@ -156,7 +156,7 @@ class _Body extends State<Body> {
       _formKey.currentState.save();
       final AuthentificationService authService = AuthentificationService();
       
-      bool signInStatus = false;
+      String signInStatus = "";
       String snackbarMessage;
       try {
         final signInFuture = authService.signIn(
@@ -173,11 +173,11 @@ class _Body extends State<Body> {
             );
           },
         );
-        if (signInStatus == true) {
+        if (signInStatus == "true") {
           snackbarMessage = "Signed In Successfully";
         } 
         else {
-          throw FirebaseSignInAuthUnknownReasonFailure();
+          snackbarMessage = signInStatus;
         }
       } on MessagedFirebaseAuthException catch (e) {
         snackbarMessage = e.message;
@@ -190,7 +190,7 @@ class _Body extends State<Body> {
             content: Text(snackbarMessage),
           ),
         );
-        if(signInStatus == true){
+        if(signInStatus == "true"){
           Navigator.push(
             context, MaterialPageRoute(builder: (context){
               return HomeScreen();

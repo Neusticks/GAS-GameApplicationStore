@@ -264,7 +264,7 @@ class _Body extends State<Body> {
     if (_formKey.currentState.validate()) {
       // goto complete profile page
       final AuthentificationService authService = AuthentificationService();
-      bool signUpStatus = false;
+      String signUpStatus = "";
       String snackbarMessage;
       try {
         final signUpFuture = authService.signUp(
@@ -283,11 +283,11 @@ class _Body extends State<Body> {
             );
           },
         );
-        if (signUpStatus == true) {
+        if (signUpStatus == "true") {
           snackbarMessage =
               "Registered successfully, Please verify your email id";
         } else {
-          throw FirebaseSignUpAuthUnknownReasonFailureException();
+          snackbarMessage = signUpStatus;
         }
       } on MessagedFirebaseAuthException catch (e) {
         snackbarMessage = e.message;

@@ -76,7 +76,7 @@ class AuthentificationService {
     return true;
   }
 
-  Future<bool> signIn({String email, String password}) async {
+  Future<String> signIn({String email, String password}) async {
     try {
       final UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
@@ -87,40 +87,41 @@ class AuthentificationService {
         Map<String, dynamic> docFields = userDoc.data();
         var userIsBan = docFields["userIsBan"].toString();
         if(userIsBan == "false"){
-          return true;
+          return "true";
         }
         else if(userIsBan == "true"){
-          throw FirebaseSignInAuthUserDisabledException();
+          return FirebaseSignInAuthUserDisabledException().toString();
         }
       } else {
         await userCredential.user.sendEmailVerification();
-        throw FirebaseSignInAuthUserNotVerifiedException();
+        return FirebaseSignInAuthUserNotVerifiedException().toString();
       }
     } on MessagedFirebaseAuthException {
       rethrow;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case INVALID_EMAIL_EXCEPTION_CODE:
-          throw FirebaseSignInAuthInvalidEmailException();
-
+          return FirebaseSignInAuthInvalidEmailException().toString();
+          break;
         case USER_DISABLED_EXCEPTION_CODE:
-          throw FirebaseSignInAuthUserDisabledException();
-
+          return FirebaseSignInAuthUserDisabledException().toString();
+          break;
         case USER_NOT_FOUND_EXCEPTION_CODE:
-          throw FirebaseSignInAuthUserNotFoundException();
-
+          return FirebaseSignInAuthUserNotFoundException().toString();
+          break;
         case WRONG_PASSWORD_EXCEPTION_CODE:
-          throw FirebaseSignInAuthWrongPasswordException();
-
+          return FirebaseSignInAuthWrongPasswordException().toString();
+          break;
         default:
-          throw FirebaseSignInAuthException(message: e.code);
+          return FirebaseSignInAuthException(message: e.code).toString();
+          break;
       }
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<bool> signUp({String email, String password, String gender, String dob}) async {
+  Future<String> signUp({String email, String password, String gender, String dob}) async {
     try {
       final UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
@@ -129,21 +130,26 @@ class AuthentificationService {
         await userCredential.user.sendEmailVerification();
       }
       await UserDatabaseHelper().createNewUser(uid, email, password, gender, dob);
-      return true;
+      return "true";
     } on MessagedFirebaseAuthException {
       rethrow;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case EMAIL_ALREADY_IN_USE_EXCEPTION_CODE:
-          throw FirebaseSignUpAuthEmailAlreadyInUseException();
+          return FirebaseSignUpAuthEmailAlreadyInUseException().toString();
+          break;
         case INVALID_EMAIL_EXCEPTION_CODE:
-          throw FirebaseSignUpAuthInvalidEmailException();
+          return FirebaseSignUpAuthInvalidEmailException().toString();
+          break;
         case OPERATION_NOT_ALLOWED_EXCEPTION_CODE:
-          throw FirebaseSignUpAuthOperationNotAllowedException();
+          return FirebaseSignUpAuthOperationNotAllowedException().toString();
+          break;
         case WEAK_PASSWORD_EXCEPTION_CODE:
-          throw FirebaseSignUpAuthWeakPasswordException();
+          return FirebaseSignUpAuthWeakPasswordException().toString();
+          break;
         default:
-          throw FirebaseSignInAuthException(message: e.code);
+          return FirebaseSignInAuthException(message: e.code).toString();
+          break;
       }
     } catch (e) {
       rethrow;
@@ -209,10 +215,13 @@ class AuthentificationService {
       switch (e.code) {
         case WEAK_PASSWORD_EXCEPTION_CODE:
           throw FirebaseCredentialActionAuthWeakPasswordException();
+          break;
         case REQUIRES_RECENT_LOGIN_EXCEPTION_CODE:
           throw FirebaseCredentialActionAuthRequiresRecentLoginException();
+          break;
         default:
           throw FirebaseCredentialActionAuthException(message: e.code);
+          break;
       }
     } catch (e) {
       rethrow;
@@ -259,20 +268,28 @@ class AuthentificationService {
       switch (e.code) {
         case USER_MISMATCH_EXCEPTION_CODE:
           throw FirebaseReauthUserMismatchException();
+          break;
         case USER_NOT_FOUND_EXCEPTION_CODE:
           throw FirebaseReauthUserNotFoundException();
+          break;
         case INVALID_CREDENTIALS_EXCEPTION_CODE:
           throw FirebaseReauthInvalidCredentialException();
+          break;
         case INVALID_EMAIL_EXCEPTION_CODE:
           throw FirebaseReauthInvalidEmailException();
+          break;
         case WRONG_PASSWORD_EXCEPTION_CODE:
           throw FirebaseReauthWrongPasswordException();
+          break;
         case INVALID_VERIFICATION_CODE_EXCEPTION_CODE:
           throw FirebaseReauthInvalidVerificationCodeException();
+          break;
         case INVALID_VERIFICATION_ID_EXCEPTION_CODE:
           throw FirebaseReauthInvalidVerificationIdException();
+          break;
         default:
           throw FirebaseReauthException(message: e.code);
+          break;
       }
     } catch (e) {
       rethrow;
