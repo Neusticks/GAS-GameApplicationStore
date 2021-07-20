@@ -36,7 +36,7 @@ class PilotRequest extends Model {
       id,
       gameId: map[PILOT_REQUEST_GAME_ID_KEY],
       userName: map[PILOT_REQUEST_USER_NAME_KEY],
-      userPhone: map[[PILOT_REQUEST_USER_PHONE_KEY]],
+      userPhone: map[PILOT_REQUEST_USER_PHONE_KEY],
       requestStatus: map[PILOT_REQUEST_STATUS_KEY],
       gameName:
           EnumToString.fromString(GameList.values, map[PILOT_REQUEST_GAME_NAME_KEY]),

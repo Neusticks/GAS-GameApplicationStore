@@ -148,25 +148,6 @@ class _BodyState extends State<Body>{
                       horizontal: 12,
                       vertical: 5,
                     ),
-                    // decoration: BoxDecoration(
-                    //   color: kTextColor.withOpacity(0.05),
-                    //   borderRadius: BorderRadius.circular(15),
-                    // ),
-                    // child: Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     DefaultButton(
-                    //       text: "Unban",
-                    //       press: (){},
-                    //     ),
-                    //     SizedBox(height: 20),
-                    //     DefaultButton(
-                    //       text: "Ban",
-                    //       press: (){},
-                    //     ),
-                    //     SizedBox(height: 20),
-                    //   ],
-                    // ),
                   ),
                 ),
               ],
