@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gas_gameappstore/models/Store.dart';
+import 'package:gas_gameappstore/screens/AdminProfile/admin_profile_screen.dart';
 import 'package:gas_gameappstore/screens/CreateMyStore/create_mystore_screen.dart';
 import 'package:gas_gameappstore/screens/FavoriteProduct/favorite_product_screen.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/screens/Mystore/mystore_screen.dart';
-import 'package:gas_gameappstore/screens/profile/profile_screen.dart';
+import 'package:gas_gameappstore/screens/Profile/profile_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/services/database/store_database_helper.dart';
@@ -94,10 +95,12 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
                         ? kPrimaryColor
                         : inActiveIconColor,
                   ),
-                  onPressed: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return ProfileScreen();
-                      }))),
+                  onPressed: () => profileButtonCallback(context),
+                  // Navigator.push(context,
+                  //         MaterialPageRoute(builder: (context) {
+                  //       return ProfileScreen();
+                  //     }))
+                  ),
             ],
           )),
     );
@@ -120,5 +123,24 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
         return MyStoreScreen();
       }));
     }
+  }
+
+  Future<void> profileButtonCallback(BuildContext context) async{
+    String uid = AuthentificationService().currentUser.uid;
+    final userCollectionRef = firestore.collection('users');
+    final userDoc = await userCollectionRef.doc(uid).get();
+    Map<String, dynamic> docFields = userDoc.data();
+    var userRole = docFields["userRole"].toString();
+    if(userRole == "Customer" || userRole == "customer"){
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return ProfileScreen();
+      }));
+    }
+    else if(userRole == "Admin" || userRole == "admin"){
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return AdminProfileScreen();
+      }));
+    }
+
   }
 }

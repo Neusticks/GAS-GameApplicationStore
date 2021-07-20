@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
+import 'package:gas_gameappstore/screens/ManageUserAdmin/manage_user_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
-import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
-import 'profile_menu.dart';
-import 'profile_pic.dart';
+
+import 'admin_profile_menu.dart';
+import 'admin_profile_pic.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -21,9 +22,9 @@ class _Body extends State<Body> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          ProfilePic(),
+          AdminProfilePic(),
           SizedBox(height: 20),
-          ProfileMenu(
+          AdminProfileMenu(
               text: "My Account",
               icon: "assets/icons/User Icon.svg",
               press: () =>
@@ -31,17 +32,25 @@ class _Body extends State<Body> {
                     return ProfileSettings();
                   }))
           ),
-          ProfileMenu(
-            text: "Notifications",
+          AdminProfileMenu(
+            text: "Manage Users Account", 
+            icon: "assets/icons/User Icon.svg",
+            press: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ManageUserScreen();
+                })),
+          ),
+          AdminProfileMenu(
+            text: "Manage Request",
             icon: "assets/icons/Bell.svg",
             press: () {},
           ),
-          ProfileMenu(
-            text: "Help Center",
+          AdminProfileMenu(
+            text: "Manage Report",
             icon: "assets/icons/Question mark.svg",
             press: () {},
           ),
-          ProfileMenu(
+          AdminProfileMenu(
             text: "Log Out",
             icon: "assets/icons/Log out.svg",
             press: () async{

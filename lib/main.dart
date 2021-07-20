@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter App',
       theme: theme(),
-      home: ManageUserScreen(),
+      home: SplashScreen(),
     );
   }
 }

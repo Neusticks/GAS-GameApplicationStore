@@ -51,12 +51,6 @@ class _BodyState extends State<Body>{
               width: double.infinity,
               child: Column(
                 children: [
-                  SizedBox(height: getProportionScreenHeight(10)),
-                  Text(
-                    "User List",
-                    style: headingStyle,
-                  ),
-                  SizedBox(height: getProportionScreenHeight(20)),
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.75,
                     child: Center(
@@ -77,15 +71,6 @@ class _BodyState extends State<Body>{
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<String> userId = snapshot.data;
-
-          if (userId.length == 0) {
-            return Center(
-              child: NothingToShowContainer(
-                iconPath: "assets/icons/empty_cart.svg",
-                secondaryMessage: "Your cart is empty",
-              ),
-            );
-          }
 
           return Column(
             children: [

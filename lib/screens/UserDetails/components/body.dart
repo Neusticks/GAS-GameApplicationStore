@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
-import 'package:gas_gameappstore/customdialogueutils.dart';
 import 'package:gas_gameappstore/models/User.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:gas_gameappstore/size_config.dart';
@@ -37,12 +36,14 @@ class Body extends StatelessWidget {
                 final userData = snapshot.data;
                 String userId = userData.id;
                 String userName = userData.userName;
+                String userEmail = userData.userEmail;
                 String banStatus = userData.userIsBan.toString();
                 return SizedBox(
                   height: getProportionScreenHeight(320),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 10),
                       Text(
                         "User Id: $userId",
                         softWrap: true,
@@ -65,12 +66,22 @@ class Body extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                text: "Ban Status: $banStatus",
+                                text: "User Email: $userEmail\n",
                                 style: TextStyle(
                                   color: kTextColor,
                                   fontWeight: FontWeight.normal,
                                   fontSize: 15,
                                 ),
+                                children: [
+                                  TextSpan(
+                                    text: "Ban Status: $banStatus",
+                                    style: TextStyle(
+                                      color: kTextColor,
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 15,
+                                      ),
+                                  ),
+                                ],
                               ),
                             ]),
                       ),

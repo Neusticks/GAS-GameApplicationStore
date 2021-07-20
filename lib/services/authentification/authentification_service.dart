@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/credential_actions_exceptions.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/reauth_exceptions.dart';
@@ -21,7 +23,7 @@ class AuthentificationService {
   static const String USER_MISMATCH_EXCEPTION_CODE = "user-mismatch";
   static const String INVALID_CREDENTIALS_EXCEPTION_CODE = "invalid-credential";
   static const String INVALID_EMAIL_EXCEPTION_CODE = "invalid-email";
-  static const String USER_DISABLED_EXCEPTION_CODE = "user-disabled";
+  static const String USER_DISABLED_EXCEPTION_CODE = "user-banned";
   static const String INVALID_VERIFICATION_CODE_EXCEPTION_CODE =
       "invalid-verification-code";
   static const String INVALID_VERIFICATION_ID_EXCEPTION_CODE =
@@ -78,8 +80,18 @@ class AuthentificationService {
     try {
       final UserCredential userCredential = await firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
-      if (userCredential.user.emailVerified) {
-        return true;
+
+      if (userCredential.user.emailVerified ) {
+        String uid = userCredential.user.uid;
+        final userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        Map<String, dynamic> docFields = userDoc.data();
+        var userIsBan = docFields["userIsBan"].toString();
+        if(userIsBan == "false"){
+          return true;
+        }
+        else if(userIsBan == "true"){
+          throw FirebaseSignInAuthUserDisabledException();
+        }
       } else {
         await userCredential.user.sendEmailVerification();
         throw FirebaseSignInAuthUserNotVerifiedException();

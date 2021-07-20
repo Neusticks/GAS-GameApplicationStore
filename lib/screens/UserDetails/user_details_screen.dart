@@ -17,7 +17,7 @@ class UserDetailsScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-
+        title: Text("User Details"),
       ),
       body: Body(
         userId: userId,

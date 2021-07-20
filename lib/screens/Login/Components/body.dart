@@ -155,6 +155,7 @@ class _Body extends State<Body> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       final AuthentificationService authService = AuthentificationService();
+      
       bool signInStatus = false;
       String snackbarMessage;
       try {
@@ -174,7 +175,8 @@ class _Body extends State<Body> {
         );
         if (signInStatus == true) {
           snackbarMessage = "Signed In Successfully";
-        } else {
+        } 
+        else {
           throw FirebaseSignInAuthUnknownReasonFailure();
         }
       } on MessagedFirebaseAuthException catch (e) {
