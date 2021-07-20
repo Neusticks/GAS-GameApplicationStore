@@ -263,7 +263,7 @@ class _EditProductFormState extends State<EditProductForm> {
                 )
                 .toList(),
             hint: Text(
-              "Chose Product Type",
+              "Choose Product Type",
             ),
             style: TextStyle(
               color: kTextColor,
