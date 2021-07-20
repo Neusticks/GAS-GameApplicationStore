@@ -133,16 +133,24 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
   }
 
   Future<void> changePasswordButtonCallback() async {
+    String snackbarMessage;
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       final AuthentificationService authService = AuthentificationService();
-      bool currentPasswordValidation = await authService
-          .verifyCurrentUserPassword(currentPasswordController.text);
+      bool currentPasswordValidation;
+      final userDocSnapshotFirst = await FirebaseFirestore.instance.collection("users").doc(authService.currentUser.uid).get();
+      if(userDocSnapshotFirst.data()["userPassword"] == currentPasswordController.text) currentPasswordValidation = true;
+      else currentPasswordValidation = false;
       if (currentPasswordValidation == false) {
-        print("Current password provided is wrong");
+        snackbarMessage = "Current password provided is wrong";
+        Logger().i(snackbarMessage);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(snackbarMessage),
+          ),
+        );
       } else {
         bool updationStatus = false;
-        String snackbarMessage;
         try {
           updationStatus = await authService.changePasswordForCurrentUser(
               newPassword: newPasswordController.text);
@@ -152,9 +160,8 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             await userDocSnapshot.update({"userPassword" : newPasswordController.text});
             snackbarMessage = "Password changed successfully";
           } else {
-            throw FirebaseCredentialActionAuthUnknownReasonFailureException(
-                message:
-                    "Failed to change password, due to some unknown reason");
+            //throw FirebaseCredentialActionAuthUnknownReasonFailureException(message: "Failed to change password, due to some unknown reason");
+            snackbarMessage = "Failed to change password";
           }
         } on MessagedFirebaseAuthException catch (e) {
           snackbarMessage = e.message;
