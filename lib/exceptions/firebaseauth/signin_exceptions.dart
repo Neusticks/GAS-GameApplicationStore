@@ -9,7 +9,7 @@ class FirebaseSignInAuthException extends MessagedFirebaseAuthException {
 class FirebaseSignInAuthUserDisabledException
     extends FirebaseSignInAuthException {
   FirebaseSignInAuthUserDisabledException(
-      {String message = "This user is disabled"})
+      {String message = "This user is banned"})
       : super(message: message);
 }
 

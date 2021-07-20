@@ -3,6 +3,7 @@ import 'package:gas_gameappstore/models/Address.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/Store.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
+import 'package:gas_gameappstore/models/User.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 
@@ -24,6 +25,7 @@ class UserDatabaseHelper {
   static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
   static const String USER_STORE_ID_KEY = "userStoreId";
   static const String FAV_PRODUCTS_KEY = "favourite_products";
+  static const String USER_ISBAN_KEY = "userIsBan";
 
   static const String STORE_COLLECTION_NAME = "stores";
   static const String STORE_NAME_KEY = "storeName";
@@ -62,6 +64,7 @@ class UserDatabaseHelper {
       USER_ROLE_KEY: 'Customer',
       USER_PROFILE_PICTURE_KEY: null,
       FAV_PRODUCTS_KEY: List<String>(),
+      USER_ISBAN_KEY: false,
     });
   }
 
@@ -100,6 +103,17 @@ class UserDatabaseHelper {
     } else {
       return false;
     }
+  }
+  Future<User> getUserWithID(String userId) async {
+    final docSnapshot = await firestore
+        .collection(USERS_COLLECTION_NAME)
+        .doc(userId)
+        .get();
+
+    if (docSnapshot.exists) {
+      return User.fromMap(docSnapshot.data(), id: docSnapshot.id);
+    }
+    return null;
   }
 
   Future<List> get usersFavouriteProductsList async {
@@ -145,6 +159,16 @@ class UserDatabaseHelper {
     return addresses;
   }
 
+  Future<List<String>> get allUsersList async {
+    final users = await firestore.collection(USERS_COLLECTION_NAME).get();
+    List userId = List<String>();
+    for (final user in users.docs) {
+      final id = user.id;
+      userId.add(id);
+    }
+    return userId;
+  }
+
   Future<Address> getAddressFromId(String id) async {
     String uid = AuthentificationService().currentUser.uid;
     final doc = await firestore
@@ -155,6 +179,13 @@ class UserDatabaseHelper {
         .get();
     final address = Address.fromMap(doc.data(), id: doc.id);
     return address;
+  }
+  
+  Future banAccountUser(String userId, bool banStatus) async{
+    final CollectionReference collectionRef = FirebaseFirestore.instance.collection(USERS_COLLECTION_NAME);
+    return await collectionRef.doc(userId).set({
+      'userIsBan' : banStatus,
+    });
   }
 
   Future<bool> addAddressForCurrentUser(Address address) async {
