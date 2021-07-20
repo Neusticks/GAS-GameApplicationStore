@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/models/PilotRequest.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
+import 'package:gas_gameappstore/screens/PilotService/pilot_service_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'profile_menu.dart';
@@ -35,6 +37,13 @@ class _Body extends State<Body> {
             text: "Notifications",
             icon: "assets/icons/Bell.svg",
             press: () {},
+          ),
+          ProfileMenu(
+            text: "Request Pilot Service", 
+            icon: "assets/icons/User Icon.svg",
+            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+              return RequestPilotServiceScreen();
+            })),
           ),
           ProfileMenu(
             text: "Help Center",
