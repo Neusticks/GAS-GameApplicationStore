@@ -1,20 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
-import 'package:gas_gameappstore/models/User.dart';
 import 'package:gas_gameappstore/services/database/pilot_request_database_helper.dart';
-import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:gas_gameappstore/size_config.dart';
-import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/constants.dart';
-import 'package:gas_gameappstore/models/Product.dart';
 import 'package:flutter/material.dart';
-import 'package:gas_gameappstore/utils.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
-
-
 
 class Body extends StatelessWidget {
   final String requestId;
@@ -35,11 +28,11 @@ class Body extends StatelessWidget {
             future: PilotDatabaseHelper().getRequestWithID(requestId),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                final requestData = snapshot.data;
+                PilotRequest requestData = snapshot.data;
                 String requestId = requestData.id;
                 String requestUserName = requestData.userName;
                 String requestGameId = requestData.gameId;
-                String requestGameChoice = requestData.gameName.toString();
+                String requestGameChoice = EnumToString.convertToString(requestData.gameName);
                 String requestUserPhone = requestData.userPhone;
                 String requestStatus = requestData.requestStatus;
                 return SizedBox(

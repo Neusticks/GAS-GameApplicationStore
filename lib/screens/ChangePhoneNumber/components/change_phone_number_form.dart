@@ -75,7 +75,7 @@ class _ChangePhoneNumberFormState extends State<ChangePhoneNumberForm> {
         if (status == true) {
           snackbarMessage = "Phone updated successfully";
         } else {
-          throw "Coulnd't update phone due to unknown reason";
+          throw "Couldn't update phone due to unknown reason";
         }
       } on FirebaseException catch (e) {
         Logger().w("Firebase Exception: $e");

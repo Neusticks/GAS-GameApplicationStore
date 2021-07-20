@@ -84,7 +84,7 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
         }
         return null;
       },
-      // autovalidateMode: AutovalidateMode.onUserInteraction,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
@@ -103,24 +103,28 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
         }
         return null;
       },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
    Widget buildUserPhone() {
     return TextFormField(
       controller: userPhoneController,
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.phone,
       decoration: InputDecoration(
         hintText: "Enter User Phone Number",
         labelText: "User Phone Number To Contact",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(Icons.person),
+        suffixIcon: Icon(Icons.phone),
       ),
       validator: (value) {
-        if (userNameController.text.isEmpty) {
+        if (userPhoneController.text.isEmpty) {
           return "Phone Number cannot be empty";
+        }else if (userPhoneController.text.length != 10) {
+          return "Only 10 digits allowed";
         }
         return null;
       },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
