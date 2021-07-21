@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/PilotService/pilot_service_screen.dart';
+import 'package:gas_gameappstore/screens/ReportProblem/report_problem_screen.dart';
+import 'package:gas_gameappstore/screens/ReportUser/report_user_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'profile_menu.dart';
@@ -24,7 +26,7 @@ class _Body extends State<Body> {
       child: Column(
         children: [
           ProfilePic(),
-          SizedBox(height: 20),
+          SizedBox(height: 30),
           ProfileMenu(
               text: "My Account",
               icon: "assets/icons/User Icon.svg",
@@ -33,11 +35,11 @@ class _Body extends State<Body> {
                     return ProfileSettings();
                   }))
           ),
-          ProfileMenu(
-            text: "Notifications",
-            icon: "assets/icons/Bell.svg",
-            press: () {},
-          ),
+          // ProfileMenu(
+          //   text: "Notifications",
+          //   icon: "assets/icons/Bell.svg",
+          //   press: () {},
+          // ),
           ProfileMenu(
             text: "Request Pilot Service", 
             icon: "assets/icons/User Icon.svg",
@@ -46,9 +48,18 @@ class _Body extends State<Body> {
             })),
           ),
           ProfileMenu(
-            text: "Help Center",
+            text: "Report User",
             icon: "assets/icons/Question mark.svg",
-            press: () {},
+            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+              return ReportUserScreen();
+            })),
+          ),
+          ProfileMenu(
+            text: "Report Problem",
+            icon: "assets/icons/Question mark.svg",
+            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+              return ReportProblemScreen();
+            })),
           ),
           ProfileMenu(
             text: "Log Out",

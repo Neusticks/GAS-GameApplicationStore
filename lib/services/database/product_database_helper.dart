@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductDatabaseHelper {
   static const String PRODUCTS_COLLECTION_NAME = "products";
-  static const String REVIEWS_COLLECTOIN_NAME = "reviews";
+  static const String REVIEWS_COLLECTION_NAME = "reviews";
 
   ProductDatabaseHelper._privateConstructor();
   static ProductDatabaseHelper _instance =
@@ -58,11 +58,11 @@ class ProductDatabaseHelper {
   }
 
   Future<bool> addProductReview(String productId, Review review) async {
-    final reviewesCollectionRef = firestore
+    final reviewsCollectionRef = firestore
         .collection(PRODUCTS_COLLECTION_NAME)
         .doc(productId)
-        .collection(REVIEWS_COLLECTOIN_NAME);
-    final reviewDoc = reviewesCollectionRef.doc(review.reviewerUid);
+        .collection(REVIEWS_COLLECTION_NAME);
+    final reviewDoc = reviewsCollectionRef.doc(review.reviewerUid);
     if ((await reviewDoc.get()).exists == false) {
       reviewDoc.set(review.toMap());
       return await addUsersRatingForProduct(
@@ -83,12 +83,12 @@ class ProductDatabaseHelper {
     final productDocRef =
     firestore.collection(PRODUCTS_COLLECTION_NAME).doc(productId);
     final ratingsCount =
-        (await productDocRef.collection(REVIEWS_COLLECTOIN_NAME).get())
+        (await productDocRef.collection(REVIEWS_COLLECTION_NAME).get())
             .docs
             .length;
     final productDoc = await productDocRef.get();
     final prevRating = productDoc.data()[Review.RATING_KEY];
-    double newRating;
+    double newRating ;
     if (oldRating == null) {
       newRating = (prevRating * (ratingsCount - 1) + rating) / ratingsCount;
     } else {
@@ -102,11 +102,11 @@ class ProductDatabaseHelper {
 
   Future<Review> getProductReviewWithID(
       String productId, String reviewId) async {
-    final reviewesCollectionRef = firestore
+    final reviewsCollectionRef = firestore
         .collection(PRODUCTS_COLLECTION_NAME)
         .doc(productId)
-        .collection(REVIEWS_COLLECTOIN_NAME);
-    final reviewDoc = await reviewesCollectionRef.doc(reviewId).get();
+        .collection(REVIEWS_COLLECTION_NAME);
+    final reviewDoc = await reviewsCollectionRef.doc(reviewId).get();
     if (reviewDoc.exists) {
       return Review.fromMap(reviewDoc.data(), id: reviewDoc.id);
     }
@@ -115,13 +115,13 @@ class ProductDatabaseHelper {
 
   Stream<List<Review>> getAllReviewsStreamForProductId(
       String productId) async* {
-    final reviewesQuerySnapshot = firestore
+    final reviewsQuerySnapshot = firestore
         .collection(PRODUCTS_COLLECTION_NAME)
         .doc(productId)
-        .collection(REVIEWS_COLLECTOIN_NAME)
+        .collection(REVIEWS_COLLECTION_NAME)
         .get()
         .asStream();
-    await for (final querySnapshot in reviewesQuerySnapshot) {
+    await for (final querySnapshot in reviewsQuerySnapshot) {
       List<Review> reviews = List<Review>();
       for (final reviewDoc in querySnapshot.docs) {
         Review review = Review.fromMap(reviewDoc.data(), id: reviewDoc.id);

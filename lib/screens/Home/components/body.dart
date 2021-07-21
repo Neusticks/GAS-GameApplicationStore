@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/SearchResult/search_result_screen.dart';
 import 'package:gas_gameappstore/services/data_streams/all_products_stream.dart';
 import 'package:gas_gameappstore/services/data_streams/favourite_products_stream.dart';
+import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
+import 'package:logger/logger.dart';
 import 'categories.dart';
 import 'home_header.dart';
 import 'news_banner.dart';
@@ -34,7 +37,31 @@ class _BodyState extends State<Body> {
             child: Column(
               children: [
                 SizedBox(height: getProportionScreenHeight(20)),
-                HomeHeader(),
+                HomeHeader(
+                  onSearchSubmitted: (value) async{
+                    final query = value.toString();
+                    if (query.length <= 0) return;
+                    List<String> searchedProductsId;
+                    try{
+                      searchedProductsId = await ProductDatabaseHelper().searchInProducts(query.toLowerCase());
+                      if (searchedProductsId != null){
+                        await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResultScreen(searchQuery: query, searchResultProductsId: searchedProductsId, searchIn: "All Products",
+                        ),
+                        ),
+                        );
+                        await refreshPage();
+                      }else {
+                        throw "Couldn't Perform Search due to some unknown reason";
+                      }
+                    }catch (e){
+                      final error = e.toString();
+                      Logger().e(error);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$error"),
+                      ),
+                      );
+                    }
+                  },
+                ),
                 SizedBox(height: getProportionScreenWidth(10)),
                 NewsBanner(),
                 Categories(),

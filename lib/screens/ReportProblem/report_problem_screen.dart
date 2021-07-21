@@ -4,16 +4,15 @@ import 'package:provider/provider.dart';
 import '../../size_config.dart';
 import 'components/body.dart';
 
-class RequestPilotServiceScreen extends StatelessWidget {
-  static String routeName = "/requestpilotservice";
+class ReportProblemScreen extends StatelessWidget {
+  static String routeName = "/reportproblemscreen";
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return ChangeNotifierProvider(
-      create: (context) => GameDetails(),
-      child: Scaffold(
-        appBar: AppBar(
-        ),
-        body: Body()),);
+    return Scaffold(
+      appBar: AppBar(),
+      body: Body(
+      ),
+    );
   }
 }
