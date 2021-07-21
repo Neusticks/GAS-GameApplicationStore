@@ -498,7 +498,7 @@ class _BodyState extends State<Body> {
                       await refreshPage();
                     },
                     child: Text(
-                      "Give Product Review",
+                      "Give Product And Store Review",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -506,6 +506,7 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   ),
+
                 ),
               ],
             ),

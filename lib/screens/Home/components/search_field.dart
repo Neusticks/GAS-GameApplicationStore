@@ -4,8 +4,10 @@ import '../../../constants.dart';
 import '../../../size_config.dart';
 
 class SearchField extends StatelessWidget {
+  final Function onSubmit;
   const SearchField({
     Key key,
+    @required this.onSubmit,
   }) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class SearchField extends StatelessWidget {
             enabledBorder: InputBorder.none,
             hintText: "Search product",
             prefixIcon: Icon(Icons.search)),
+        onSubmitted: onSubmit,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:gas_gameappstore/screens/PilotService/components/pilot_service_form.dart';
+import 'package:gas_gameappstore/screens/ReportProblem/components/report_problem_form.dart';
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -17,10 +18,10 @@ class Body extends StatelessWidget {
           children: [
             SizedBox(height: getProportionScreenHeight(10)),
             Text(
-              "Pilot Service",
+              "Report Problem",
               style: headingStyle,
             ),
-            PilotServiceForm(),
+            ReportProblemForm(),
           ],
         ),
       ),

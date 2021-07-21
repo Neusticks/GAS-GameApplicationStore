@@ -9,8 +9,10 @@ import 'icon_btn_with_counter.dart';
 import 'search_field.dart';
 
 class HomeHeader extends StatelessWidget {
+  final Function onSearchSubmitted;
   const HomeHeader({
     Key key,
+    @required this.onSearchSubmitted,
   }) : super(key: key);
 
   Future<int> getTransaction() async {
@@ -28,7 +30,9 @@ class HomeHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SearchField(),
+          SearchField(
+            onSubmit: onSearchSubmitted,
+          ),
           IconBtnWithCounter(
             svgSrc: "assets/icons/shopping-cart.svg",
             press: () =>

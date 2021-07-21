@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/ManagePilotRequest/manage_pilot_screen.dart';
+import 'package:gas_gameappstore/screens/ManageReport/manage_report_screen.dart';
 import 'package:gas_gameappstore/screens/ManageUserAdmin/manage_user_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
 
@@ -51,7 +52,9 @@ class _Body extends State<Body> {
           AdminProfileMenu(
             text: "Manage Report",
             icon: "assets/icons/Question mark.svg",
-            press: () {},
+            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+              return ManageReportScreen();
+            })),
           ),
           AdminProfileMenu(
             text: "Log Out",

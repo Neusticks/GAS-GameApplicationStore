@@ -47,15 +47,15 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
       key: _formKey,
       child: Column(
         children: [
-          SizedBox(height: SizeConfig.screenHeight * 0.1),
+          SizedBox(height: getProportionScreenHeight(30)),
           buildEmailOrIdGameAccountField(),
-          SizedBox(height: SizeConfig.screenHeight * 0.05),
+          SizedBox(height: getProportionScreenHeight(30)),
           buildAccountOwner(),
-          SizedBox(height: SizeConfig.screenHeight * 0.05),
+          SizedBox(height: getProportionScreenHeight(30)),
           buildUserPhone(),
-          SizedBox(height: SizeConfig.screenHeight * 0.05),
+          SizedBox(height: getProportionScreenHeight(30)),
           buildChooseGame(),
-          SizedBox(height: SizeConfig.screenHeight * 0.2),
+          SizedBox(height: getProportionScreenHeight(80)),
           DefaultButton(
             text: "Request Game Pilot",
             press: () {
