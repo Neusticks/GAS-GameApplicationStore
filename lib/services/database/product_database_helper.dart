@@ -88,9 +88,10 @@ class ProductDatabaseHelper {
             .length;
     final productDoc = await productDocRef.get();
     final prevRating = productDoc.data()[Review.RATING_KEY];
-    double newRating ;
+    double newRating = 0;
     if (oldRating == null) {
-      newRating = (prevRating * (ratingsCount - 1) + rating) / ratingsCount;
+      if(prevRating == null) newRating = rating.toDouble();
+      else newRating = (prevRating * (ratingsCount - 1) + rating) / ratingsCount;
     } else {
       newRating =
           (prevRating * (ratingsCount) + rating - oldRating) / ratingsCount;
