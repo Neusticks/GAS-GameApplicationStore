@@ -8,6 +8,7 @@ import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/data_streams/cart_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
@@ -65,22 +66,25 @@ class _BodyState extends State<Body> {
         ],
       ),
     );
+    Cart cart;
     final orderFuture = UserDatabaseHelper().emptyCart();
     orderFuture.then((orderedProductsUid) async {
       if (orderedProductsUid != null) {
         print(orderedProductsUid);
         final dateTime = DateTime.now();
+        final buyerId = AuthentificationService().currentUser.uid;
         final formatedDateTime =
             "${dateTime.day}-${dateTime.month}-${dateTime.year}";
         List<OrderedProduct> orderedProducts = orderedProductsUid
             .map((e) => OrderedProduct(null,
-            productUid: e, orderDate: formatedDateTime))
+            productUid: e, orderDate: formatedDateTime, buyerId: buyerId))
             .toList();
         bool addedProductsToMyProducts = false;
         String snackbarmMessage;
         try {
           addedProductsToMyProducts =
           await UserDatabaseHelper().addToMyOrders(orderedProducts);
+
           if (addedProductsToMyProducts) {
             snackbarmMessage = "Products ordered Successfully";
           } else {

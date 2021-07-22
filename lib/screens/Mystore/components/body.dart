@@ -6,6 +6,7 @@ import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/MyProduct/my_product_screen.dart';
 import 'package:gas_gameappstore/screens/MyStore/components/shop_pic.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
+import 'package:gas_gameappstore/screens/StoreOrdered/store_ordered_screen.dart';
 
 import 'mystore_menu.dart';
 
@@ -35,9 +36,13 @@ class _Body extends State<Body> {
                   }))
           ),
           MyStoreMenu(
-            text: "Notifications",
-            icon: "assets/icons/Bell.svg",
-            press: () {},
+            text: "Ordered Product",
+            icon: "assets/icons/receipt.svg",
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return StoreOrderedScreen();
+              }));
+            },
           ),
           MyStoreMenu(
             text: "My Product",
@@ -46,12 +51,6 @@ class _Body extends State<Body> {
               Navigator.push(context, MaterialPageRoute(builder: (context){
                 return MyProductsScreen();
               }));
-            },
-          ),
-          MyStoreMenu(
-            text: "Help Center",
-            icon: "assets/icons/Question mark.svg",
-            press: () {
             },
           ),
         ],
