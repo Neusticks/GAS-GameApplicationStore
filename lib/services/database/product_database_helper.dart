@@ -62,7 +62,7 @@ class ProductDatabaseHelper {
         .collection(PRODUCTS_COLLECTION_NAME)
         .doc(productId)
         .collection(REVIEWS_COLLECTION_NAME);
-    final reviewDoc = reviewsCollectionRef.doc(review.reviewerUid);
+    final reviewDoc = reviewsCollectionRef.doc(review.id);
     if ((await reviewDoc.get()).exists == false) {
       reviewDoc.set(review.toMap());
       return await addUsersRatingForProduct(
@@ -89,9 +89,9 @@ class ProductDatabaseHelper {
     final productDoc = await productDocRef.get();
     final prevRating = productDoc.data()[Review.RATING_KEY];
     double newRating = 0;
+    print(ratingsCount);
     if (oldRating == null) {
-      if(prevRating == null) newRating = rating.toDouble();
-      else newRating = (prevRating * (ratingsCount - 1) + rating) / ratingsCount;
+      newRating = (prevRating * (ratingsCount - 1) + rating) / ratingsCount;
     } else {
       newRating =
           (prevRating * (ratingsCount) + rating - oldRating) / ratingsCount;

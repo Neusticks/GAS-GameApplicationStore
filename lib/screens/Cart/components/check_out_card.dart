@@ -210,10 +210,11 @@ class CheckoutCard extends StatelessWidget {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       final cartTotal = snapshot.data;
+                      double total = cartTotal;
                       return Text.rich(
                         TextSpan(text: "Total\n", children: [
                           TextSpan(
-                            text: "${rupiah(cartTotal)}",
+                            text: "${rupiah(total.toInt())}",
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.black,

@@ -52,7 +52,7 @@ class _BodyState extends State<Body> {
                   ),
                   Text(
                     "Swipe LEFT to Edit, Swipe RIGHT to Delete",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 17),
                   ),
                   SizedBox(height: getProportionScreenHeight(20)),
                   DefaultButton(
