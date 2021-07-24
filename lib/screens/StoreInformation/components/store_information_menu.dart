@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AccountInformationMenu extends StatelessWidget {
-  const AccountInformationMenu({
+class StoreInformationMenu extends StatelessWidget {
+  const StoreInformationMenu({
     Key key,
     @required this.text,
     // @required this.icon,

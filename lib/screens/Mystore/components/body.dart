@@ -2,11 +2,9 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/MyProduct/my_product_screen.dart';
 import 'package:gas_gameappstore/screens/MyStore/components/shop_pic.dart';
-import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
-
+import 'package:gas_gameappstore/screens/StoreInformation/store_information.dart';
 import 'mystore_menu.dart';
 
 
@@ -31,7 +29,7 @@ class _Body extends State<Body> {
               icon: "assets/icons/User Icon.svg",
               press: () =>
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ProfileSettings();
+                    return StoreInformationScreen();
                   }))
           ),
           MyStoreMenu(
