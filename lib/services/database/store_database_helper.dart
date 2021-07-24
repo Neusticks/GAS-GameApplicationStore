@@ -81,18 +81,20 @@ class StoreDatabaseHelper {
   }
 
 
-  // Future<String> getStoreId() async{
-  //   String uid = AuthentificationService().currentUser.uid;
-  //   final docSnapshot = await firestore
-  //       .collection(STORE_COLLECTION_NAME)
-  //       .where(STORE_OWNER_ID_KEY, isEqualTo: uid)
-  //       .get();
-  //
-  //   if (docSnapshot.docs[0].exists) {
-  //     return docSnapshot.docs[0].id;
-  //   }
-  //   return null;
-  // }
+  Future<String> getStoreId() async{
+    String uid = AuthentificationService().currentUser.uid;
+    String storeId;
+    final docSnapshot = await firestore
+        .collection(STORE_COLLECTION_NAME)
+        .where(STORE_OWNER_ID_KEY, isEqualTo: uid)
+        .get();
+  
+    if (docSnapshot.docs[0].exists) {
+      storeId = docSnapshot.docs[0].id;
+      return storeId;
+    }
+    return null;
+  }
   //
   // String getPathForCurrentUserStoreDisplayPicture() {
   //   var storeReference;
