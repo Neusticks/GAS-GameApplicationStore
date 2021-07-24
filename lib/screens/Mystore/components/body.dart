@@ -33,8 +33,8 @@ class _Body extends State<Body> {
                   }))
           ),
           MyStoreMenu(
-            text: "Notifications",
-            icon: "assets/icons/Bell.svg",
+            text: "Ordered Product",
+            icon: "assets/icons/receipt.svg",
             press: () {},
           ),
           MyStoreMenu(
@@ -44,12 +44,6 @@ class _Body extends State<Body> {
               Navigator.push(context, MaterialPageRoute(builder: (context){
                 return MyProductsScreen();
               }));
-            },
-          ),
-          MyStoreMenu(
-            text: "Help Center",
-            icon: "assets/icons/Question mark.svg",
-            press: () {
             },
           ),
         ],
