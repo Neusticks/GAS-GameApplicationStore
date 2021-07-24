@@ -224,7 +224,7 @@ class _BodyState extends State<Body> {
                       Review prevReview;
                       try {
                         prevReview = await ProductDatabaseHelper()
-                            .getProductReviewWithID(product.id, currentUserUid);
+                            .getProductReviewWithID(product.id, orderedProduct.id);
                       } on FirebaseException catch (e) {
                         Logger().w("Firebase Exception: $e");
                       } catch (e) {
@@ -232,7 +232,7 @@ class _BodyState extends State<Body> {
                       } finally {
                         if (prevReview == null) {
                           prevReview = Review(
-                            currentUserUid,
+                            orderedProduct.id,
                             reviewerUid: currentUserUid,
                           );
                         }

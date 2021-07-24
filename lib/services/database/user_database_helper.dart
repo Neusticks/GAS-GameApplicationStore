@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/models/Address.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
@@ -6,6 +8,7 @@ import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/User.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
+import 'package:gas_gameappstore/services/database/store_database_helper.dart';
 
 class UserDatabaseHelper {
   static const String USERS_COLLECTION_NAME = "users";
@@ -231,6 +234,7 @@ class UserDatabaseHelper {
     final cartItem = Cart.fromMap(docSnapshot.data(), id: docSnapshot.id);
     return cartItem;
   }
+
   Future<bool> itemChecked(String productId, bool itemChecked) async{
     String uid = AuthentificationService().currentUser.uid;
     final cartCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
@@ -257,7 +261,7 @@ class UserDatabaseHelper {
     return true;
   }
 
-  Future<List<String>> emptyCart() async {
+  Future<List<dynamic>> emptyCart() async {
     String uid = AuthentificationService().currentUser.uid;
     final cartItems = await firestore
         .collection(USERS_COLLECTION_NAME)
@@ -265,7 +269,7 @@ class UserDatabaseHelper {
         .collection(CART_COLLECTION_NAME)
         .get();
     // ignore: deprecated_member_use
-    List orderedProductsUid = List<String>();
+    List orderedProductsUid = List<dynamic>();
     for (final doc in cartItems.docs) {
       orderedProductsUid.add(doc.id);
       await doc.reference.delete();
@@ -363,7 +367,14 @@ class UserDatabaseHelper {
         .doc(uid)
         .collection(ORDERED_PRODUCTS_COLLECTION_NAME);
     for (final order in orders) {
-      await orderedProductsCollectionRef.add(order.toMap());
+      String newID = getRandomString(20);
+      await orderedProductsCollectionRef.doc(newID).set(order.toMap());
+      final productRef = await firestore.collection(ProductDatabaseHelper.PRODUCTS_COLLECTION_NAME).doc(order.productUid).get();
+      final userProductRef = await firestore.collection(USERS_COLLECTION_NAME).where(FieldPath.documentId, isEqualTo: productRef.data()["ownerId"]).get();
+      final userProductDocRef = userProductRef.docs.single;
+      final storeRef = await firestore.collection(StoreDatabaseHelper.STORE_COLLECTION_NAME).where("storeOwnerID", isEqualTo: userProductDocRef.id).get();
+      final storeDocRef = storeRef.docs.single;
+      await firestore.collection(StoreDatabaseHelper.STORE_COLLECTION_NAME).doc(storeDocRef.id).collection("incoming_request_product").doc(newID).set(order.toMap());
     }
     return true;
   }
@@ -436,5 +447,11 @@ class UserDatabaseHelper {
     final userDocSnapshot =
         firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update({USER_STORE_ID_KEY: storeId});
+  }
+
+  String getRandomString(int length){
+    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    var random = Random.secure();
+    return String.fromCharCodes(Iterable.generate(length, (_) => _chars.codeUnitAt(random.nextInt(_chars.length))));
   }
 }

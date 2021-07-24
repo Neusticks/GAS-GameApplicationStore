@@ -61,7 +61,7 @@ class ProductShortDetailCard extends StatelessWidget {
                       SizedBox(height: 10),
                       Text.rich(
                         TextSpan(
-                            text: "${rupiah(product.productDiscountPrice)}",
+                            text: "${rupiah(product.productDiscountPrice.toInt())} ",
                             style: TextStyle(
                               color: kPrimaryColor,
                               fontWeight: FontWeight.w700,
@@ -69,7 +69,7 @@ class ProductShortDetailCard extends StatelessWidget {
                             ),
                             children: [
                               TextSpan(
-                                text: "${rupiah(product.productOriginalPrice)}",
+                                text: "${rupiah(product.productOriginalPrice.toInt())}",
                                 style: TextStyle(
                                   color: kTextColor,
                                   decoration: TextDecoration.lineThrough,
