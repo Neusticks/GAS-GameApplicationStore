@@ -11,12 +11,14 @@ enum GameList {
 class PilotRequest extends Model {
 
   static const String PILOT_REQUEST_GAME_ID_KEY = "gameId";
+  static const String PILOT_REQUEST_GAME_PASSWORD_KEY = "gamePassword";
   static const String PILOT_REQUEST_USER_NAME_KEY = "userName";
   static const String PILOT_REQUEST_USER_PHONE_KEY = "userPhone";
   static const String PILOT_REQUEST_GAME_NAME_KEY = "gameName";
   static const String PILOT_REQUEST_STATUS_KEY = "requestStatus";
 
   String gameId;
+  String gamePassword;
   String userName;
   String userPhone;
   String requestStatus;
@@ -25,6 +27,7 @@ class PilotRequest extends Model {
   PilotRequest(
     String id, {
     this.gameId,
+    this.gamePassword,
     this.userName,
     this.userPhone,
     this.gameName,
@@ -35,6 +38,7 @@ class PilotRequest extends Model {
     return PilotRequest(
       id,
       gameId: map[PILOT_REQUEST_GAME_ID_KEY],
+      gamePassword: map[PILOT_REQUEST_GAME_PASSWORD_KEY],
       userName: map[PILOT_REQUEST_USER_NAME_KEY],
       userPhone: map[PILOT_REQUEST_USER_PHONE_KEY],
       requestStatus: map[PILOT_REQUEST_STATUS_KEY],
@@ -47,6 +51,7 @@ class PilotRequest extends Model {
   Map<String, dynamic> toMap() {
     final map = <String, dynamic>{
       PILOT_REQUEST_GAME_ID_KEY: gameId,
+      PILOT_REQUEST_GAME_PASSWORD_KEY: gamePassword,
       PILOT_REQUEST_USER_NAME_KEY: userName,
       PILOT_REQUEST_USER_PHONE_KEY: userPhone,
       PILOT_REQUEST_STATUS_KEY: requestStatus,
