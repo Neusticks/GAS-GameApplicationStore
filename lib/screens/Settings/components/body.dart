@@ -5,6 +5,9 @@ import 'package:gas_gameappstore/screens/ChangePassword/change_password_screen.d
 import 'package:gas_gameappstore/screens/ManageAddresses/manage_addresses_screen.dart';
 import 'package:gas_gameappstore/screens/profile/components/profile_menu.dart';
 
+import '../../../constants.dart';
+import '../../../size_config.dart';
+
 class Body extends StatefulWidget {
   @override
   _Body createState() => _Body();
@@ -19,6 +22,11 @@ class _Body extends State<Body> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
+          Text(
+            "My Account",
+            style: headingStyle,
+          ),
+          SizedBox(height: getProportionScreenHeight(20)),
           SizedBox(height: 20),
           // ProfileMenu(
           //   text: "Create Store",
@@ -55,11 +63,6 @@ class _Body extends State<Body> {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ChangePasswordScreen();
                   })),
-          ),
-          ProfileMenu(
-            text: "My Pin",
-            icon: "assets/icons/Pin Number.svg",
-            press: () {},
           ),
         ],
       ),

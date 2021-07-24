@@ -74,8 +74,7 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
 
   Widget buildGamePassword() {
     return TextFormField(
-      controller: userPhoneController,
-      keyboardType: TextInputType.phone,
+      controller: gamePassController,
       decoration: InputDecoration(
         hintText: "Enter Game Password",
         labelText: "User Game Password",

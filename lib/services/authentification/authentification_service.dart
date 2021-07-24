@@ -83,16 +83,22 @@ class AuthentificationService {
 
       if (userCredential.user.emailVerified ) {
         String uid = userCredential.user.uid;
-        final userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        final userDoc = await FirebaseFirestore.instance.collection('users')
+            .doc(uid)
+            .get();
         Map<String, dynamic> docFields = userDoc.data();
+        var userRole = docFields["userRole"].toString();
         var userIsBan = docFields["userIsBan"].toString();
-        if(userIsBan == "false"){
-          return "true";
+        if (userRole == "Pilot") {
+          return "pilot";
         }
-        else if(userIsBan == "true"){
-          return FirebaseSignInAuthUserDisabledException().toString();
-        }
-      } else {
+        if (userIsBan == "false") {
+            return "true";
+          }
+          else if (userIsBan == "true") {
+            return FirebaseSignInAuthUserDisabledException().toString();
+          }
+        } else {
         await userCredential.user.sendEmailVerification();
         return FirebaseSignInAuthUserNotVerifiedException().toString();
       }
@@ -120,6 +126,42 @@ class AuthentificationService {
       rethrow;
     }
   }
+
+  Future<String> registerPilotUser({String email, String userName, String password, String gender, String dob, String phoneNumber}) async {
+    try {
+      final UserCredential userCredential = await firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      final String uid = userCredential.user.uid;
+      if (userCredential.user.emailVerified == false) {
+        await userCredential.user.sendEmailVerification();
+      }
+      await UserDatabaseHelper().createNewPilot(uid, email, userName, password, gender, dob, phoneNumber);
+      return "true";
+    } on MessagedFirebaseAuthException {
+      rethrow;
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case EMAIL_ALREADY_IN_USE_EXCEPTION_CODE:
+          return FirebaseSignUpAuthEmailAlreadyInUseException().toString();
+          break;
+        case INVALID_EMAIL_EXCEPTION_CODE:
+          return FirebaseSignUpAuthInvalidEmailException().toString();
+          break;
+        case OPERATION_NOT_ALLOWED_EXCEPTION_CODE:
+          return FirebaseSignUpAuthOperationNotAllowedException().toString();
+          break;
+        case WEAK_PASSWORD_EXCEPTION_CODE:
+          return FirebaseSignUpAuthWeakPasswordException().toString();
+          break;
+        default:
+          return FirebaseSignInAuthException(message: e.code).toString();
+          break;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
   Future<String> signUp({String email, String password, String gender, String dob}) async {
     try {

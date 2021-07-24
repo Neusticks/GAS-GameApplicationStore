@@ -2,30 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
-import 'package:gas_gameappstore/exceptions/firebaseauth/signup_exceptions.dart';
-import 'package:gas_gameappstore/screens/Login/login_screen.dart';
-import 'package:gas_gameappstore/components/have_an_account_check.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
-import 'package:gas_gameappstore/screens/SignUp/Components/or_divider.dart';
-import 'package:gas_gameappstore/screens/SignUp/Components/social_icon.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:logger/logger.dart';
 import '../../../constants.dart';
 import 'package:intl/intl.dart';
 
-class Body extends StatefulWidget {
+class RegisterPilotServiceForm extends StatefulWidget {
   @override
-  _Body createState() => _Body();
+  _RegisterPilotServiceForm createState() => _RegisterPilotServiceForm();
 }
 
-class _Body extends State<Body> {
+class _RegisterPilotServiceForm extends State<RegisterPilotServiceForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
   final _genderController = TextEditingController();
   final _DOBController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
+  final _userNameController = TextEditingController();
   final format = DateFormat("yyyy-MM-dd");
   final formKey = new GlobalKey<FormState>();
   DateTime _selectedDate;
@@ -35,6 +32,10 @@ class _Body extends State<Body> {
     _emailController.dispose();
     _confirmPasswordController.dispose();
     _passwordController.dispose();
+    _genderController.dispose();
+    _DOBController.dispose();
+    _userNameController.dispose();
+    _phoneNumberController.dispose();
     super.dispose();
   }
 
@@ -51,6 +52,8 @@ class _Body extends State<Body> {
           children: [
             buildEmailField(),
             SizedBox(height: getProportionScreenHeight(30)),
+            buildUserNameField(),
+            SizedBox(height: getProportionScreenHeight(30)),
             buildPasswordField(),
             SizedBox(height: getProportionScreenHeight(30)),
             buildConfirmPasswordField(),
@@ -60,9 +63,9 @@ class _Body extends State<Body> {
             buildGenderField(),
             SizedBox(height: getProportionScreenHeight(30)),
             RoundedButton(
-              text: "Sign Up",
+              text: "Register Pilot",
               press: () {
-                signUpCallback();
+                registerPilotCallback();
               },
               // press: () async {
               // try {
@@ -79,40 +82,30 @@ class _Body extends State<Body> {
               // }
             ),
             SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
-              login: false,
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocialIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )
           ],
         ),
       ),
+    );
+  }
+
+  Widget buildUserNameField() {
+    return TextFormField(
+      controller: _userNameController,
+      decoration: InputDecoration(
+        hintText: "Enter Pilot User Name",
+        labelText: "User Name",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/User Icon.svg",
+        ),
+      ),
+      validator: (value) {
+        if (_userNameController.text.isEmpty) {
+          return kUserNameNullError;
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
@@ -120,16 +113,16 @@ class _Body extends State<Body> {
     return TextFormField(
       controller: _genderController,
       decoration: InputDecoration(
-        hintText: "Enter Your Gender",
+        hintText: "Enter Pilot Gender",
         labelText: "Gender",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
-          svgIcon: "assets/icons/User Icons.svg",
+          svgIcon: "assets/icons/User Icon.svg",
         ),
       ),
       validator: (value) {
         if (_genderController.text.isEmpty) {
-          return kGenderNullError;
+          return "Please Enter Pilot Gender";
         }
         return null;
       },
@@ -141,7 +134,7 @@ class _Body extends State<Body> {
     return TextFormField(
       controller: _DOBController,
       decoration: InputDecoration(
-        hintText: "Enter Your DOB",
+        hintText: "Enter Pilot DOB",
         labelText: "DOB",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.date_range),
@@ -188,7 +181,7 @@ class _Body extends State<Body> {
     return TextFormField(
       controller: _emailController,
       decoration: InputDecoration(
-        hintText: "Enter Your Email",
+        hintText: "Enter Pilot Email",
         labelText: "Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
@@ -197,7 +190,7 @@ class _Body extends State<Body> {
       ),
       validator: (value) {
         if (_emailController.text.isEmpty) {
-          return kEmailNullError;
+          return "Please Enter Pilot Email";
         } else if (!emailValidatorRegExp.hasMatch(_emailController.text)) {
           return kInvalidEmailError;
         }
@@ -212,7 +205,7 @@ class _Body extends State<Body> {
       controller: _passwordController,
       obscureText: true,
       decoration: InputDecoration(
-        hintText: "Enter Your Password",
+        hintText: "Enter Pilot Password",
         labelText: "Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
@@ -221,7 +214,7 @@ class _Body extends State<Body> {
       ),
       validator: (value) {
         if (_passwordController.text.isEmpty) {
-          return kPassNullError;
+          return "Please Enter Pilot Password";
         } else if (_passwordController.text.length < 8) {
           return kShortPassError;
         }
@@ -236,7 +229,7 @@ class _Body extends State<Body> {
       controller: _confirmPasswordController,
       obscureText: true,
       decoration: InputDecoration(
-        hintText: "Re-enter your password",
+        hintText: "Re-enter Pilot password",
         labelText: "Confirm Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
@@ -258,18 +251,42 @@ class _Body extends State<Body> {
     );
   }
 
-  Future<void> signUpCallback() async {
+  Widget buildPhoneNumberField() {
+    return TextFormField(
+      controller: _phoneNumberController,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        hintText: "Enter Pilot Phone Number",
+        labelText: "Phone Number",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: Icon(Icons.phone),
+      ),
+      validator: (value) {
+        if (_phoneNumberController.text.isEmpty) {
+          return "Please Enter Pilot Phone Number";
+        } else if (_phoneNumberController.text.length != 10) {
+          return "Only 10 digits allowed";
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Future<void> registerPilotCallback() async {
     if (_formKey.currentState.validate()) {
       // goto complete profile page
       final AuthentificationService authService = AuthentificationService();
       String signUpStatus = "";
       String snackbarMessage;
       try {
-        final signUpFuture = authService.signUp(
+        final signUpFuture = authService.registerPilotUser(
           email: _emailController.text,
+          userName: _userNameController.text,
           password: _passwordController.text,
           gender: _genderController.text,
           dob: _DOBController.text,
+          phoneNumber: _phoneNumberController.text,
         );
         signUpFuture.then((value) => signUpStatus = value);
         signUpStatus = await showDialog(
@@ -277,13 +294,13 @@ class _Body extends State<Body> {
           builder: (context) {
             return FutureProgressDialog(
               signUpFuture,
-              message: Text("Creating new account"),
+              message: Text("Creating Pilot account"),
             );
           },
         );
         if (signUpStatus == "true") {
           snackbarMessage =
-              "Registered successfully, Please verify your email id";
+          "Registered successfully, Please verify email id";
         } else {
           snackbarMessage = signUpStatus;
         }
@@ -298,7 +315,7 @@ class _Body extends State<Body> {
             content: Text(snackbarMessage),
           ),
         );
-        if (signUpStatus == true) {
+        if (signUpStatus == "true") {
           Navigator.pop(context);
         }
       }

@@ -1,14 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/models/PilotRequest.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
-import 'package:gas_gameappstore/screens/ManagePilotRequest/manage_pilot_screen.dart';
-import 'package:gas_gameappstore/screens/ManageReport/manage_report_screen.dart';
-import 'package:gas_gameappstore/screens/ManageUserAdmin/manage_user_screen.dart';
-import 'package:gas_gameappstore/screens/RegisterPilotService/register_pilot_service_screen.dart';
+import 'package:gas_gameappstore/screens/PilotRequestList/manage_pilot_screen.dart';
+import 'package:gas_gameappstore/screens/PilotService/pilot_service_screen.dart';
+import 'package:gas_gameappstore/screens/ReportProblem/report_problem_screen.dart';
+import 'package:gas_gameappstore/screens/ReportUser/report_user_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
-
-import 'admin_profile_menu.dart';
-import 'admin_profile_pic.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
+import '../../../constants.dart';
+import '../../../size_config.dart';
+import 'profile_menu.dart';
+import 'profile_pic.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -25,9 +28,14 @@ class _Body extends State<Body> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
-          AdminProfilePic(),
-          SizedBox(height: 20),
-          AdminProfileMenu(
+          Text(
+            "Profile",
+            style: headingStyle,
+          ),
+          SizedBox(height: getProportionScreenHeight(20)),
+          PilotProfilePic(),
+          SizedBox(height: 30),
+          PilotProfileMenu(
               text: "My Account",
               icon: "assets/icons/User Icon.svg",
               press: () =>
@@ -35,36 +43,19 @@ class _Body extends State<Body> {
                     return ProfileSettings();
                   }))
           ),
-          AdminProfileMenu(
-            text: "Manage Users Account", 
+          // ProfileMenu(
+          //   text: "Notifications",
+          //   icon: "assets/icons/Bell.svg",
+          //   press: () {},
+          // ),
+          PilotProfileMenu(
+            text: "Pilot Request List",
             icon: "assets/icons/User Icon.svg",
-            press: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return ManageUserScreen();
-                })),
-          ),
-          AdminProfileMenu(
-              text: "Register Pilot",
-              icon: "assets/icons/User Icon.svg",
-              press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-                return RegisterPilotServiceScreen();
-              })),
-          ),
-          AdminProfileMenu(
-            text: "Manage Pilot Request",
-            icon: "assets/icons/Bell.svg",
             press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-              return ManagePilotRequestScreen();
+              return PilotRequestListScreen();
             })),
           ),
-          AdminProfileMenu(
-            text: "Manage Report",
-            icon: "assets/icons/Question mark.svg",
-            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-              return ManageReportScreen();
-            })),
-          ),
-          AdminProfileMenu(
+          PilotProfileMenu(
             text: "Log Out",
             icon: "assets/icons/Log out.svg",
             press: () async{

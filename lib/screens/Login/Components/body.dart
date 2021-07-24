@@ -1,6 +1,7 @@
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
+import 'package:gas_gameappstore/screens/PilotProfile/profile_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/SignUp/signup_screen.dart';
@@ -173,7 +174,7 @@ class _Body extends State<Body> {
             );
           },
         );
-        if (signInStatus == "true") {
+        if (signInStatus == "true" || signInStatus == "pilot") {
           snackbarMessage = "Signed In Successfully";
         } 
         else {
@@ -196,6 +197,11 @@ class _Body extends State<Body> {
               return HomeScreen();
           })
           );
+        }
+        else if (signInStatus == "pilot"){
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return PilotProfileScreen();
+          }));
         }
       }
     }

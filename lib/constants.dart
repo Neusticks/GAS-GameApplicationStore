@@ -30,6 +30,7 @@ final RegExp emailValidatorRegExp =
 const String kEmailNullError = "Please Enter Your Email";
 const String kInvalidEmailError = "Please Enter Valid Email";
 const String kGenderNullError = "Please Enter Your Gender";
+const String kUserNameNullError = "Please Enter User Name";
 const String kPassNullError = "Please Enter your password";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";

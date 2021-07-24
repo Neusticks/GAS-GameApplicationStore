@@ -68,6 +68,26 @@ class UserDatabaseHelper {
     });
   }
 
+  Future<void> createNewPilot(String uid, String email, String userName, String password,
+      String gender, String dob, String phoneNumber) async {
+    await firestore.collection(USERS_COLLECTION_NAME).doc(uid).set({
+      USER_EMAIL_KEY: email,
+      USER_NAME_KEY: userName,
+      USER_PASSWORD_KEY: password,
+      USER_DATE_OF_BIRTH_KEY: dob,
+      USER_GENDER_KEY: gender,
+      USER_PHONE_NUMBER_KEY: phoneNumber,
+      USER_STORE_ID_KEY: null,
+      USER_ADDRESS_KEY: null,
+      USER_TRANSACTION_PIN_KEY: null,
+      USER_ROLE_KEY: 'Pilot',
+      USER_PROFILE_PICTURE_KEY: null,
+      FAV_PRODUCTS_KEY: List<String>(),
+      USER_ISBAN_KEY: false,
+    });
+  }
+
+
   // Future<void> deleteCurrentUserData() async {
   //   final uid = AuthentificationService().currentUser.uid;
   //   final docRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid);
