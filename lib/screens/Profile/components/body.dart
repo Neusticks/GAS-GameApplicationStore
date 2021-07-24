@@ -7,6 +7,8 @@ import 'package:gas_gameappstore/screens/ReportProblem/report_problem_screen.dar
 import 'package:gas_gameappstore/screens/ReportUser/report_user_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
+import 'package:gas_gameappstore/size_config.dart';
+import '../../../constants.dart';
 import 'profile_menu.dart';
 import 'profile_pic.dart';
 
@@ -25,6 +27,11 @@ class _Body extends State<Body> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
+          Text(
+            "My Account",
+            style: headingStyle,
+          ),
+          SizedBox(height: getProportionScreenHeight(20)),
           ProfilePic(),
           SizedBox(height: 30),
           ProfileMenu(

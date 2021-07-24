@@ -29,6 +29,7 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
   final TextEditingController gameIdController =
       TextEditingController();
 
+  final TextEditingController gamePassController = TextEditingController();
   
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController userPhoneController = TextEditingController();
@@ -50,6 +51,8 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
           SizedBox(height: getProportionScreenHeight(30)),
           buildEmailOrIdGameAccountField(),
           SizedBox(height: getProportionScreenHeight(30)),
+          buildGamePassword(),
+          SizedBox(height: getProportionScreenHeight(30)),
           buildAccountOwner(),
           SizedBox(height: getProportionScreenHeight(30)),
           buildUserPhone(),
@@ -67,6 +70,25 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
     );
 
     return form;
+  }
+
+  Widget buildGamePassword() {
+    return TextFormField(
+      controller: gamePassController,
+      decoration: InputDecoration(
+        hintText: "Enter Game Password",
+        labelText: "User Game Password",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: Icon(Icons.password),
+      ),
+      validator: (value) {
+        if (gamePassController.text.isEmpty) {
+          return "Game Password cannot be empty";
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
   }
 
   Widget buildEmailOrIdGameAccountField() {
@@ -183,6 +205,7 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
     String snackbarMessage;
     try{
       pilot.gameId = gameIdController.text;
+      pilot.gamePassword = gamePassController.text;
       pilot.userName = userNameController.text;
       pilot.userPhone = userPhoneController.text;
       pilot.gameName = gameDetails.gameName;
