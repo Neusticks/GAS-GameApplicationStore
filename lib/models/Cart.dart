@@ -4,15 +4,12 @@ class Cart extends Model {
   static const String PRODUCT_ID_KEY = "productId";
   static const String ITEM_QTY_KEY = "itemQty";
   static const String ITEM_CART_CHECKED = "itemChecked";
-  static const String SELLER_ID_KEY = "sellerId";
 
   bool itemChecked;
-  String sellerId;
   int itemQty;
   Cart({
     String id,
     this.itemQty = 1,
-    this.sellerId,
     this.itemChecked = true,
   }) : super(id);
 
@@ -21,7 +18,6 @@ class Cart extends Model {
       id: id,
       itemQty: map[ITEM_QTY_KEY],
       itemChecked: map[ITEM_CART_CHECKED],
-      sellerId: map[SELLER_ID_KEY],
     );
   }
   @override
@@ -29,7 +25,6 @@ class Cart extends Model {
     final map = <String, dynamic>{
       ITEM_QTY_KEY: itemQty,
       ITEM_CART_CHECKED: itemChecked,
-      SELLER_ID_KEY: sellerId,
     };
     return map;
   }
