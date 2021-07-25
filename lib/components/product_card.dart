@@ -99,48 +99,12 @@ class ProductCard extends StatelessWidget {
                     Flexible(
                       flex: 5,
                       child: Text.rich(
-                        TextSpan(
-                          text: "${rupiah(product.productDiscountPrice.toInt())}\n",
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                          ),
-                          children: [
-                            TextSpan(                              
-                              text: "${rupiah(product.productOriginalPrice.toInt())}\n",
-                              style: TextStyle(
-                                color: kTextColor,
-                                decoration: TextDecoration.lineThrough,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+                        showPrice(product)
                       ),
                     ),
                     Flexible(
                       flex: 3,
-                      child: Stack(
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icons/DiscountTag.svg",
-                            color: kPrimaryColor,
-                          ),
-                          Center(
-                            child: Text(
-                              "${product.calculatePercentageDiscount()}%\nOff",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                                fontWeight: FontWeight.w900,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
+                      child: showDiscountRateField(product)
                     ),
                   ],
                 ),
@@ -149,6 +113,73 @@ class ProductCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  TextSpan showPrice(Product product){
+    if(product.productOriginalPrice.toInt() == product.productDiscountPrice.toInt()){
+      return TextSpan(
+        text: "${rupiah(product.productDiscountPrice.toInt())} ",
+        style: TextStyle(
+          color: kPrimaryColor,
+          fontWeight: FontWeight.w700,
+          fontSize: 14,
+        ),
+      );
+    }
+    else{
+      return TextSpan(
+          text: "${rupiah(product.productDiscountPrice.toInt())}\n",
+          style: TextStyle(
+            color: kPrimaryColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
+          children: [
+            TextSpan(
+              text: "${rupiah(product.productOriginalPrice.toInt())}",
+              style: TextStyle(
+                color: kTextColor,
+                decoration: TextDecoration.lineThrough,
+                fontWeight: FontWeight.normal,
+                fontSize: 12,
+              ),
+            ),
+          ]
+      );
+    }
+  }
+
+  Stack showDiscountRateField(Product product){
+    final discountRate = product.calculatePercentageDiscount();
+    if(discountRate == 0) return Stack();
+    else {
+      return Stack(
+        children: [
+          SvgPicture.asset(
+            "assets/icons/DiscountTag.svg",
+            color: kPrimaryColor,
+          ),
+          Center(
+              child: showDiscountRate(product)
+          ),
+        ],
+      );
+    }
+  }
+
+  Text showDiscountRate(Product product){
+    final discountRate = product.calculatePercentageDiscount();
+    if(discountRate == 0){
+      return null;
+    }else return Text(
+      "${product.calculatePercentageDiscount()}%\nOff",
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 8,
+        fontWeight: FontWeight.w900,
+      ),
+      textAlign: TextAlign.center,
     );
   }
 }

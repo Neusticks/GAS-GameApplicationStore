@@ -25,7 +25,7 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      padding: EdgeInsets.symmetric(vertical: 80),
       child: Column(
         children: [
           Text(
