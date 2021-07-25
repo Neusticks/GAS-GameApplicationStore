@@ -5,6 +5,7 @@ import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
 import 'package:gas_gameappstore/screens/PilotService/provider_models/game_details.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/pilot_request_database_helper.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -205,6 +206,7 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
     String snackbarMessage;
     try{
       pilot.gameId = gameIdController.text;
+      pilot.ownerId = AuthentificationService().currentUser.uid;
       pilot.gamePassword = gamePassController.text;
       pilot.userName = userNameController.text;
       pilot.userPhone = userPhoneController.text;

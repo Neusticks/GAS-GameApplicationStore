@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 
 class PilotDatabaseHelper{
   static const String PILOT_REQUEST_COLLECTION_NAME = "pilotRequest";
@@ -11,6 +12,7 @@ class PilotDatabaseHelper{
   static const String PILOT_REQUEST_USER_PHONE_NUM_KEY = "userPhone";
   static const String PILOT_REQUEST_GAME_CHOICE_KEY = "pilotRequestGameChoice";
   static const String PILOT_REQUEST_STATUS_KEY = "requestStatus";
+  static const String PILOT_ASSIGN_TO_KEY = "assignPilot";
 
   PilotDatabaseHelper._privateConstructor();
   static PilotDatabaseHelper _instance = PilotDatabaseHelper._privateConstructor();
@@ -42,8 +44,19 @@ class PilotDatabaseHelper{
     return requestId;
   }
 
-  Future<List<String>> get notFinishRequestList async {
-    final pilots = await firestore.collection(PILOT_REQUEST_COLLECTION_NAME).where(PILOT_REQUEST_STATUS_KEY, isEqualTo: 'Not Finished').get();
+  Future<List<String>> get notAssignRequestList async {
+    final pilots = await firestore.collection(PILOT_REQUEST_COLLECTION_NAME).where(PILOT_ASSIGN_TO_KEY, isEqualTo: 'Not Assign').get();
+    List requestId = List<String>();
+    for (final request in pilots.docs){
+      final id = request.id;
+      requestId.add(id);
+    }
+    return requestId;
+  }
+
+  Future<List<String>> get assignRequestList async {
+    String uid = AuthentificationService().currentUser.uid;
+    final pilots = await firestore.collection(PILOT_REQUEST_COLLECTION_NAME).where(PILOT_ASSIGN_TO_KEY, isEqualTo: uid).get();
     List requestId = List<String>();
     for (final request in pilots.docs){
       final id = request.id;

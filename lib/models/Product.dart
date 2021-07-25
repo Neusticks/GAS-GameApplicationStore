@@ -4,7 +4,10 @@ import 'Base.dart';
 
 enum ProductType {
   InGameCurrency,
-  Services,
+  GamingAccessories,
+  Electronics,
+  GameCosmetics,
+  Others,
 }
 
 class Product extends Model {

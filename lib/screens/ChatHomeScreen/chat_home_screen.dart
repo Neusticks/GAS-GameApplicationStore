@@ -6,8 +6,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/models/User.dart';
+import 'package:gas_gameappstore/screens/ChatHomeScreen/search_field.dart';
 import 'package:gas_gameappstore/screens/Chats/chat_screen.dart';
 import 'package:gas_gameappstore/screens/Chats/components/loading.dart';
+import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
@@ -129,7 +131,7 @@ class ChatHomeScreenState extends State<ChatHomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'MAIN',
+          'Chat Room',
           style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -138,8 +140,34 @@ class ChatHomeScreenState extends State<ChatHomeScreen> {
       body: WillPopScope(
         child: Stack(
           children: <Widget>[
+            // SearchField(
+            //   onSubmit: (value) async{
+            //     final query = value.toString();
+            //     if (query.length <= 0) return;
+            //     List<String> searchedUserName;
+            //     try{
+            //       searchedUserName = await UserDatabaseHelper().searchInUser(query.toLowerCase());
+            //       if (searchedUserName != null){
+            //         // await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResultScreen(searchQuery: query, searchResultProductsId: searchedProductsId, searchIn: "All Products",
+            //         // ),
+            //         // ),
+            //         // );
+            //       }else {
+            //         throw "Couldn't Perform Search due to some unknown reason";
+            //       }
+            //     }catch (e){
+            //       final error = e.toString();
+            //       Logger().e(error);
+            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$error"),
+            //       ),
+            //       );
+            //     }
+            //   },
+            // ),
+
             // List
             Container(
+
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance.collection('users').limit(_limit).snapshots(),
                 builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -39,11 +39,13 @@ class _Body extends State<Body> {
                     return ProfileSettings();
                   }))
           ),
+
           AdminProfileMenu(
             text: "Chats",
             icon: "assets/icons/User Icon.svg",
             press: profilePictureChecking
           ),
+
           AdminProfileMenu(
             text: "Manage Users Account", 
             icon: "assets/icons/User Icon.svg",
@@ -59,13 +61,13 @@ class _Body extends State<Body> {
                 return RegisterPilotServiceScreen();
               })),
           ),
-          AdminProfileMenu(
-            text: "Manage Pilot Request",
-            icon: "assets/icons/Bell.svg",
-            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-              return ManagePilotRequestScreen();
-            })),
-          ),
+          // AdminProfileMenu(
+          //   text: "Manage Pilot Request",
+          //   icon: "assets/icons/Bell.svg",
+          //   press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+          //     return ManagePilotRequestScreen();
+          //   })),
+          // ),
           AdminProfileMenu(
             text: "Manage Report",
             icon: "assets/icons/Question mark.svg",
