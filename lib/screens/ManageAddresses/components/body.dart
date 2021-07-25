@@ -52,7 +52,7 @@ class _BodyState extends State<Body> {
                   ),
                   Text(
                     "Swipe LEFT to Edit, Swipe RIGHT to Delete",
-                    style: TextStyle(fontSize: 12),
+                    style: TextStyle(fontSize: 17),
                   ),
                   SizedBox(height: getProportionScreenHeight(20)),
                   DefaultButton(
@@ -157,7 +157,7 @@ class _BodyState extends State<Body> {
         if (status == true) {
           snackbarMessage = "Address deleted successfully";
         } else {
-          throw "Coulnd't delete address due to unknown reason";
+          throw "Couldn't delete address due to unknown reason";
         }
       } on FirebaseException catch (e) {
         Logger().w("Firebase Exception: $e");

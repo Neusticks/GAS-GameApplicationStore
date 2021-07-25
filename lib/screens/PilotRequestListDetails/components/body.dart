@@ -40,7 +40,7 @@ class Body extends StatelessWidget {
                 String requestStatus = requestData.requestStatus;
                 String requestAssign = requestData.assignPilot;
                 return SizedBox(
-                  height: getProportionScreenHeight(320),
+                  height: getProportionScreenHeight(500),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -60,7 +60,7 @@ class Body extends StatelessWidget {
                         ),
                         maxLines: 2,
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: getProportionScreenHeight(20)),
                       Text.rich(
                         TextSpan(
                             text: "Game Account: $requestGameId\n",
@@ -129,7 +129,7 @@ class Body extends StatelessWidget {
                               ),
                             ]),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: getProportionScreenHeight(30)),
                        DefaultButton(
                           text: "Assign Request",
                           press: () {

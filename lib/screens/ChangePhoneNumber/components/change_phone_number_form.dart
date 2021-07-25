@@ -107,8 +107,8 @@ class _ChangePhoneNumberFormState extends State<ChangePhoneNumberForm> {
       validator: (value) {
         if (newPhoneNumberController.text.isEmpty) {
           return "Phone Number cannot be empty";
-        } else if (newPhoneNumberController.text.length != 10) {
-          return "Only 10 digits allowed";
+        } else if (newPhoneNumberController.text.length < 10) {
+          return "At least 10 digits allowed";
         }
         return null;
       },

@@ -10,8 +10,8 @@ class PilotProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-      ),
+      // appBar: AppBar(
+      // ),
       body: Body(),
     );
   }

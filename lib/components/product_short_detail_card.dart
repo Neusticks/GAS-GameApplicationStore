@@ -52,7 +52,7 @@ class ProductShortDetailCard extends StatelessWidget {
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: kTextColor,
                         ),
@@ -60,24 +60,7 @@ class ProductShortDetailCard extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       Text.rich(
-                        TextSpan(
-                            text: "${rupiah(product.productDiscountPrice)}",
-                            style: TextStyle(
-                              color: kPrimaryColor,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: "${rupiah(product.productOriginalPrice)}",
-                                style: TextStyle(
-                                  color: kTextColor,
-                                  decoration: TextDecoration.lineThrough,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 11,
-                                ),
-                              ),
-                            ]),
+                        showPrice(product)
                       ),
                     ],
                   ),
@@ -100,5 +83,39 @@ class ProductShortDetailCard extends StatelessWidget {
         },
       ),
     );
+  }
+
+  TextSpan showPrice(Product product){
+    if(product.productOriginalPrice.toInt() == product.productDiscountPrice.toInt()){
+      return TextSpan(
+          text: "${rupiah(product.productDiscountPrice.toInt())} ",
+          style: TextStyle(
+          color: kPrimaryColor,
+          fontWeight: FontWeight.w700,
+          fontSize: 14,
+        ),
+      );
+    }
+    else{
+      return TextSpan(
+          text: "${rupiah(product.productDiscountPrice.toInt())} ",
+          style: TextStyle(
+            color: kPrimaryColor,
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+          ),
+          children: [
+            TextSpan(
+              text: "${rupiah(product.productOriginalPrice.toInt())}",
+              style: TextStyle(
+                color: kTextColor,
+                decoration: TextDecoration.lineThrough,
+                fontWeight: FontWeight.normal,
+                fontSize: 12,
+              ),
+            ),
+          ]
+      );
+    }
   }
 }

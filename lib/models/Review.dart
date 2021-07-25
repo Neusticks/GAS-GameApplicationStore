@@ -2,17 +2,18 @@ import 'Base.dart';
 
 class Review extends Model {
   static const String REVIEWER_UID_KEY = "reviewer_uid";
-  static const String RATING_KEY = "rating";
+  static const String RATING_KEY = "productRating";
   static const String FEEDBACK_KEY = "review";
 
   String reviewerUid;
   int rating;
   String feedback;
+
   Review(
     String id, {
-    this.reviewerUid,
-    this.rating = 3,
-    this.feedback,
+      this.reviewerUid,
+      this.rating = 3,
+      this.feedback,
   }) : super(id);
 
   factory Review.fromMap(Map<String, dynamic> map, {String id}) {

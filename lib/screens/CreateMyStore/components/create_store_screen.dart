@@ -371,53 +371,6 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
         UserDatabaseHelper().updateUserStoreId(value);
       });
       snackbarMessage = "Store Created";
-    //   await showDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return FutureProgressDialog(
-    //         storeUploadFuture,
-    //         message:
-    //             Text("Uploading Product"),
-    //       );
-    //     },
-    //   );
-    //   if (storeId != null) {
-    //     snackbarMessage = "Product Info updated successfully";
-    //   } else {
-    //     throw "Couldn't update product info due to some unknown issue";
-    //   }
-    // } on FirebaseException catch (e) {
-    //   Logger().w("Firebase Exception: $e");
-    //   snackbarMessage = "Something went wrong";
-    // } catch (e) {
-    //   Logger().w("Unknown Exception: $e");
-    //   snackbarMessage = e.toString();
-    // } finally {
-    //   Logger().i(snackbarMessage);
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //       content: Text(snackbarMessage),
-    //     ),
-    //   );
-    // }
-    // bool productFinalizeUpdate = false;
-    // try {
-    //   StoreDatabaseHelper().createUserStore();
-      // StoreDatabaseHelper.updateProductsImages(productId, downloadUrls);
-      // productFinalizeUpdate = await showDialog(
-      //   context: context,
-      //   builder: (context) {
-      //     return FutureProgressDialog(
-      //       updateProductFuture,
-      //       message: Text("Saving Product"),
-      //     );
-      //   },
-      // );
-      // if (productFinalizeUpdate == true) {
-      //   snackbarMessage = "Product uploaded successfully";
-      // } else {
-      //   throw "Couldn't upload product properly, please retry";
-      // }
     } on FirebaseException catch (e) {
       Logger().w("Firebase Exception: $e");
       snackbarMessage = "Something went wrong";

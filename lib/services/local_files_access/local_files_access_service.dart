@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 Future<String> choseImageFromLocalFiles(
     BuildContext context, {
-      int maxSizeInKB = 1024,
+      int maxSizeInKB = 20480,
       int minSizeInKB = 5,
     }) async {
   final PermissionStatus photoPermissionStatus =
@@ -52,7 +52,7 @@ Future<String> choseImageFromLocalFiles(
     if (fileLength > (maxSizeInKB * 1024) ||
         fileLength < (minSizeInKB * 1024)) {
       throw LocalImagePickingFileSizeOutOfBoundsException(
-          message: "Image size should not exceed 1MB");
+          message: "Image size should not exceed 20MB");
     } else {
       return imagePicked.path;
     }

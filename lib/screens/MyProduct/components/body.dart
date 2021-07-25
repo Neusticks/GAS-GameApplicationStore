@@ -50,7 +50,13 @@ class _BodyState extends State<Body> {
               width: double.infinity,
               child: Column(
                 children: [
-                  SizedBox(height: getProportionScreenHeight(30)),
+                  Text("Your Product", style: headingStyle),
+                  SizedBox(height: getProportionScreenHeight(15)),
+                  Text(
+                    "Swipe LEFT to Edit, Swipe RIGHT to Delete",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  SizedBox(height: getProportionScreenHeight(15)),
                   RoundedButton(
                             text: "Add Product",
                             press: () {
@@ -208,7 +214,7 @@ class _BodyState extends State<Body> {
               if (productInfoDeleted == true) {
                 snackbarMessage = "Product deleted successfully";
               } else {
-                throw "Coulnd't delete product, please retry";
+                throw "Couldn't delete product, please retry";
               }
             } on FirebaseException catch (e) {
               Logger().w("Firebase Exception: $e");
