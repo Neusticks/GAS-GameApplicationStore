@@ -309,6 +309,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
             content: Text(snackbarMessage),
           ),
         );
+        Navigator.pop(context);
       }
     }
   }
@@ -342,6 +343,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
             content: Text(snackbarMessage),
           ),
         );
+        Navigator.pop(context);
       }
     }
   }

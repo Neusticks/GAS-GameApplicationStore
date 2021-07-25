@@ -368,7 +368,7 @@ class _CreateStoreFormState extends State<CreateStoreForm> {
           StoreDatabaseHelper().createUserStore(storeId, storeNameController.text, storeSellerNameController.text, storeAddressController.text, storeDescriptionController.text);
       storeUploadFuture.then((value) {
         storeId = value;
-        UserDatabaseHelper().updateUserStoreId(value);
+        UserDatabaseHelper().updateUserStoreId(storeId);
       });
       snackbarMessage = "Store Created";
     } on FirebaseException catch (e) {

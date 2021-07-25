@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/screens/ChangeDisplayName/change_display_name_screen.dart';
 import 'package:gas_gameappstore/screens/ChangeStoreAddress/change_store_address_screen.dart';
 import 'package:gas_gameappstore/screens/ChangeStoreDescription/change_store_desc_screen.dart';
@@ -22,8 +23,10 @@ class _Body extends State<Body> {
     var storeName, storeAddress, storeDesc;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(vertical: 20),
+
       child: Column(
         children: [
+          Text("Store Account", style: headingStyle),
           SizedBox(height: 20),
           StreamBuilder<QueryDocumentSnapshot>(
             stream: StoreDatabaseHelper().currentUserStoreDataStream,
