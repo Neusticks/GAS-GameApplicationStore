@@ -3,6 +3,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
+import 'package:gas_gameappstore/screens/Chats/chat_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/pilot_request_database_helper.dart';
 import 'package:gas_gameappstore/size_config.dart';
@@ -32,6 +33,7 @@ class Body extends StatelessWidget {
               if (snapshot.hasData) {
                 PilotRequest requestData = snapshot.data;
                 String requestId = requestData.id;
+                String requestOwnerId = requestData.ownerId;
                 String requestUserName = requestData.userName;
                 String requestGameId = requestData.gameId;
                 String requestPass = requestData.gamePassword;
@@ -77,53 +79,53 @@ class Body extends StatelessWidget {
                                   fontWeight: FontWeight.w900,
                                   fontSize: 15,
                                 ),
-                            children: [
-                              TextSpan(
-                                text: "Account Owner: $requestUserName\n",
-                                style: TextStyle(
-                                  color: kTextColor,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 15,
-                                ),
                                 children: [
                                   TextSpan(
-                                    text: "User Phone Number: $requestUserPhone\n",
+                                    text: "Account Owner: $requestUserName\n",
                                     style: TextStyle(
                                       color: kTextColor,
                                       fontWeight: FontWeight.normal,
                                       fontSize: 15,
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: "Game Choice: $requestGameChoice\n",
-                                          style: TextStyle(
-                                            color: kPrimaryColor,
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 15,
-                                          ),
-                                          children:[
-                                            TextSpan(
-                                              text: "Assign To: $requestAssign\n",
-                                              style: TextStyle(
-                                                color: kPrimaryColor,
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 15,
-                                              ),
-                                          children: [
-                                            TextSpan(
-                                              text: "Request Status: $requestStatus",
-                                              style: TextStyle(
-                                                color: kPrimaryColor,
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],),
-                                    ],
                                     ),
-                                  ],
+                                    children: [
+                                      TextSpan(
+                                        text: "User Phone Number: $requestUserPhone\n",
+                                        style: TextStyle(
+                                          color: kTextColor,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 15,
+                                        ),
+                                        children: [
+                                          TextSpan(
+                                            text: "Game Choice: $requestGameChoice\n",
+                                            style: TextStyle(
+                                              color: kPrimaryColor,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 15,
+                                            ),
+                                            children:[
+                                              TextSpan(
+                                                text: "Assign To: $requestAssign\n",
+                                                style: TextStyle(
+                                                  color: kPrimaryColor,
+                                                  fontWeight: FontWeight.w900,
+                                                  fontSize: 15,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: "Request Status: $requestStatus",
+                                                    style: TextStyle(
+                                                      color: kPrimaryColor,
+                                                      fontWeight: FontWeight.w900,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -133,33 +135,28 @@ class Body extends StatelessWidget {
                       DefaultButton(
                         text: "Chat User",
                         press: () {
-
-                          final uploadFuture = assignRequestButtonCallback(requestId);
-                          showDialog(context: context, builder: (context){
-                            return FutureProgressDialog(
-                              uploadFuture,
-                              message: Text("Chat User"),
-                            );
-                          },
-                          );
+                              Navigator.push(context, MaterialPageRoute(builder: (context){
+                              return ChatScreen(peerId: requestOwnerId);
+                          }
+                        ));
                         },
                       ),
                       SizedBox(height: getProportionScreenHeight(20)),
-                       DefaultButton(
-                          text: "Assign Request",
-                          press: () {
-                            
-                            final uploadFuture = assignRequestButtonCallback(requestId);
-                            showDialog(context: context, builder: (context){
-                              return FutureProgressDialog(
-                                uploadFuture,
-                                message: Text("Assigning You to this Request"),
-                              );
-                            },
+                      DefaultButton(
+                        text: "Finish Request",
+                        press: () {
+
+                          final uploadFuture = finishRequestButtonCallback(requestId);
+                          showDialog(context: context, builder: (context){
+                            return FutureProgressDialog(
+                              uploadFuture,
+                              message: Text("Finishing Request"),
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You have been Assigned to this Request")));
                           },
-                        ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You have Finished this Request")));
+                        },
+                      ),
 
                     ],
                   ),
@@ -183,14 +180,15 @@ class Body extends StatelessWidget {
       ),
     );
   }
-  Future<void> assignRequestButtonCallback(requestId)  async{
+  Future<void> finishRequestButtonCallback(requestId)  async{
     String uid = AuthentificationService().currentUser.uid;
     final requestDocSnapshot = FirebaseFirestore.instance.collection('pilotRequest').doc(requestId);
-    await requestDocSnapshot.update({"assignPilot" : uid});
+
+    await requestDocSnapshot.update({"requestStatus" : 'Finished'});
   }
 
   Future<void> chatUserButtonCallback() async{
 
   }
-  
+
 }

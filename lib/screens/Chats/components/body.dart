@@ -503,7 +503,7 @@ class BodyState extends State<Body> {
                 onSubmitted: (value) {
                   onSendMessage(textEditingController.text, 0);
                 },
-                style: TextStyle(color: kPrimaryColor, fontSize: 15.0),
+                style: TextStyle(color: kPrimaryColor, fontSize: 20.0),
                 controller: textEditingController,
                 decoration: InputDecoration.collapsed(
                   hintText: 'Type your message...',

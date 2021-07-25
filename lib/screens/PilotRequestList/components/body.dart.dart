@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/components/nothingtoshow_container.dart';
 import 'package:gas_gameappstore/components/user_short_detail_card.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
-import 'package:gas_gameappstore/screens/ManagePilotRequest/components/request_pilot_short_detail_card.dart';
-import 'package:gas_gameappstore/screens/PilotRequestDetails/pilot_request_details_screen.dart';
+
 import 'package:gas_gameappstore/screens/PilotRequestList/components/pilot_short_detail_card.dart';
 import 'package:gas_gameappstore/screens/PilotRequestListDetails/pilot_request_details_screen.dart';
 import 'package:gas_gameappstore/services/data_streams/pilot_request_stream.dart';
@@ -23,7 +22,6 @@ class Body extends StatefulWidget{
 
 class _BodyState extends State<Body>{
   final PilotRequestStream pilotRequestStream = PilotRequestStream();
-  List pilots;
 
   @override
   void initState() {
@@ -78,10 +76,7 @@ class _BodyState extends State<Body>{
 
           return Column(
             children: [
-              Text(
-                "Pilot Request List",
-                style: headingStyle,
-              ),
+
 
               SizedBox(height: getProportionScreenHeight(20)),
               Expanded(

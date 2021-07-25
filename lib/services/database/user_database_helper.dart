@@ -87,6 +87,27 @@ class UserDatabaseHelper {
     });
   }
 
+  Future<List<String>> searchInUser(String query,
+    {User user}) async {
+    Query queryRef;
+    if (user.userName == null) {
+      queryRef = firestore.collection(USERS_COLLECTION_NAME);
+    } else {
+      queryRef = firestore
+          .collection(USERS_COLLECTION_NAME)
+          .where(USER_NAME_KEY, isEqualTo: user.userName);
+    }
+
+    Set userId = Set<String>();
+    final queryRefDocs = await queryRef.get();
+    for (final doc in queryRefDocs.docs) {
+      final user = User.fromMap(doc.data(), id: doc.id);
+      if (user.userName.toString().toLowerCase().contains(query)) {
+        userId.add(user.id);
+      }
+    }
+    return userId.toList();
+  }
 
   // Future<void> deleteCurrentUserData() async {
   //   final uid = AuthentificationService().currentUser.uid;
@@ -124,6 +145,13 @@ class UserDatabaseHelper {
       return false;
     }
   }
+  Future<String> getUserNameWithId(String userId) async{
+    final docSnapshot = await firestore.collection(USERS_COLLECTION_NAME).doc(userId).get();
+    Map<String, dynamic> docFields = docSnapshot.data();
+    String userName = docFields['userName'].toString();
+    return userName;
+  }
+
   Future<User> getUserWithID(String userId) async {
     final docSnapshot = await firestore
         .collection(USERS_COLLECTION_NAME)
