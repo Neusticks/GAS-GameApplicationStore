@@ -63,7 +63,7 @@ class _BodyState extends State<Body> {
                         MaterialPageRoute(
                           builder: (context) => EditAddressScreen(),
                         ),
-                      );
+                      ).then((_) => refreshPage());
                     },
                   ),
                   SizedBox(height: getProportionScreenHeight(30)),

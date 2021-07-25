@@ -65,16 +65,17 @@ class User extends Model {
   factory User.fromDocument(DocumentSnapshot doc){
     String userName ="";
     String userProfilePicture = "";
+    String userRole = "";
     try{
-      userName = doc.get('userName');
+      userName = doc.get("userName");
+      userProfilePicture = doc.get("userProfilePicture");
+      userRole = doc.get("userRole");
     }catch (e){}
-    try{
-      userProfilePicture = doc.get('userProfilePicture');
-    }catch(e){}
     return User(
       id: doc.id,
       userName: userName,
       userProfilePicture: userProfilePicture,
+      userRole: userRole
     );
   }
 

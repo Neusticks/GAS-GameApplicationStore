@@ -63,7 +63,7 @@ class TransactionShortDetailCard extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       Text.rich(
-                          showPrice(product)
+                        showPrice(product)
                       ),
                       SizedBox(height: 10),
                       Text(
@@ -79,14 +79,14 @@ class TransactionShortDetailCard extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       Text.rich(
-                          TextSpan(
+                        TextSpan(
                             text: "Total: ${rupiah(product.productDiscountPrice.toInt()*productQuantity)} ",
                             style: TextStyle(
-                              color: kPrimaryColor,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20,
-                            ),
-                          )
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20,
+                          ),
+                        )
                       )
                     ],
                   ),

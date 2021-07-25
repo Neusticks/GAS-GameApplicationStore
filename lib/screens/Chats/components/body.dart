@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:io';
 
@@ -284,6 +283,7 @@ class BodyState extends State<Body> {
                 children: <Widget>[
                   isLastMessageLeft(index)
                       ? Material(
+                    child: showProfilePicture(),
                     borderRadius: BorderRadius.all(
                       Radius.circular(18.0),
                     ),
@@ -404,6 +404,34 @@ class BodyState extends State<Body> {
     }
   }
 
+  Image showProfilePicture(){
+    return Image.network(
+      peerAvatar,
+      loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: CircularProgressIndicator(
+            color: kPrimaryColor,
+            value: loadingProgress.expectedTotalBytes != null &&
+                loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes
+                : null,
+          ),
+        );
+      },
+      errorBuilder: (context, object, stackTrace) {
+        return Icon(
+          Icons.account_circle,
+          size: 35,
+          color: greyColor,
+        );
+      },
+      width: 35,
+      height: 35,
+      fit: BoxFit.cover,
+    );
+  }
+
   bool isLastMessageLeft(int index) {
     if ((index > 0 && listMessage[index - 1].get('idFrom') == id) ||
         index == 0) {
@@ -505,7 +533,13 @@ class BodyState extends State<Body> {
                 },
                 style: TextStyle(color: kPrimaryColor, fontSize: 20.0),
                 controller: textEditingController,
-                decoration: InputDecoration.collapsed(
+                decoration: new InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
                   hintText: 'Type your message...',
                   hintStyle: TextStyle(color: greyColor),
                 ),

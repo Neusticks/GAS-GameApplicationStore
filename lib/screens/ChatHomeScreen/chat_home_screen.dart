@@ -204,7 +204,9 @@ class ChatHomeScreenState extends State<ChatHomeScreen> {
       User userChat = User.fromDocument(document);
       if (userChat.id == currentUserId) {
         return SizedBox.shrink();
-      } else {
+      }else if(userChat.userRole == "Admin") return SizedBox.shrink();
+
+      else {
         return Container(
           child: TextButton(
             child: Row(
