@@ -1,3 +1,6 @@
+
+import 'package:gas_gameappstore/screens/Chats/chat_screen.dart';
+
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +89,11 @@ class ProductDescription extends StatelessWidget {
                 ],
               ),
             ),
+            TextButton(
+                onPressed: ()=>
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return ChatScreen(peerId: product.ownerId);
+                    })), child: Text('Chat'))
           ],
         ),
       ],

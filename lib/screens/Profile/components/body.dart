@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:gas_gameappstore/models/PilotRequest.dart';
+import 'package:gas_gameappstore/screens/ChatHomeScreen/chat_home_screen.dart';
+
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/PilotService/pilot_service_screen.dart';
 import 'package:gas_gameappstore/screens/ReportProblem/report_problem_screen.dart';
@@ -45,6 +49,13 @@ class _Body extends State<Body> {
           //   icon: "assets/icons/Bell.svg",
           //   press: () {},
           // ),
+          ProfileMenu(
+            text: "Chats",
+            icon: "assets/icons/User Icon.svg",
+            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+              return ChatHomeScreen(currentUserId: AuthentificationService().currentUser.uid);
+            })),
+          ),
           ProfileMenu(
             text: "Request Pilot Service", 
             icon: "assets/icons/User Icon.svg",

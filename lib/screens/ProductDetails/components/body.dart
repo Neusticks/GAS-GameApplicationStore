@@ -109,6 +109,7 @@
 // }
 
 
+import 'package:gas_gameappstore/screens/Chats/chat_screen.dart';
 import 'package:gas_gameappstore/size_config.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/constants.dart';
@@ -147,6 +148,7 @@ class Body extends StatelessWidget {
                     SizedBox(height: getProportionScreenHeight(20)),
                     ProductReview(product: product),
                     SizedBox(height: getProportionScreenHeight(100)),
+
                   ],
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
