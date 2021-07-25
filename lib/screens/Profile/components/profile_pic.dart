@@ -175,7 +175,7 @@ class ProfilePic extends StatelessWidget {
       if (uploadDisplayPictureStatus == true) {
         snackbarMessage = "Display Picture updated successfully";
       } else {
-        throw "Coulnd't update display picture due to unknown reason";
+        throw "Couldn't update display picture due to unknown reason";
       }
     } on FirebaseException catch (e) {
       Logger().w("Firebase Exception: $e");

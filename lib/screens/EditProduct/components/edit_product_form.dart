@@ -484,6 +484,9 @@ class _EditProductFormState extends State<EditProductForm> {
         if (discountPriceFieldController.text.isEmpty) {
           return FIELD_REQUIRED_MSG;
         }
+        if(int.parse(discountPriceFieldController.text) > int.parse(originalPriceFieldController.text)){
+          return "Discount Price can't be higher than Original Price";
+        }
         return null;
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -494,7 +497,7 @@ class _EditProductFormState extends State<EditProductForm> {
     if (validateBasicDetailsForm() == false) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Erros in Basic Details Form"),
+          content: Text("Errors in Basic Details Form"),
         ),
       );
       return;
@@ -511,7 +514,7 @@ class _EditProductFormState extends State<EditProductForm> {
     if (productDetails.selectedImages.length < 1) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Upload atleast One Image of Product"),
+          content: Text("Upload at least One Image of Product"),
         ),
       );
       return;
@@ -527,7 +530,7 @@ class _EditProductFormState extends State<EditProductForm> {
     if (productDetails.searchTags.length < 3) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Add atleast 3 search tags"),
+          content: Text("Add at least 3 search tags"),
         ),
       );
       return;

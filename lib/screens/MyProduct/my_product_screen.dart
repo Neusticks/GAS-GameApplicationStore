@@ -8,13 +8,13 @@ class MyProductsScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Your Product',
-            style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w300,
-          ),
-        )
+        // title: Text(
+        //     'Your Product',
+        //     style: TextStyle(
+        //     fontSize: 24.0,
+        //     fontWeight: FontWeight.w300,
+        //   ),
+        // )
       ),
       body: Body(),
       //body: Body(),
