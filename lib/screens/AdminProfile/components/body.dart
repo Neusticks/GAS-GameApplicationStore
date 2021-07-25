@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/ChatHomeScreen/chat_home_screen.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/ManagePilotRequest/manage_pilot_screen.dart';
 import 'package:gas_gameappstore/screens/ManageReport/manage_report_screen.dart';
 import 'package:gas_gameappstore/screens/ManageUserAdmin/manage_user_screen.dart';
 import 'package:gas_gameappstore/screens/RegisterPilotService/register_pilot_service_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 
 import 'admin_profile_menu.dart';
 import 'admin_profile_pic.dart';
@@ -34,6 +36,14 @@ class _Body extends State<Body> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ProfileSettings();
                   }))
+          ),
+          AdminProfileMenu(
+            text: "Chats",
+            icon: "assets/icons/User Icon.svg",
+            press: () =>
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ChatHomeScreen(currentUserId: AuthentificationService().currentUser.uid);
+                })),
           ),
           AdminProfileMenu(
             text: "Manage Users Account", 
