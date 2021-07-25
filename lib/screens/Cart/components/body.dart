@@ -73,7 +73,8 @@ class _BodyState extends State<Body> {
         ],
       ),
     );
-    final cartItems = await FirebaseFirestore.instance.collection("users").doc(AuthentificationService().currentUser.uid).collection("cart").get();
+    final uid = AuthentificationService().currentUser.uid;
+    final cartItems = await FirebaseFirestore.instance.collection("users").doc(uid).collection("cart").get();
     final orderFuture = UserDatabaseHelper().emptyCart();
     orderFuture.then((orderedProductsUid) async {
       if (orderedProductsUid != null) {
@@ -84,7 +85,10 @@ class _BodyState extends State<Body> {
         List<OrderedProduct> orderedProductsCombined = [];
         for(int i = 0; i < orderedProductsUid.length; i++){
           int itemQty = cartItems.docs.elementAt(i).data()["itemQty"];
-          List<OrderedProduct> orderedProducts = orderedProductsUid.map((e) => OrderedProduct(null, productUid: e, orderDate: formatedDateTime, productQuantity: itemQty)).toList();
+          final productRef = await FirebaseFirestore.instance.collection("products").doc(cartItems.docs.elementAt(i).id).get();
+          final storeRef = await FirebaseFirestore.instance.collection("stores").where("storeOwnerID", isEqualTo: productRef.data()["ownerId"]).get();
+          final storeRefSnapshot = storeRef.docs.single;
+          List<OrderedProduct> orderedProducts = orderedProductsUid.map((e) => OrderedProduct(null, userID: uid, storeID: storeRefSnapshot.id, productUid: e, orderDate: formatedDateTime, productQuantity: itemQty)).toList();
           orderedProductsCombined.add(orderedProducts.elementAt(i));
         }
         bool addedProductsToMyProducts = false;
@@ -188,7 +192,7 @@ class _BodyState extends State<Body> {
                   ),
                   SizedBox(height: getProportionScreenHeight(20)),
                   Text(
-                    "Swipe LEFT to Edit, Swipe RIGHT to Delete",
+                    "Swipe RIGHT to Delete",
                     style: TextStyle(fontSize: 17),
                   ),
                   SizedBox(

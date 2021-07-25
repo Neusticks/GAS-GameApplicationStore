@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/models/Review.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
@@ -68,17 +69,18 @@ class ProductDatabaseHelper {
       return await addUsersRatingForProduct(
         productId,
         review.rating,
+        review,
       );
     } else {
       int oldRating = 0;
       oldRating = (await reviewDoc.get()).data()[Product.PRODUCT_RATING_KEY];
       reviewDoc.update(review.toUpdateMap());
-      return await addUsersRatingForProduct(productId, review.rating,
+      return await addUsersRatingForProduct(productId, review.rating, review,
           oldRating: oldRating);
     }
   }
 
-  Future<bool> addUsersRatingForProduct(String productId, int rating,
+  Future<bool> addUsersRatingForProduct(String productId, int rating, Review review,
       {int oldRating}) async {
     final productDocRef =
     firestore.collection(PRODUCTS_COLLECTION_NAME).doc(productId);
@@ -89,7 +91,6 @@ class ProductDatabaseHelper {
     final productDoc = await productDocRef.get();
     final prevRating = productDoc.data()[Review.RATING_KEY];
     double newRating = 0;
-    print(ratingsCount);
     if (oldRating == null) {
       newRating = (prevRating * (ratingsCount - 1) + rating) / ratingsCount;
     } else {
@@ -98,6 +99,10 @@ class ProductDatabaseHelper {
     }
     final newRatingRounded = double.parse(newRating.toStringAsFixed(1));
     await productDocRef.update({Product.PRODUCT_RATING_KEY: newRatingRounded});
+    final userReviewRef = await firestore.collection("users").doc(AuthentificationService().currentUser.uid).collection("ordered_products").where(FieldPath.documentId, isEqualTo: review.id).get();
+    await userReviewRef.docs[0].reference.update({
+      "review_id" : true
+    });
     return true;
   }
 

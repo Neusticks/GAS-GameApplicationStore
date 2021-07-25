@@ -20,6 +20,7 @@ class ProfilePic extends StatelessWidget {
     this.bodyState,
   }) : super(key: key);
   final ChosenImage bodyState;
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(

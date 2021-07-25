@@ -2,6 +2,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/constants.dart';
+import 'package:gas_gameappstore/screens/IncomingRequestProduct/incoming_request_product_screen.dart';
 import 'package:gas_gameappstore/screens/MyProduct/my_product_screen.dart';
 import 'package:gas_gameappstore/screens/MyStore/components/shop_pic.dart';
 import 'package:gas_gameappstore/screens/StoreInformation/store_information.dart';
@@ -22,6 +24,8 @@ class _Body extends State<Body> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
+          Text("Store Profile", style: headingStyle),
+          SizedBox(height: 20),
           ShopPic(),
           SizedBox(height: 20),
           MyStoreMenu(
@@ -35,7 +39,11 @@ class _Body extends State<Body> {
           MyStoreMenu(
             text: "Ordered Product",
             icon: "assets/icons/receipt.svg",
-            press: () {},
+            press: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context){
+                return IncomingRequestProductScreen();
+              }));
+            },
           ),
           MyStoreMenu(
             text: "My Product",

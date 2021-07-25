@@ -135,7 +135,7 @@ class _BodyState extends State<Body> {
   }
 
   Widget buildOrderedProductItem(OrderedProduct orderedProduct) {
-    if(orderedProduct.transactionCompleted == true && orderedProduct.reviewID == false) return FutureBuilder<Product>(
+    if(orderedProduct.reviewID == true) return FutureBuilder<Product>(
       future:
       ProductDatabaseHelper().getProductWithID(orderedProduct.productUid),
       builder: (context, snapshot) {
@@ -189,6 +189,7 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   child: TransactionShortDetailCard(
+                    productQuantity: orderedProduct.productQuantity,
                     productId: product.id,
                     onPressed: () {
                       Navigator.push(
@@ -211,80 +212,12 @@ class _BodyState extends State<Body> {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: kPrimaryColor,
+                    color: greyColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16),
                     ),
                   ),
-                  child: FlatButton(
-                    onPressed: () async {
-                      String currentUserUid =
-                          AuthentificationService().currentUser.uid;
-                      Review prevReview;
-                      try {
-                        prevReview = await ProductDatabaseHelper()
-                            .getProductReviewWithID(product.id, orderedProduct.id);
-                      } on FirebaseException catch (e) {
-                        Logger().w("Firebase Exception: $e");
-                      } catch (e) {
-                        Logger().w("Unknown Exception: $e");
-                      } finally {
-                        if (prevReview == null) {
-                          prevReview = Review(
-                            orderedProduct.id,
-                            reviewerUid: currentUserUid,
-                          );
-                        }
-                      }
-
-                      final result = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ProductReviewDialog(
-                            review: prevReview,
-                          );
-                        },
-                      );
-                      if (result is Review) {
-                        bool reviewAdded = false;
-                        String snackbarMessage;
-                        try {
-                          reviewAdded = await ProductDatabaseHelper()
-                              .addProductReview(product.id, result);
-                          if (reviewAdded == true) {
-                            snackbarMessage =
-                            "Product review added successfully";
-                          } else {
-                            throw "Couldn't add product review due to unknown reason";
-                          }
-                        } on FirebaseException catch (e) {
-                          Logger().w("Firebase Exception: $e");
-                          snackbarMessage = e.toString();
-                        } catch (e) {
-                          Logger().w("Unknown Exception: $e");
-                          snackbarMessage = e.toString();
-                        } finally {
-                          Logger().i(snackbarMessage);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(snackbarMessage),
-                            ),
-                          );
-                        }
-                      }
-                      await refreshPage();
-                    },
-                    child: Text(
-                      "Give Product And Store Review",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-
                 ),
               ],
             ),
@@ -302,127 +235,6 @@ class _BodyState extends State<Body> {
         );
       },
     );
-    else if(orderedProduct.transactionCompleted == false){
-      return FutureBuilder<Product>(
-        future:
-        ProductDatabaseHelper().getProductWithID(orderedProduct.productUid),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final product = snapshot.data;
-            return Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 16,
-                    ),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: kTextColor.withOpacity(0.12),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16),
-                      ),
-                    ),
-                    child: Text.rich(
-                      TextSpan(
-                        text: "Ordered on:  ",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: orderedProduct.orderDate,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.symmetric(
-                        vertical: BorderSide(
-                          color: kTextColor.withOpacity(0.15),
-                        ),
-                      ),
-                    ),
-                    child: TransactionShortDetailCard(
-                      productQuantity: orderedProduct.productQuantity,
-                      productId: product.id,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsScreen(
-                              productId: product.id,
-                            ),
-                          ),
-                        ).then((_) async {
-                          await refreshPage();
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: kPrimaryColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(16),
-                        bottomRight: Radius.circular(16),
-                      ),
-                    ),
-                    child: FlatButton(
-                      onPressed: () async {
-                        final userOrderedProductRef = await FirebaseFirestore.instance.collection("users").doc(AuthentificationService().currentUser.uid).collection("ordered_products").where(FieldPath.documentId, isEqualTo: orderedProduct.id).get();
-                        final userOrderedProductRefSnapshot = userOrderedProductRef.docs.single;
-                        final storeRef = await FirebaseFirestore.instance.collection("stores").doc(orderedProduct.storeID).collection("incoming_request_product").where(FieldPath.documentId, isEqualTo: userOrderedProductRefSnapshot.id).get();
-                        await storeRef.docs[0].reference.delete();
-                        await userOrderedProductRef.docs[0].reference.delete();
-                        await refreshPage();
-                      },
-                      child: Text(
-                        "Cancel Order",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-
-                  ),
-                ],
-              ),
-            );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            final error = snapshot.error.toString();
-            Logger().e(error);
-          }
-          return Icon(
-            Icons.error,
-            size: 60,
-            color: kTextColor,
-          );
-        },
-      );
-    }
     else return SizedBox.shrink();
   }
 }

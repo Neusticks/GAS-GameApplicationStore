@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'components/body.dart';
 
-class StoreInformationScreen extends StatelessWidget {
-  static String routeName = "/storeinfo";
+class IncomingRequestProductScreen extends StatelessWidget {
+  static String routeName = "/incoming_request_product";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // title: Text("Store Account"),
-      ),
+      appBar: AppBar(),
       body: Body(),
     );
   }

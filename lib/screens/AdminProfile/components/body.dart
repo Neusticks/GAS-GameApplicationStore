@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/ChatHomeScreen/chat_home_screen.dart';
@@ -8,6 +9,7 @@ import 'package:gas_gameappstore/screens/ManageUserAdmin/manage_user_screen.dart
 import 'package:gas_gameappstore/screens/RegisterPilotService/register_pilot_service_screen.dart';
 import 'package:gas_gameappstore/screens/Settings/profile_settings.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
+import 'package:logger/logger.dart';
 
 import 'admin_profile_menu.dart';
 import 'admin_profile_pic.dart';
@@ -40,10 +42,7 @@ class _Body extends State<Body> {
           AdminProfileMenu(
             text: "Chats",
             icon: "assets/icons/User Icon.svg",
-            press: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return ChatHomeScreen(currentUserId: AuthentificationService().currentUser.uid);
-                })),
+            press: profilePictureChecking
           ),
           AdminProfileMenu(
             text: "Manage Users Account", 
@@ -111,4 +110,20 @@ class _Body extends State<Body> {
     }));
   }
 
+  Future<void> profilePictureChecking() async{
+    final uid = AuthentificationService().currentUser.uid;
+    final userDocRef = await FirebaseFirestore.instance.collection("users").doc(uid).get();
+    if(userDocRef.data()["userProfilePicture"] == null){
+      final snackbarMessage = "You don't have profile picture!\nYou need profile picture to access chat!";
+      Logger().i(snackbarMessage);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(snackbarMessage),
+        ),
+      );
+    }
+    else Navigator.push(context, MaterialPageRoute(builder: (context){
+      return ChatHomeScreen(currentUserId: AuthentificationService().currentUser.uid);
+    }));
+  }
 }
