@@ -135,7 +135,8 @@ class _BodyState extends State<Body> {
   }
 
   Widget buildOrderedProductItem(OrderedProduct orderedProduct) {
-    return FutureBuilder<Product>(
+    if(orderedProduct.transactionCompleted == true) return SizedBox.shrink();
+    else return FutureBuilder<Product>(
       future:
       ProductDatabaseHelper().getProductWithID(orderedProduct.productUid),
       builder: (context, snapshot) {
@@ -223,6 +224,9 @@ class _BodyState extends State<Body> {
                       final storeRef = await FirebaseFirestore.instance.collection("stores").where("storeOwnerID", isEqualTo: AuthentificationService().currentUser.uid).get();
                       final storeRefSnapshot = storeRef.docs.single;
                       final incomingRequestProductRef = await FirebaseFirestore.instance.collection("stores").doc(storeRefSnapshot.id).collection("incoming_request_product").where(FieldPath.documentId, isEqualTo: orderedProduct.id).get();
+                      await incomingRequestProductRef.docs[0].reference.update({
+                        "transaction_completed" : true
+                      });
                       final incomingRequestProductRefSnapshot = incomingRequestProductRef.docs.single;
                       final userOrderedProductRef = await FirebaseFirestore.instance.collection("users").doc(orderedProduct.userID).collection("ordered_products").where(FieldPath.documentId, isEqualTo: incomingRequestProductRefSnapshot.id).get();
                       await userOrderedProductRef.docs[0].reference.update({

@@ -145,9 +145,9 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       final AuthentificationService authService = AuthentificationService();
-      bool passwordValidation =
+      String passwordValidation =
           await authService.verifyCurrentUserPassword(passwordController.text);
-      if (passwordValidation) {
+      if (passwordValidation == "true") {
         bool updationStatus = false;
         String snackbarMessage;
         try {
