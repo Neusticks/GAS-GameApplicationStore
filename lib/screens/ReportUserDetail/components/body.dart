@@ -41,6 +41,9 @@ class Body extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Align(
+                        child: Text("User Report Details", style: headingStyle),
+                      ),
                       SizedBox(height: 10),
                       Text(
                         "Report Id: $reportId",

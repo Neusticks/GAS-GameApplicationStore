@@ -136,8 +136,7 @@ class _BodyState extends State<Body> {
 
   Widget buildOrderedProductItem(OrderedProduct orderedProduct) {
     if(orderedProduct.transactionCompleted == true && orderedProduct.reviewID == false) return FutureBuilder<Product>(
-      future:
-      ProductDatabaseHelper().getProductWithID(orderedProduct.productUid),
+      future: ProductDatabaseHelper().getProductWithID(orderedProduct.productUid),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final product = snapshot.data;
@@ -189,6 +188,7 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   child: TransactionShortDetailCard(
+                    productQuantity: orderedProduct.productQuantity,
                     productId: product.id,
                     onPressed: () {
                       Navigator.push(

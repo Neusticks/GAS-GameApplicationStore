@@ -1,6 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/components/bottom_nav_bar_button.dart';
+import 'package:gas_gameappstore/enums.dart';
 import 'package:gas_gameappstore/models/Store.dart';
 import 'components/body.dart';
 import '../../size_config.dart';
@@ -21,6 +23,7 @@ class MyStoreScreen extends StatelessWidget {
         // )
       ),
       body: Body(),
+      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.message),
     );
   }
 

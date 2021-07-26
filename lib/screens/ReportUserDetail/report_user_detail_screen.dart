@@ -18,7 +18,7 @@ class ReportUserDetailScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Report Detail"),
+        // title: Text("Report Detail"),
       ),
       body: Body(
         reportId: reportId,

@@ -64,110 +64,111 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-
-        return SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: getProportionScreenHeight(20)),
-                HomeHeader(
-                  onSearchSubmitted: (value) async{
-                    final query = value.toString();
-                    if (query.length <= 0) return;
-                    List<String> searchedProductsId;
-                    try{
-                      searchedProductsId = await ProductDatabaseHelper().searchInProducts(query.toLowerCase());
-                      if (searchedProductsId != null){
-                        await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResultScreen(searchQuery: query, searchResultProductsId: searchedProductsId, searchIn: "All Products",
-                        ),
-                        ),
-                        );
-                        await refreshPage();
-                      }else {
-                        throw "Couldn't Perform Search due to some unknown reason";
-                      }
-                    }catch (e){
-                      final error = e.toString();
-                      Logger().e(error);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$error"),
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: getProportionScreenHeight(20)),
+              HomeHeader(
+                onSearchSubmitted: (value) async{
+                  final query = value.toString();
+                  if (query.length <= 0) return;
+                  List<String> searchedProductsId;
+                  try{
+                    searchedProductsId = await ProductDatabaseHelper().searchInProducts(query.toLowerCase());
+                    if (searchedProductsId != null){
+                      await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResultScreen(searchQuery: query, searchResultProductsId: searchedProductsId, searchIn: "All Products",
+                      ),
                       ),
                       );
+                      await refreshPage();
+                    }else {
+                      throw "Couldn't Perform Search due to some unknown reason";
                     }
-                  },
-                ),
-                SizedBox(height: getProportionScreenWidth(5)),
-                NewsBanner(),
-                SizedBox(height: getProportionScreenHeight(5)),
-                SizedBox(
-                  height: SizeConfig.screenHeight * 0.1,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      physics: BouncingScrollPhysics(),
-                      children: [
-                        ...List.generate(
-                          productCategories.length,
-                              (index) {
-                            return ProductTypeBox(
-                              icon: productCategories[index][ICON_KEY],
-                              title: productCategories[index][TITLE_KEY],
-                              onPress: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoryProductsScreen(
-                                          productType: productCategories[index]
-                                          [PRODUCT_TYPE_KEY],
-                                        ),
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ],
+                  }catch (e){
+                    final error = e.toString();
+                    Logger().e(error);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$error"),
                     ),
+                    );
+                  }
+                },
+              ),
+              SizedBox(height: getProportionScreenWidth(5)),
+              NewsBanner(),
+              SizedBox(height: getProportionScreenHeight(5)),
+              SizedBox(
+                height: SizeConfig.screenHeight * 0.1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      ...List.generate(
+                        productCategories.length,
+                            (index) {
+                          return ProductTypeBox(
+                            icon: productCategories[index][ICON_KEY],
+                            title: productCategories[index][TITLE_KEY],
+                            onPress: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CategoryProductsScreen(
+                                        productType: productCategories[index]
+                                        [PRODUCT_TYPE_KEY],
+                                      ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: getProportionScreenHeight(10)),
+              ),
+              SizedBox(height: getProportionScreenHeight(10)),
 
-                // Categories(),
-                // RoundedButton(
-                //     text: "Add Product",
-                //     press: () {
-                //       Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //             builder: (context) => EditProductScreen(),
-                //           ));
-                //     }),
-                // SizedBox(height: SizeConfig.screenHeight * 0.03),
-                // SpecialOffers(),
-                SizedBox(height: getProportionScreenWidth(20)),
-                SizedBox(
-                  height: SizeConfig.screenHeight * 0.5,
-                  child: ProductSection(
-                    sectionTitle: "Products You Like",
-                    productsStreamController: favouriteProductsStream,
-                    emptyListMessage: "Add Product to Favourites",
-                    onProductCardTapped: onProductCardTapped,
-                  ),
+              // Categories(),
+              // RoundedButton(
+              //     text: "Add Product",
+              //     press: () {
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) => EditProductScreen(),
+              //           ));
+              //     }),
+              // SizedBox(height: SizeConfig.screenHeight * 0.03),
+              // SpecialOffers(),
+              SizedBox(height: getProportionScreenWidth(20)),
+              SizedBox(
+                height: SizeConfig.screenHeight * 0.5,
+                child: ProductSection(
+                  sectionTitle: "Products You Like",
+                  productsStreamController: favouriteProductsStream,
+                  emptyListMessage: "Add Product to Favourites",
+                  onProductCardTapped: onProductCardTapped,
                 ),
-                SizedBox(height: getProportionScreenHeight(20)),
-                SizedBox(
-                  height: SizeConfig.screenHeight * 0.8,
-                  child: ProductSection(
-                    sectionTitle: "Explore All Products",
-                    productsStreamController: allProductsStream,
-                    emptyListMessage: "There is No Product in the Stores",
-                    onProductCardTapped: onProductCardTapped,
-                  ),
+              ),
+              SizedBox(height: getProportionScreenHeight(20)),
+              SizedBox(
+                height: SizeConfig.screenHeight * 0.8,
+                child: ProductSection(
+                  sectionTitle: "Explore All Products",
+                  productsStreamController: allProductsStream,
+                  emptyListMessage: "There is No Product in the Stores",
+                  onProductCardTapped: onProductCardTapped,
                 ),
-                SizedBox(height: getProportionScreenHeight(80)),
-          ],
-
+              ),
+              SizedBox(height: getProportionScreenHeight(80)),
+            ],
+          ),
         ),
       ),
     );

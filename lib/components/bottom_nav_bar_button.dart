@@ -24,7 +24,7 @@ class CustomBottomNavBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomBottomNavBar createState() => _CustomBottomNavBar();
+  _CustomBottomNavBar createState() => _CustomBottomNavBar(selectedMenu);
 }
 
 class _CustomBottomNavBar extends State<CustomBottomNavBar> {
@@ -36,8 +36,12 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
     return _firebaseFirestore;
   }
 
-  MenuState selectedMenu;
   Store store;
+  MenuState selectedMenu;
+
+  _CustomBottomNavBar(MenuState selectedMenu){
+    this.selectedMenu = selectedMenu;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +70,7 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
               IconButton(
                   icon: SvgPicture.asset(
                     "assets/icons/homeicon.svg",
-                    color: MenuState.home == selectedMenu
+                    color: MenuState.home ==  selectedMenu
                         ? kPrimaryColor
                         : inActiveIconColor,
                   ),
@@ -75,18 +79,17 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
                         return HomeScreen();
                     }))),
               IconButton(
-                icon: SvgPicture.asset("assets/icons/Heart Icon.svg"),
+                icon: SvgPicture.asset("assets/icons/Heart Icon.svg",
+                color: MenuState.favourite == selectedMenu ? kPrimaryColor : inActiveIconColor,
+                ),
                 onPressed: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) {
                       return FavoriteProductScreen();
                     }))),
               IconButton(
-                icon: SvgPicture.asset("assets/icons/Shop Icon.svg"),
+                icon: SvgPicture.asset("assets/icons/Shop Icon.svg",
+                color: MenuState.message == selectedMenu ? kPrimaryColor : inActiveIconColor),
                 onPressed: () => storeButtonCallback(context),
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) {
-                //   return CreateStoreFormScreen();
-                // })),
               ),
               IconButton(
                   icon: SvgPicture.asset(
@@ -96,10 +99,6 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
                         : inActiveIconColor,
                   ),
                   onPressed: () => profileButtonCallback(context),
-                  // Navigator.push(context,
-                  //         MaterialPageRoute(builder: (context) {
-                  //       return ProfileScreen();
-                  //     }))
                   ),
             ],
           )),
@@ -141,6 +140,5 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
         return AdminProfileScreen();
       }));
     }
-
   }
 }

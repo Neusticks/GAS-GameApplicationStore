@@ -93,7 +93,7 @@ class ProductDescription extends StatelessWidget {
                 onPressed: ()=>
                     Navigator.push(context, MaterialPageRoute(builder: (context){
                       return ChatScreen(peerId: product.ownerId);
-                    })), child: Text('Chat'))
+                    })), child: Text('Chat with Seller'))
           ],
         ),
       ],

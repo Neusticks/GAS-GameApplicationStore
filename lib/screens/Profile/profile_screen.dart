@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/components/bottom_nav_bar_button.dart';
 
+import '../../enums.dart';
 import 'components/body.dart';
 import '../../size_config.dart';
 
@@ -11,15 +13,10 @@ class ProfileScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        // title: Text(
-        //     "Profile",
-        //     style: TextStyle(
-        //     fontSize: 24.0,
-        //     fontWeight: FontWeight.w300,
-        //   ),
-        // )
+        elevation: 0.0,
       ),
       body: Body(),
+      bottomNavigationBar: CustomBottomNavBar(selectedMenu: MenuState.profile),
     );
   }
 }

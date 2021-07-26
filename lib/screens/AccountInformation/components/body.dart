@@ -26,7 +26,7 @@ class _Body extends State<Body> {
       child: Column(
         children: [
           Text(
-            "Account Details",
+            "Account Information",
             style: headingStyle,
           ),
           SizedBox(height: getProportionScreenHeight(20)),

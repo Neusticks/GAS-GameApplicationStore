@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/screens/Welcome/Components/background.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gas_gameappstore/size_config.dart';
@@ -16,9 +17,13 @@ class _BodyState extends State<Body> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-            "WELCOME TO GAS",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            SizedBox(height: getProportionScreenHeight(10)),
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                "WELCOME TO GAS",
+                style: headingStyle,
+              ),
             ),
             SizedBox(height: getProportionScreenHeight(100)),
             SvgPicture.asset(

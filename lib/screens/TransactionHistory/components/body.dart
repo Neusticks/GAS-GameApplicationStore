@@ -52,7 +52,7 @@ class _BodyState extends State<Body> {
                 children: [
                   SizedBox(height: getProportionScreenHeight(10)),
                   Text(
-                    "Your Orders",
+                    "Your Transaction History",
                     style: headingStyle,
                   ),
                   SizedBox(height: getProportionScreenHeight(20)),
