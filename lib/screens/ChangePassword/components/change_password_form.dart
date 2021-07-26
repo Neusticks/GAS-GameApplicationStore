@@ -137,11 +137,11 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       final AuthentificationService authService = AuthentificationService();
-      bool currentPasswordValidation;
-      final userDocSnapshotFirst = await FirebaseFirestore.instance.collection("users").doc(authService.currentUser.uid).get();
-      if(userDocSnapshotFirst.data()["userPassword"] == currentPasswordController.text) currentPasswordValidation = true;
-      else currentPasswordValidation = false;
-      if (currentPasswordValidation == false) {
+      String currentPasswordValidation = "";
+      currentPasswordValidation = await authService.verifyCurrentUserPassword(currentPasswordController.text.trim());
+      // final userDocSnapshotFirst = await FirebaseFirestore.instance.collection("users").doc(authService.currentUser.uid).get();
+      // if(userDocSnapshotFirst.data()["userPassword"] == currentPasswordController.text) currentPasswordValidation = true;
+      if (currentPasswordValidation != "true") {
         snackbarMessage = "Current password provided is wrong";
         Logger().i(snackbarMessage);
         ScaffoldMessenger.of(context).showSnackBar(

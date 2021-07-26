@@ -219,17 +219,17 @@ class AuthentificationService {
     await currentUser.updateProfile(displayName: updatedDisplayName);
   }
 
-  Future<bool> resetPasswordForEmail(String email) async {
+  Future<String> resetPasswordForEmail(String email) async {
     try {
       await firebaseAuth.sendPasswordResetEmail(email: email);
-      return true;
+      return "true";
     } on MessagedFirebaseAuthException {
       rethrow;
     } on FirebaseAuthException catch (e) {
       if (e.code == USER_NOT_FOUND_EXCEPTION_CODE) {
-        throw FirebaseCredentialActionAuthUserNotFoundException();
+        return FirebaseCredentialActionAuthUserNotFoundException().toString();
       } else {
-        throw FirebaseCredentialActionAuthException(message: e.code);
+        return FirebaseCredentialActionAuthException(message: e.code).toString();
       }
     } catch (e) {
       rethrow;
@@ -239,14 +239,13 @@ class AuthentificationService {
   Future<bool> changePasswordForCurrentUser(
       {String oldPassword, @required String newPassword}) async {
     try {
-      bool isOldPasswordProvidedCorrect = true;
+      String isOldPasswordProvidedCorrect = "true";
       if (oldPassword != null) {
         isOldPasswordProvidedCorrect =
         await verifyCurrentUserPassword(oldPassword);
       }
-      if (isOldPasswordProvidedCorrect) {
+      if (isOldPasswordProvidedCorrect == "true") {
         await firebaseAuth.currentUser.updatePassword(newPassword);
-
         return true;
       } else {
         throw FirebaseReauthWrongPasswordException();
@@ -273,11 +272,11 @@ class AuthentificationService {
   Future<bool> changeEmailForCurrentUser(
       {String password, String newEmail}) async {
     try {
-      bool isPasswordProvidedCorrect = true;
+      String isPasswordProvidedCorrect = "true";
       if (password != null) {
         isPasswordProvidedCorrect = await verifyCurrentUserPassword(password);
       }
-      if (isPasswordProvidedCorrect) {
+      if (isPasswordProvidedCorrect == "true") {
         await currentUser.verifyBeforeUpdateEmail(newEmail);
         final userDocSnapshot = FirebaseFirestore.instance.collection("users").doc(currentUser.uid);
         userDocSnapshot.update({"userEmail" : newEmail.toString()});
@@ -294,7 +293,7 @@ class AuthentificationService {
     }
   }
 
-  Future<bool> verifyCurrentUserPassword(String password) async {
+  Future<String> verifyCurrentUserPassword(String password) async {
     try {
       final AuthCredential authCredential = EmailAuthProvider.credential(
         email: currentUser.email,
@@ -303,34 +302,35 @@ class AuthentificationService {
 
       final authCredentials =
       await currentUser.reauthenticateWithCredential(authCredential);
-      return authCredentials != null;
+      if(authCredentials != null) return "true";
+      return "false";
     } on MessagedFirebaseAuthException {
       rethrow;
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case USER_MISMATCH_EXCEPTION_CODE:
-          throw FirebaseReauthUserMismatchException();
+          return FirebaseReauthUserMismatchException().toString();
           break;
         case USER_NOT_FOUND_EXCEPTION_CODE:
-          throw FirebaseReauthUserNotFoundException();
+          return FirebaseReauthUserNotFoundException().toString();
           break;
         case INVALID_CREDENTIALS_EXCEPTION_CODE:
-          throw FirebaseReauthInvalidCredentialException();
+          return FirebaseReauthInvalidCredentialException().toString();
           break;
         case INVALID_EMAIL_EXCEPTION_CODE:
-          throw FirebaseReauthInvalidEmailException();
+          return FirebaseReauthInvalidEmailException().toString();
           break;
         case WRONG_PASSWORD_EXCEPTION_CODE:
-          throw FirebaseReauthWrongPasswordException();
+          return FirebaseReauthWrongPasswordException().toString();
           break;
         case INVALID_VERIFICATION_CODE_EXCEPTION_CODE:
-          throw FirebaseReauthInvalidVerificationCodeException();
+          return FirebaseReauthInvalidVerificationCodeException().toString();
           break;
         case INVALID_VERIFICATION_ID_EXCEPTION_CODE:
-          throw FirebaseReauthInvalidVerificationIdException();
+          return FirebaseReauthInvalidVerificationIdException().toString();
           break;
         default:
-          throw FirebaseReauthException(message: e.code);
+          return FirebaseReauthException(message: e.code).toString();
           break;
       }
     } catch (e) {
