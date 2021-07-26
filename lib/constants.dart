@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/size_config.dart';
 
-const kPrimaryColor = Color(0xFFFF7643);
+//Primary == 0xFFFF7643
+const kPrimaryColor = Colors.black;
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,

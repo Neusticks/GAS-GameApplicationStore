@@ -42,7 +42,8 @@ class IconBtnWithCounter extends StatelessWidget {
                 height: getProportionScreenWidth(16),
                 width: getProportionScreenWidth(16),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFF4848),
+                  //0xFFFF4848
+                  color: Colors.black,
                   shape: BoxShape.circle,
                   border: Border.all(width: 1.5, color: Colors.white),
                 ),

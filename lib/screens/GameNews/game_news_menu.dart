@@ -25,13 +25,9 @@ class GameNewsMenu extends StatelessWidget {
         onPressed: press,
         child: Row(
           children: [
-            // SvgPicture.asset(
-            //   icon,
-            //   color: kPrimaryColor,
-            //   width: 22,
-            // ),
+            Image.asset(icon, width: 80, height: 80),
             SizedBox(width: 20),
-            Expanded(child: Text(text)),
+            Expanded(child: Text(text, style: new TextStyle(fontSize: 22))),
             Icon(Icons.arrow_forward_ios),
           ],
         ),

@@ -81,7 +81,7 @@ class _CustomBottomNavBar extends State<CustomBottomNavBar> {
                       return FavoriteProductScreen();
                     }))),
               IconButton(
-                icon: SvgPicture.asset("assets/icons/Shop Icon.svg"),
+                icon: SvgPicture.asset("assets/icons/Shop Icon.svg", color: Colors.grey,),
                 onPressed: () => storeButtonCallback(context),
                 // Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) {

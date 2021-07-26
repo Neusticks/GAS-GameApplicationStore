@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -20,17 +21,18 @@ class _Body extends State<Body> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
+          Text("Game News", style: headingStyle),
           SizedBox(height: 20),
           GameNewsMenu(
               text: "Epic Seven",
-              icon: "assets/icons/epicseven.svg",
+              icon: "assets/images/Epic_Seven_Logo.png",
               press: () async => launch('https://page.onstove.com/epicseven/global')
               
               
           ),
           GameNewsMenu(
             text: "Dota 2",
-            icon: "assets/icons/dota2.svg",
+            icon: "assets/images/Dota 2.png",
             press: () async => launch('https://www.dota2.com/patches')
           ),
           // GameNewsMenu(

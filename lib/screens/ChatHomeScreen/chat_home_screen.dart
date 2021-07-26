@@ -14,6 +14,8 @@ import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 
+import '../../size_config.dart';
+
 
 class ChatHomeScreen extends StatefulWidget {
   final String currentUserId;
@@ -130,70 +132,83 @@ class ChatHomeScreenState extends State<ChatHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Chat Room',
-          style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
+        // title: Text(
+        //   'Chat Room',
+        //   style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
+        // ),
+        // centerTitle: true,
 
       ),
-      body: WillPopScope(
-        child: Stack(
-          children: <Widget>[
-            // SearchField(
-            //   onSubmit: (value) async{
-            //     final query = value.toString();
-            //     if (query.length <= 0) return;
-            //     List<String> searchedUserName;
-            //     try{
-            //       searchedUserName = await UserDatabaseHelper().searchInUser(query.toLowerCase());
-            //       if (searchedUserName != null){
-            //         // await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResultScreen(searchQuery: query, searchResultProductsId: searchedProductsId, searchIn: "All Products",
-            //         // ),
-            //         // ),
-            //         // );
-            //       }else {
-            //         throw "Couldn't Perform Search due to some unknown reason";
-            //       }
-            //     }catch (e){
-            //       final error = e.toString();
-            //       Logger().e(error);
-            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$error"),
-            //       ),
-            //       );
-            //     }
-            //   },
-            // ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionScreenWidth(screenPadding)),
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    "Chat Room",
+                    style: headingStyle,
+                  ),
+                  // SearchField(
+                  //   onSubmit: (value) async{
+                  //     final query = value.toString();
+                  //     if (query.length <= 0) return;
+                  //     List<String> searchedUserName;
+                  //     try{
+                  //       searchedUserName = await UserDatabaseHelper().searchInUser(query.toLowerCase());
+                  //       if (searchedUserName != null){
+                  //         // await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchResultScreen(searchQuery: query, searchResultProductsId: searchedProductsId, searchIn: "All Products",
+                  //         // ),
+                  //         // ),
+                  //         // );
+                  //       }else {
+                  //         throw "Couldn't Perform Search due to some unknown reason";
+                  //       }
+                  //     }catch (e){
+                  //       final error = e.toString();
+                  //       Logger().e(error);
+                  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$error"),
+                  //       ),
+                  //       );
+                  //     }
+                  //   },
+                  // ),
+                  SizedBox(height: getProportionScreenHeight(20)),
 
-            // List
-            Container(
+                  // List
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection('users').limit(_limit).snapshots(),
+                    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.all(10.0),
+                          itemBuilder: (context, index) => buildItem(context, snapshot.data.docs[index]),
+                          itemCount: snapshot.data.docs.length,
+                          controller: listScrollController,
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                          ),
+                        );
+                      }
+                    },
+                  ),
 
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('users').limit(_limit).snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      padding: EdgeInsets.all(10.0),
-                      itemBuilder: (context, index) => buildItem(context, snapshot.data.docs[index]),
-                      itemCount: snapshot.data.docs.length,
-                      controller: listScrollController,
-                    );
-                  } else {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                      ),
-                    );
-                  }
-                },
+                  // Loading
+                  // Positioned(
+                  //   child: isLoading ? const Loading() : Container(),
+                  // )
+                ],
               ),
             ),
-
-            // Loading
-            Positioned(
-              child: isLoading ? const Loading() : Container(),
-            )
-          ],
+          ),
         ),
       ),
     );
