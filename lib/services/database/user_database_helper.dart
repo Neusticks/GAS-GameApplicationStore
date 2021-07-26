@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:gas_gameappstore/models/Address.dart';
 import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/Store.dart';
@@ -6,6 +9,7 @@ import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/User.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
+import 'package:gas_gameappstore/services/database/store_database_helper.dart';
 
 class UserDatabaseHelper {
   static const String USERS_COLLECTION_NAME = "users";
@@ -20,7 +24,6 @@ class UserDatabaseHelper {
   static const String USER_GENDER_KEY = "userGender";
   static const String USER_PHONE_NUMBER_KEY = "userPhoneNumber";
   static const String USER_ADDRESS_KEY = "userAddress";
-  static const String USER_TRANSACTION_PIN_KEY = "userTransactionPIN";
   static const String USER_ROLE_KEY = "userRole";
   static const String USER_PROFILE_PICTURE_KEY = "userProfilePicture";
   static const String USER_STORE_ID_KEY = "userStoreId";
@@ -50,22 +53,61 @@ class UserDatabaseHelper {
   }
 
   Future<void> createNewUser(String uid, String email, String password,
-      String gender, String dob) async {
+      String gender, String dob, String name, String phoneNumber) async {
     await firestore.collection(USERS_COLLECTION_NAME).doc(uid).set({
       USER_EMAIL_KEY: email,
-      USER_NAME_KEY: null,
+      USER_NAME_KEY: name,
       USER_PASSWORD_KEY: password,
       USER_DATE_OF_BIRTH_KEY: dob,
       USER_GENDER_KEY: gender,
-      USER_PHONE_NUMBER_KEY: null,
+      USER_PHONE_NUMBER_KEY: phoneNumber,
       USER_STORE_ID_KEY: null,
       USER_ADDRESS_KEY: null,
-      USER_TRANSACTION_PIN_KEY: null,
       USER_ROLE_KEY: 'Customer',
       USER_PROFILE_PICTURE_KEY: null,
       FAV_PRODUCTS_KEY: List<String>(),
       USER_ISBAN_KEY: false,
     });
+  }
+
+  Future<void> createNewPilot(String uid, String email, String userName, String password,
+      String gender, String dob, String phoneNumber) async {
+    await firestore.collection(USERS_COLLECTION_NAME).doc(uid).set({
+      USER_EMAIL_KEY: email,
+      USER_NAME_KEY: userName,
+      USER_PASSWORD_KEY: password,
+      USER_DATE_OF_BIRTH_KEY: dob,
+      USER_GENDER_KEY: gender,
+      USER_PHONE_NUMBER_KEY: phoneNumber,
+      USER_STORE_ID_KEY: null,
+      USER_ADDRESS_KEY: null,
+      USER_ROLE_KEY: 'Pilot',
+      USER_PROFILE_PICTURE_KEY: null,
+      FAV_PRODUCTS_KEY: List<String>(),
+      USER_ISBAN_KEY: false,
+    });
+  }
+
+  Future<List<String>> searchInUser(String query,
+    {User user}) async {
+    Query queryRef;
+    if (user.userName == null) {
+      queryRef = firestore.collection(USERS_COLLECTION_NAME);
+    } else {
+      queryRef = firestore
+          .collection(USERS_COLLECTION_NAME)
+          .where(USER_NAME_KEY, isEqualTo: user.userName);
+    }
+
+    Set userId = Set<String>();
+    final queryRefDocs = await queryRef.get();
+    for (final doc in queryRefDocs.docs) {
+      final user = User.fromMap(doc.data(), id: doc.id);
+      if (user.userName.toString().toLowerCase().contains(query)) {
+        userId.add(user.id);
+      }
+    }
+    return userId.toList();
   }
 
   // Future<void> deleteCurrentUserData() async {
@@ -104,6 +146,13 @@ class UserDatabaseHelper {
       return false;
     }
   }
+  Future<String> getUserNameWithId(String userId) async{
+    final docSnapshot = await firestore.collection(USERS_COLLECTION_NAME).doc(userId).get();
+    Map<String, dynamic> docFields = docSnapshot.data();
+    String userName = docFields['userName'].toString();
+    return userName;
+  }
+
   Future<User> getUserWithID(String userId) async {
     final docSnapshot = await firestore
         .collection(USERS_COLLECTION_NAME)
@@ -231,6 +280,7 @@ class UserDatabaseHelper {
     final cartItem = Cart.fromMap(docSnapshot.data(), id: docSnapshot.id);
     return cartItem;
   }
+
   Future<bool> itemChecked(String productId, bool itemChecked) async{
     String uid = AuthentificationService().currentUser.uid;
     final cartCollectionRef = firestore.collection(USERS_COLLECTION_NAME).doc(uid).collection(CART_COLLECTION_NAME);
@@ -257,7 +307,7 @@ class UserDatabaseHelper {
     return true;
   }
 
-  Future<List<String>> emptyCart() async {
+  Future<List<dynamic>> emptyCart() async {
     String uid = AuthentificationService().currentUser.uid;
     final cartItems = await firestore
         .collection(USERS_COLLECTION_NAME)
@@ -265,7 +315,7 @@ class UserDatabaseHelper {
         .collection(CART_COLLECTION_NAME)
         .get();
     // ignore: deprecated_member_use
-    List orderedProductsUid = List<String>();
+    List orderedProductsUid = List<dynamic>();
     for (final doc in cartItems.docs) {
       orderedProductsUid.add(doc.id);
       await doc.reference.delete();
@@ -363,7 +413,14 @@ class UserDatabaseHelper {
         .doc(uid)
         .collection(ORDERED_PRODUCTS_COLLECTION_NAME);
     for (final order in orders) {
-      await orderedProductsCollectionRef.add(order.toMap());
+      String newID = getRandomString(20);
+      await orderedProductsCollectionRef.doc(newID).set(order.toMap());
+      final productRef = await firestore.collection(ProductDatabaseHelper.PRODUCTS_COLLECTION_NAME).doc(order.productUid).get();
+      final userProductRef = await firestore.collection(USERS_COLLECTION_NAME).where(FieldPath.documentId, isEqualTo: productRef.data()["ownerId"]).get();
+      final userProductDocRef = userProductRef.docs.single;
+      final storeRef = await firestore.collection(StoreDatabaseHelper.STORE_COLLECTION_NAME).where("storeOwnerID", isEqualTo: userProductDocRef.id).get();
+      final storeDocRef = storeRef.docs.single;
+      await firestore.collection(StoreDatabaseHelper.STORE_COLLECTION_NAME).doc(storeDocRef.id).collection("incoming_request_product").doc(newID).set(order.toMap());
     }
     return true;
   }
@@ -436,5 +493,11 @@ class UserDatabaseHelper {
     final userDocSnapshot =
         firestore.collection(USERS_COLLECTION_NAME).doc(uid);
     await userDocSnapshot.update({USER_STORE_ID_KEY: storeId});
+  }
+
+  String getRandomString(int length){
+    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    var random = Random.secure();
+    return String.fromCharCodes(Iterable.generate(length, (_) => _chars.codeUnitAt(random.nextInt(_chars.length))));
   }
 }

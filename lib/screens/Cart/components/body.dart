@@ -8,12 +8,14 @@ import 'package:gas_gameappstore/models/Cart.dart';
 import 'package:gas_gameappstore/models/OrderedProduct.dart';
 import 'package:gas_gameappstore/models/Product.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/data_streams/cart_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:logger/logger.dart';
 import 'package:square_in_app_payments/in_app_payments.dart';
 import 'package:square_in_app_payments/models.dart';
+import 'dart:math';
 
 import '../../../constants.dart';
 import '../../../size_config.dart';
@@ -48,6 +50,12 @@ class _BodyState extends State<Body> {
     return Future<void>.value();
   }
 
+  String getRandomString(int length){
+    const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    var random = Random.secure();
+    return String.fromCharCodes(Iterable.generate(length, (_) => _chars.codeUnitAt(random.nextInt(_chars.length))));
+  }
+
   Future<void> onCardEntryComplete() async{
     //Success, clear cart
     await showDialog<String>(
@@ -65,6 +73,8 @@ class _BodyState extends State<Body> {
         ],
       ),
     );
+    final uid = AuthentificationService().currentUser.uid;
+    final cartItems = await FirebaseFirestore.instance.collection("users").doc(uid).collection("cart").get();
     final orderFuture = UserDatabaseHelper().emptyCart();
     orderFuture.then((orderedProductsUid) async {
       if (orderedProductsUid != null) {
@@ -72,30 +82,35 @@ class _BodyState extends State<Body> {
         final dateTime = DateTime.now();
         final formatedDateTime =
             "${dateTime.day}-${dateTime.month}-${dateTime.year}";
-        List<OrderedProduct> orderedProducts = orderedProductsUid
-            .map((e) => OrderedProduct(null,
-            productUid: e, orderDate: formatedDateTime))
-            .toList();
+        List<OrderedProduct> orderedProductsCombined = [];
+        for(int i = 0; i < orderedProductsUid.length; i++){
+          int itemQty = cartItems.docs.elementAt(i).data()["itemQty"];
+          final productRef = await FirebaseFirestore.instance.collection("products").doc(cartItems.docs.elementAt(i).id).get();
+          final storeRef = await FirebaseFirestore.instance.collection("stores").where("storeOwnerID", isEqualTo: productRef.data()["ownerId"]).get();
+          final storeRefSnapshot = storeRef.docs.single;
+          List<OrderedProduct> orderedProducts = orderedProductsUid.map((e) => OrderedProduct(null, userID: uid, storeID: storeRefSnapshot.id, productUid: e, orderDate: formatedDateTime, productQuantity: itemQty)).toList();
+          orderedProductsCombined.add(orderedProducts.elementAt(i));
+        }
         bool addedProductsToMyProducts = false;
-        String snackbarmMessage;
+        String snackbarMessage;
         try {
           addedProductsToMyProducts =
-          await UserDatabaseHelper().addToMyOrders(orderedProducts);
+          await UserDatabaseHelper().addToMyOrders(orderedProductsCombined);
           if (addedProductsToMyProducts) {
-            snackbarmMessage = "Products ordered Successfully";
+            snackbarMessage = "Products ordered Successfully";
           } else {
             throw "Could not order products due to unknown issue";
           }
         } on FirebaseException catch (e) {
           Logger().e(e.toString());
-          snackbarmMessage = e.toString();
+          snackbarMessage = e.toString();
         } catch (e) {
           Logger().e(e.toString());
-          snackbarmMessage = e.toString();
+          snackbarMessage = e.toString();
         } finally {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(snackbarmMessage ?? "Something went wrong"),
+              content: Text(snackbarMessage ?? "Something went wrong"),
             ),
           );
         }
@@ -176,6 +191,10 @@ class _BodyState extends State<Body> {
                     style: headingStyle,
                   ),
                   SizedBox(height: getProportionScreenHeight(20)),
+                  Text(
+                    "Swipe RIGHT to Delete",
+                    style: TextStyle(fontSize: 17),
+                  ),
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.75,
                     child: Center(

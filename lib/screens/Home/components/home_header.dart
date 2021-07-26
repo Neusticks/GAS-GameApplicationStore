@@ -16,9 +16,11 @@ class HomeHeader extends StatelessWidget {
   }) : super(key: key);
 
   Future<int> getTransaction() async {
-    int size;
+    int size = 0;
     await FirebaseFirestore.instance.collection("users").doc(AuthentificationService().currentUser.uid).collection("ordered_products").get().then((snap) => {
-      size = snap.size,
+      for(final doc in snap.docs){
+        if(doc.data()["review_id"] == false) size += snap.size
+      }
     });
     return size;
   }

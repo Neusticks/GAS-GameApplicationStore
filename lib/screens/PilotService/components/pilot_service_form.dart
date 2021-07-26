@@ -5,6 +5,7 @@ import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
 import 'package:gas_gameappstore/screens/PilotService/provider_models/game_details.dart';
+import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/pilot_request_database_helper.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
   final TextEditingController gameIdController =
       TextEditingController();
 
+  final TextEditingController gamePassController = TextEditingController();
   
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController userPhoneController = TextEditingController();
@@ -50,6 +52,8 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
           SizedBox(height: getProportionScreenHeight(30)),
           buildEmailOrIdGameAccountField(),
           SizedBox(height: getProportionScreenHeight(30)),
+          buildGamePassword(),
+          SizedBox(height: getProportionScreenHeight(30)),
           buildAccountOwner(),
           SizedBox(height: getProportionScreenHeight(30)),
           buildUserPhone(),
@@ -67,6 +71,25 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
     );
 
     return form;
+  }
+
+  Widget buildGamePassword() {
+    return TextFormField(
+      controller: gamePassController,
+      decoration: InputDecoration(
+        hintText: "Enter Game Password",
+        labelText: "User Game Password",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: Icon(Icons.password),
+      ),
+      validator: (value) {
+        if (gamePassController.text.isEmpty) {
+          return "Game Password cannot be empty";
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
   }
 
   Widget buildEmailOrIdGameAccountField() {
@@ -183,6 +206,8 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
     String snackbarMessage;
     try{
       pilot.gameId = gameIdController.text;
+      pilot.ownerId = AuthentificationService().currentUser.uid;
+      pilot.gamePassword = gamePassController.text;
       pilot.userName = userNameController.text;
       pilot.userPhone = userPhoneController.text;
       pilot.gameName = gameDetails.gameName;

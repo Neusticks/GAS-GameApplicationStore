@@ -20,6 +20,7 @@ class ProfilePic extends StatelessWidget {
     this.bodyState,
   }) : super(key: key);
   final ChosenImage bodyState;
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -175,7 +176,7 @@ class ProfilePic extends StatelessWidget {
       if (uploadDisplayPictureStatus == true) {
         snackbarMessage = "Display Picture updated successfully";
       } else {
-        throw "Coulnd't update display picture due to unknown reason";
+        throw "Couldn't update display picture due to unknown reason";
       }
     } on FirebaseException catch (e) {
       Logger().w("Firebase Exception: $e");

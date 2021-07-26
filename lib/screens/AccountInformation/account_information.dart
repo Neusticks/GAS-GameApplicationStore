@@ -8,7 +8,6 @@ class AccountInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("My Account"),
       ),
       body: Body(),
     );

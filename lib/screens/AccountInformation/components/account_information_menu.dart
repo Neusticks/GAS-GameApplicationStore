@@ -42,7 +42,7 @@ class AccountInformationMenu extends StatelessWidget {
             // Icon(Icons.arrow_forward_ios),
             TextButton(
               onPressed: press, 
-              child: Text('Ubah', style: TextStyle(color: Colors.orange, fontSize: 20))),
+              child: Text('Change', style: TextStyle(color: Colors.orange, fontSize: 20))),
           ],
         ),
       ),

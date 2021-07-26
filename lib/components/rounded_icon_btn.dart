@@ -1,41 +1,34 @@
+
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../size_config.dart';
 
-class RoundedIconBtn extends StatelessWidget {
-  const RoundedIconBtn({
+class RoundedIconButton extends StatelessWidget {
+  final IconData iconData;
+  final GestureTapCallback press;
+  const RoundedIconButton({
     Key key,
-    @required this.icon,
+    @required this.iconData,
     @required this.press,
-    this.showShadow = false,
   }) : super(key: key);
-
-  final IconData icon;
-  final GestureTapCancelCallback press;
-  final bool showShadow;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: getProportionScreenWidth(40),
       width: getProportionScreenWidth(40),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [
-          if (showShadow)
-            BoxShadow(
-              offset: Offset(0, 6),
-              blurRadius: 10,
-              color: Color(0xFFB0B0B0).withOpacity(0.2),
-            ),
-        ],
-      ),
       child: FlatButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
         padding: EdgeInsets.zero,
         color: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
         onPressed: press,
-        child: Icon(icon),
+        child: Icon(
+          iconData,
+          color: kTextColor,
+        ),
       ),
     );
   }

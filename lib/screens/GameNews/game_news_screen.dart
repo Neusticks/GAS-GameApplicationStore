@@ -10,14 +10,7 @@ class GameNewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            "Game News",
-            style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w300,
-          ),
-        )
+      appBar: AppBar(elevation: 0.0,
       ),
       body: Body(),
     );

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/models/base.dart';
 
 class User extends Model {
@@ -59,6 +60,23 @@ class User extends Model {
         userRole: map[USER_ROLE_KEY],
         userProfilePicture: map[USER_PROFILE_PICTURE_KEY],
         userIsBan: map[USER_ISBAN_KEY]);
+  }
+
+  factory User.fromDocument(DocumentSnapshot doc){
+    String userName ="";
+    String userProfilePicture = "";
+    String userRole = "";
+    try{
+      userName = doc.get("userName");
+      userProfilePicture = doc.get("userProfilePicture");
+      userRole = doc.get("userRole");
+    }catch (e){}
+    return User(
+      id: doc.id,
+      userName: userName,
+      userProfilePicture: userProfilePicture,
+      userRole: userRole
+    );
   }
 
   @override

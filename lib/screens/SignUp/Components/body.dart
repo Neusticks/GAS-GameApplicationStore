@@ -1,15 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
-import 'package:gas_gameappstore/exceptions/firebaseauth/signup_exceptions.dart';
+import 'package:gas_gameappstore/exceptions/local_files_handling/image_picking_exceptions.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/components/have_an_account_check.dart';
 import 'package:gas_gameappstore/components/rounded_button.dart';
-import 'package:gas_gameappstore/screens/SignUp/Components/or_divider.dart';
-import 'package:gas_gameappstore/screens/SignUp/Components/social_icon.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
+import 'package:gas_gameappstore/services/local_files_access/local_files_access_service.dart';
 import 'package:gas_gameappstore/size_config.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import '../../../constants.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +23,8 @@ class Body extends StatefulWidget {
 
 class _Body extends State<Body> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
   final _emailController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -32,9 +36,13 @@ class _Body extends State<Body> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _confirmPasswordController.dispose();
     _passwordController.dispose();
+    _genderController.dispose();
+    _DOBController.dispose();
+    _phoneNumberController.dispose();
     super.dispose();
   }
 
@@ -51,6 +59,8 @@ class _Body extends State<Body> {
           children: [
             buildEmailField(),
             SizedBox(height: getProportionScreenHeight(30)),
+            buildNameField(),
+            SizedBox(height: getProportionScreenHeight(30)),
             buildPasswordField(),
             SizedBox(height: getProportionScreenHeight(30)),
             buildConfirmPasswordField(),
@@ -59,24 +69,13 @@ class _Body extends State<Body> {
             SizedBox(height: getProportionScreenHeight(30)),
             buildGenderField(),
             SizedBox(height: getProportionScreenHeight(30)),
+            buildNewPhoneNumberField(),
+            SizedBox(height: getProportionScreenHeight(30)),
             RoundedButton(
               text: "Sign Up",
               press: () {
                 signUpCallback();
               },
-              // press: () async {
-              // try {
-              //   await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
-              // } on FirebaseAuthException catch (e) {
-              //     if (e.code == 'weak-password') {
-              //       print('The password provided is too weak.');
-              //     } else if (e.code == 'email-already-in-use') {
-              //       print('The account already exists for that email.');
-              //     }
-              // }catch (e) {
-              //     print(e);
-              //   }
-              // }
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
@@ -92,24 +91,6 @@ class _Body extends State<Body> {
                 );
               },
             ),
-            OrDivider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SocialIcon(
-                  iconSrc: "assets/icons/facebook.svg",
-                  press: () {},
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/twitter.svg",
-                  press: () {},
-                ),
-                SocialIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
-                  press: () {},
-                ),
-              ],
-            )
           ],
         ),
       ),
@@ -124,7 +105,7 @@ class _Body extends State<Body> {
         labelText: "Gender",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
-          svgIcon: "assets/icons/Mail.svg",
+          svgIcon: "assets/icons/User Icon.svg",
         ),
       ),
       validator: (value) {
@@ -144,9 +125,7 @@ class _Body extends State<Body> {
         hintText: "Enter Your DOB",
         labelText: "DOB",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSuffixIcon(
-          svgIcon: "assets/icons/Mail.svg",
-        ),
+        suffixIcon: Icon(Icons.date_range),
       ),
       onTap: () {
         _selectDate(context);
@@ -160,7 +139,7 @@ class _Body extends State<Body> {
         context: context,
         initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
         firstDate: DateTime(1900),
-        lastDate: DateTime(2030),
+        lastDate: DateTime.now(),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark().copyWith(
@@ -202,6 +181,51 @@ class _Body extends State<Body> {
           return kEmailNullError;
         } else if (!emailValidatorRegExp.hasMatch(_emailController.text)) {
           return kInvalidEmailError;
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget buildNameField() {
+    return TextFormField(
+      controller: _nameController,
+      decoration: InputDecoration(
+        hintText: "Enter Your Name",
+        labelText: "Name",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSuffixIcon(
+          svgIcon: "assets/icons/User Icon.svg",
+        ),
+      ),
+      validator: (value) {
+        if (_emailController.text.isEmpty) {
+          return kEmailNullError;
+        } else if (!emailValidatorRegExp.hasMatch(_emailController.text)) {
+          return kInvalidEmailError;
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  Widget buildNewPhoneNumberField() {
+    return TextFormField(
+      controller: _phoneNumberController,
+      keyboardType: TextInputType.phone,
+      decoration: InputDecoration(
+        hintText: "Enter Phone Number",
+        labelText: "Phone Number",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: Icon(Icons.phone),
+      ),
+      validator: (value) {
+        if (_phoneNumberController.text.isEmpty) {
+          return "Phone Number cannot be empty";
+        } else if (_phoneNumberController.text.length < 10) {
+          return "At least 10 digits allowed";
         }
         return null;
       },
@@ -269,9 +293,11 @@ class _Body extends State<Body> {
       try {
         final signUpFuture = authService.signUp(
           email: _emailController.text,
+          name: _nameController.text,
           password: _passwordController.text,
           gender: _genderController.text,
           dob: _DOBController.text,
+          phoneNumber: _phoneNumberController.text,
         );
         signUpFuture.then((value) => signUpStatus = value);
         signUpStatus = await showDialog(

@@ -49,12 +49,12 @@ import 'package:logger/logger.dart';
 
 import '../../../size_config.dart';
 
-class PopularProducts extends StatelessWidget {
+class ProductSection extends StatelessWidget {
   final String sectionTitle;
   final DataStream productsStreamController;
   final String emptyListMessage;
   final Function onProductCardTapped;
-  const PopularProducts({
+  const ProductSection({
     Key key,
     @required this.sectionTitle,
     @required this.productsStreamController,

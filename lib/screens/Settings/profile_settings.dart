@@ -7,9 +7,7 @@ class ProfileSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("My Account"),
-      ),
+      appBar: AppBar(),
       body: Body(),
     );
   }

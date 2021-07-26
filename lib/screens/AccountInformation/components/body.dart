@@ -8,6 +8,9 @@ import 'package:gas_gameappstore/screens/ChangeEmail/change_email_screen.dart';
 
 import 'package:gas_gameappstore/screens/ChangePhoneNumber/change_phone_screen.dart';
 
+import '../../../constants.dart';
+import '../../../size_config.dart';
+
 class Body extends StatefulWidget {
   @override
   _Body createState() => _Body();
@@ -22,6 +25,11 @@ class _Body extends State<Body> {
       padding: EdgeInsets.symmetric(vertical: 20),
       child: Column(
         children: [
+          Text(
+            "Account Information",
+            style: headingStyle,
+          ),
+          SizedBox(height: getProportionScreenHeight(20)),
           SizedBox(height: 20),
           StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance.collection("users").doc(auth.currentUser.uid).snapshots(),

@@ -18,7 +18,7 @@ class ReportProblemDetailScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pilot Request Details"),
+        // title: Text("Pilot Request Details"),
       ),
       body: Body(
         reportId: reportId,

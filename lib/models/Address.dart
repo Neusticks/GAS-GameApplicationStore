@@ -7,7 +7,6 @@ class Address extends Model {
   static const String CITY_KEY = "city";
   static const String DISTRICT_KEY = "district";
   static const String STATE_KEY = "state";
-  static const String LANDMARK_KEY = "landmark";
   static const String PINCODE_KEY = "pincode";
   static const String RECEIVER_KEY = "receiver";
   static const String PHONE_KEY = "phone";
@@ -20,7 +19,6 @@ class Address extends Model {
   String city;
   String district;
   String state;
-  String landmark;
   String pincode;
   String phone;
 
@@ -33,7 +31,6 @@ class Address extends Model {
     this.city,
     this.district,
     this.state,
-    this.landmark,
     this.pincode,
     this.phone,
   }) : super(id);
@@ -48,7 +45,6 @@ class Address extends Model {
       city: map[CITY_KEY],
       district: map[DISTRICT_KEY],
       state: map[STATE_KEY],
-      landmark: map[LANDMARK_KEY],
       pincode: map[PINCODE_KEY],
       phone: map[PHONE_KEY],
     );
@@ -64,7 +60,6 @@ class Address extends Model {
       CITY_KEY: city,
       DISTRICT_KEY: district,
       STATE_KEY: state,
-      LANDMARK_KEY: landmark,
       PINCODE_KEY: pincode,
       PHONE_KEY: phone,
     };
@@ -82,7 +77,6 @@ class Address extends Model {
     if (city != null) map[CITY_KEY] = city;
     if (district != null) map[DISTRICT_KEY] = district;
     if (state != null) map[STATE_KEY] = state;
-    if (landmark != null) map[LANDMARK_KEY] = landmark;
     if (pincode != null) map[PINCODE_KEY] = pincode;
     if (phone != null) map[PHONE_KEY] = phone;
     return map;

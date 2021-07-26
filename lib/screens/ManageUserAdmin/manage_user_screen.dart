@@ -10,7 +10,7 @@ class ManageUserScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("User List"),
+        // title: Text("User List"),
       ),
       body: Body(),
     );

@@ -38,8 +38,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
 
   final TextEditingController stateFieldController = TextEditingController();
 
-  final TextEditingController landmarkFieldController = TextEditingController();
-
   final TextEditingController pincodeFieldController = TextEditingController();
 
   final TextEditingController phoneFieldController = TextEditingController();
@@ -53,7 +51,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
     cityFieldController.dispose();
     stateFieldController.dispose();
     districtFieldController.dispose();
-    landmarkFieldController.dispose();
     pincodeFieldController.dispose();
     phoneFieldController.dispose();
     super.dispose();
@@ -80,8 +77,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
           SizedBox(height: getProportionScreenHeight(30)),
           buildStateField(),
           SizedBox(height: getProportionScreenHeight(30)),
-          buildLandmarkField(),
-          SizedBox(height: getProportionScreenHeight(30)),
           buildPincodeField(),
           SizedBox(height: getProportionScreenHeight(30)),
           buildPhoneField(),
@@ -103,7 +98,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
       cityFieldController.text = widget.addressToEdit.city;
       districtFieldController.text = widget.addressToEdit.district;
       stateFieldController.text = widget.addressToEdit.state;
-      landmarkFieldController.text = widget.addressToEdit.landmark;
       pincodeFieldController.text = widget.addressToEdit.pincode;
       phoneFieldController.text = widget.addressToEdit.phone;
     }
@@ -249,8 +243,8 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
       controller: pincodeFieldController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        hintText: "Enter PINCODE",
-        labelText: "PINCODE",
+        hintText: "Enter ZIPCODE",
+        labelText: "ZIPCODE",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
       validator: (value) {
@@ -260,25 +254,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
           return "Only digits field";
         } else if (pincodeFieldController.text.length != 6) {
           return "PINCODE must be of 6 Digits only";
-        }
-        return null;
-      },
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-    );
-  }
-
-  Widget buildLandmarkField() {
-    return TextFormField(
-      controller: landmarkFieldController,
-      keyboardType: TextInputType.name,
-      decoration: InputDecoration(
-        hintText: "Enter Landmark",
-        labelText: "Landmark",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-      ),
-      validator: (value) {
-        if (landmarkFieldController.text.isEmpty) {
-          return FIELD_REQUIRED_MSG;
         }
         return null;
       },
@@ -298,8 +273,8 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
       validator: (value) {
         if (phoneFieldController.text.isEmpty) {
           return FIELD_REQUIRED_MSG;
-        } else if (phoneFieldController.text.length != 10) {
-          return "Only 10 Digits";
+        } else if (phoneFieldController.text.length < 10) {
+          return "At least 10 Digits";
         }
         return null;
       },
@@ -319,7 +294,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
         if (status == true) {
           snackbarMessage = "Address saved successfully";
         } else {
-          throw "Coundn't save the address due to unknown reason";
+          throw "Couldn't save the address due to unknown reason";
         }
       } on FirebaseException catch (e) {
         Logger().w("Firebase Exception: $e");
@@ -334,6 +309,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
             content: Text(snackbarMessage),
           ),
         );
+        Navigator.pop(context);
       }
     }
   }
@@ -367,6 +343,7 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
             content: Text(snackbarMessage),
           ),
         );
+        Navigator.pop(context);
       }
     }
   }
@@ -381,7 +358,6 @@ class _AddressDetailsFormState extends State<AddressDetailsForm> {
       city: cityFieldController.text,
       district: districtFieldController.text,
       state: stateFieldController.text,
-      landmark: landmarkFieldController.text,
       pincode: pincodeFieldController.text,
       phone: phoneFieldController.text,
     );
