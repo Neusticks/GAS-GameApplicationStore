@@ -11,13 +11,13 @@ class AdminProfileScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            "Profile",
-            style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.w300,
-          ),
-        )
+        // title: Text(
+        //     "Profile",
+        //     style: TextStyle(
+        //     fontSize: 24.0,
+        //     fontWeight: FontWeight.w300,
+        //   ),
+        // )
       ),
       body: Body(),
     );

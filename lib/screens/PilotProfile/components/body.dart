@@ -29,7 +29,7 @@ class _Body extends State<Body> {
       child: Column(
         children: [
           Text(
-            "Profile",
+            "Pilot Profile",
             style: headingStyle,
           ),
           SizedBox(height: getProportionScreenHeight(20)),

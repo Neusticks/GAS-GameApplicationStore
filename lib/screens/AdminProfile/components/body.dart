@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/screens/ChatHomeScreen/chat_home_screen.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/ManagePilotRequest/manage_pilot_screen.dart';
@@ -26,9 +27,11 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(vertical: 20),
+      //padding: EdgeInsets.symmetric(vertical: 10),
       child: Column(
         children: [
+          Text("Admin Profile", style: headingStyle),
+          SizedBox(height: 20),
           AdminProfilePic(),
           SizedBox(height: 20),
           AdminProfileMenu(
@@ -38,12 +41,6 @@ class _Body extends State<Body> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return ProfileSettings();
                   }))
-          ),
-
-          AdminProfileMenu(
-            text: "Chats",
-            icon: "assets/icons/User Icon.svg",
-            press: profilePictureChecking
           ),
 
           AdminProfileMenu(

@@ -12,9 +12,9 @@ class Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: getProportionScreenWidth(screenPadding)),
+      // child: Padding(
+      //   padding: EdgeInsets.symmetric(
+      //       horizontal: getProportionScreenWidth(screenPadding)),
         child: Column(
           children: [
             SizedBox(height: getProportionScreenHeight(10)),
@@ -22,10 +22,11 @@ class Body extends StatelessWidget {
               "Register Pilot Service",
               style: headingStyle,
             ),
+            SizedBox(height: 20),
             RegisterPilotServiceForm(),
           ],
         ),
-      ),
+      // ),
     );
   }
 }

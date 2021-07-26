@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/screens/PilotRequestList/components/pilot_assign_body.dart';
 import 'package:gas_gameappstore/size_config.dart';
 
@@ -15,11 +16,11 @@ class PilotRequestListScreen extends StatelessWidget {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Request List"),
+            title: Text("Request List", style: headingStyle),
             bottom: TabBar(
               tabs: <Widget>[
-                Tab(child: Text("Not Assign Request"),),
-                Tab(child: Text("Your Assigned Request"),),
+                Tab(child: Text("Not Assign Request")),
+                Tab(child: Text("Your Assigned Request")),
               ],
             ),
           ),

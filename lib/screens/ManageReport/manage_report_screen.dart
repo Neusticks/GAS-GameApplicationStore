@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/screens/ManageReport/components/problem_report_body.dart';
 import 'package:gas_gameappstore/screens/ManageReport/components/user_report_body.dart';
 
@@ -16,11 +17,11 @@ class _ManageReportScreenState extends State<ManageReportScreen>{
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text("Manage Report"),
+            title: Text("Manage Report", style: headingStyle),
             bottom: TabBar(
               tabs: <Widget>[
-                Tab(child: Text("Problem Report"),),
-                Tab(child: Text("User Report"),),
+                Tab(child: Text("Problem Report")),
+                Tab(child: Text("User Report")),
               ],
             ),
           ),

@@ -20,8 +20,7 @@ class NewsBanner extends StatelessWidget {
         vertical: getProportionScreenWidth(15),
       ),
       decoration: BoxDecoration(
-        //0xFF4A3298
-        color: Colors.black,
+        color: Color(0xFF4A3298),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text.rich(
