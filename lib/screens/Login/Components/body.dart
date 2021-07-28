@@ -30,46 +30,49 @@ class _Body extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          buildEmailField(),
-          SizedBox(height: getProportionScreenHeight(30)),
-          buildPasswordField(),
-          SizedBox(height: getProportionScreenHeight(30)),
-          RoundedButton(
-              text: "Sign In",
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            buildEmailField(),
+            SizedBox(height: getProportionScreenHeight(30)),
+            buildPasswordField(),
+            SizedBox(height: getProportionScreenHeight(30)),
+            RoundedButton(
+                text: "Sign In",
+                press: () {
+                  signInCallback();
+                }),
+            SizedBox(height: size.height * 0.03),
+            AlreadyHaveAnAccountCheck(
               press: () {
-                signInCallback();
-              }),
-          SizedBox(height: size.height * 0.03),
-          AlreadyHaveAnAccountCheck(
-            press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return SignUpScreen();
-                  },
-                ),
-              );
-            },
-          ),
-          SizedBox(height: size.height * 0.03),
-          ForgotPassword(
-            press: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return ForgotPasswordScreen();
-                  },
-                ),
-              );
-            },
-          )
-        ],
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SignUpScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+            SizedBox(height: size.height * 0.03),
+            ForgotPassword(
+              press: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ForgotPasswordScreen();
+                    },
+                  ),
+                );
+              },
+            )
+          ],
+        ),
       ),
     );
   }
