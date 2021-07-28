@@ -1,3 +1,5 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
@@ -135,10 +137,7 @@ class Body extends StatelessWidget {
                       DefaultButton(
                         text: "Chat User",
                         press: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context){
-                              return ChatScreen(peerId: requestOwnerId);
-                          }
-                        ));
+                              chatUserButtonCallback(requestOwnerId, context);
                         },
                       ),
                       SizedBox(height: getProportionScreenHeight(20)),
@@ -187,8 +186,13 @@ class Body extends StatelessWidget {
     await requestDocSnapshot.update({"requestStatus" : 'Finished'});
   }
 
-  Future<void> chatUserButtonCallback() async{
-
+  Future<void> chatUserButtonCallback(requestOwnerId, context) async{
+    final requestDocSnapshot = await FirebaseFirestore.instance.collection('users').doc(requestOwnerId).get();
+    final Map<String, dynamic> docFields = requestDocSnapshot.data();
+    String avatar = docFields['userProfilePicture'].toString();
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return ChatScreen(peerId: requestOwnerId, peerAvatar: avatar);
+    }));
   }
 
 }

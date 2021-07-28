@@ -25,6 +25,7 @@ class PilotShortDetailCard extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final pilot = snapshot.data;
+            String requestId = pilot.id;
             String gameId = pilot.gameId;
             String gameName = EnumToString.convertToString(pilot.gameName);
             String assignTo = pilot.assignPilot;
@@ -37,7 +38,7 @@ class PilotShortDetailCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        pilot.id,
+                        "ID: $requestId",
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

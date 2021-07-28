@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gas_gameappstore/screens/Chats/chat_screen.dart';
 
 import 'package:gas_gameappstore/size_config.dart';
@@ -90,10 +91,8 @@ class ProductDescription extends StatelessWidget {
               ),
             ),
             TextButton(
-                onPressed: ()=>
-                    Navigator.push(context, MaterialPageRoute(builder: (context){
-                      return ChatScreen(peerId: product.ownerId);
-                    })), child: Text('Chat with Seller'))
+              child: Text('Chat with Seller'),
+                onPressed: ()=> chatUserButtonCallback(product.ownerId, context),),
           ],
         ),
       ],
@@ -165,5 +164,14 @@ class ProductDescription extends StatelessWidget {
       ),
       textAlign: TextAlign.center,
     );
+  }
+
+  Future<void> chatUserButtonCallback(requestOwnerId, context) async{
+    final requestDocSnapshot = await FirebaseFirestore.instance.collection('users').doc(requestOwnerId).get();
+    final Map<String, dynamic> docFields = requestDocSnapshot.data();
+    String avatar = docFields['userProfilePicture'].toString();
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return ChatScreen(peerId: requestOwnerId, peerAvatar: avatar);
+    }));
   }
 }
