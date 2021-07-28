@@ -97,7 +97,7 @@ class _PilotServiceFormState extends State<PilotServiceForm> {
       controller: gameIdController,
       decoration: InputDecoration(
         hintText: "Enter Game Account Email or ID",
-        labelText: "Game Account Display Name",
+        labelText: "Game Account Email or ID",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.person),
       ),
