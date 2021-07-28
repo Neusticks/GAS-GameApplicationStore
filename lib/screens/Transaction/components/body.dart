@@ -284,7 +284,6 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   ),
-
                 ),
               ],
             ),
@@ -388,11 +387,30 @@ class _BodyState extends State<Body> {
                     ),
                     child: FlatButton(
                       onPressed: () async {
-                        final userOrderedProductRef = await FirebaseFirestore.instance.collection("users").doc(AuthentificationService().currentUser.uid).collection("ordered_products").where(FieldPath.documentId, isEqualTo: orderedProduct.id).get();
-                        final userOrderedProductRefSnapshot = userOrderedProductRef.docs.single;
-                        final storeRef = await FirebaseFirestore.instance.collection("stores").doc(orderedProduct.storeID).collection("incoming_request_product").where(FieldPath.documentId, isEqualTo: userOrderedProductRefSnapshot.id).get();
-                        await storeRef.docs[0].reference.delete();
-                        await userOrderedProductRef.docs[0].reference.delete();
+                        await showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+                          title: Text("Cancel Order"),
+                          content: Text("Are you sure you want to cancel the order?"),
+                          actions: <Widget>[
+                            TextButton(
+                                onPressed: () async {
+                                  final userOrderedProductRef = await FirebaseFirestore.instance.collection("users").doc(AuthentificationService().currentUser.uid).collection("ordered_products").where(FieldPath.documentId, isEqualTo: orderedProduct.id).get();
+                                  final userOrderedProductRefSnapshot = userOrderedProductRef.docs.single;
+                                  final storeRef = await FirebaseFirestore.instance.collection("stores").doc(orderedProduct.storeID).collection("incoming_request_product").where(FieldPath.documentId, isEqualTo: userOrderedProductRefSnapshot.id).get();
+                                  await storeRef.docs[0].reference.delete();
+                                  await userOrderedProductRef.docs[0].reference.delete();
+                                  Logger().i("Order has been cancelled");
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text("Order has been cancelled")
+                                      )
+                                  );
+                                  Navigator.pop(context, "Yes");
+                                },
+                                child: Text("Yes")
+                            ),
+                            TextButton(onPressed: () async {Navigator.pop(context, 'No');}, child: Text("No")),
+                          ],
+                        ));
                         await refreshPage();
                       },
                       child: Text(

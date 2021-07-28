@@ -84,7 +84,7 @@ class _BodyState extends State<Body> {
             return Center(
               child: NothingToShowContainer(
                 iconPath: "assets/icons/empty_bag.svg",
-                secondaryMessage: "Order something to show here",
+                secondaryMessage: "",
               ),
             );
           }
@@ -221,17 +221,35 @@ class _BodyState extends State<Body> {
                   ),
                   child: FlatButton(
                     onPressed: () async {
-                      final storeRef = await FirebaseFirestore.instance.collection("stores").where("storeOwnerID", isEqualTo: AuthentificationService().currentUser.uid).get();
-                      final storeRefSnapshot = storeRef.docs.single;
-                      final incomingRequestProductRef = await FirebaseFirestore.instance.collection("stores").doc(storeRefSnapshot.id).collection("incoming_request_product").where(FieldPath.documentId, isEqualTo: orderedProduct.id).get();
-                      await incomingRequestProductRef.docs[0].reference.update({
-                        "transaction_completed" : true
-                      });
-                      final incomingRequestProductRefSnapshot = incomingRequestProductRef.docs.single;
-                      final userOrderedProductRef = await FirebaseFirestore.instance.collection("users").doc(orderedProduct.userID).collection("ordered_products").where(FieldPath.documentId, isEqualTo: incomingRequestProductRefSnapshot.id).get();
-                      await userOrderedProductRef.docs[0].reference.update({
-                        "transaction_completed" : true
-                      });
+                      await showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+                        title: Text("Complete Order"),
+                        content: Text("Are you sure you want to complete the order?"),
+                        actions: <Widget>[
+                          TextButton(
+                              onPressed: () async{
+                                final storeRef = await FirebaseFirestore.instance.collection("stores").where("storeOwnerID", isEqualTo: AuthentificationService().currentUser.uid).get();
+                                final storeRefSnapshot = storeRef.docs.single;
+                                final incomingRequestProductRef = await FirebaseFirestore.instance.collection("stores").doc(storeRefSnapshot.id).collection("incoming_request_product").where(FieldPath.documentId, isEqualTo: orderedProduct.id).get();
+                                await incomingRequestProductRef.docs[0].reference.update({
+                                  "transaction_completed" : true
+                                });
+                                final incomingRequestProductRefSnapshot = incomingRequestProductRef.docs.single;
+                                final userOrderedProductRef = await FirebaseFirestore.instance.collection("users").doc(orderedProduct.userID).collection("ordered_products").where(FieldPath.documentId, isEqualTo: incomingRequestProductRefSnapshot.id).get();
+                                await userOrderedProductRef.docs[0].reference.update({
+                                  "transaction_completed" : true
+                                });
+                                Logger().i("Order Completed!");
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text("Order has been completed!")
+                                    )
+                                );
+                                Navigator.pop(context, "Yes");
+                              },
+                              child: Text("Yes")),
+                          TextButton(onPressed: () async {Navigator.pop(context, 'No');}, child: Text("No")),
+                        ],
+                      ));
                       await refreshPage();
                     },
                     child: Text(
