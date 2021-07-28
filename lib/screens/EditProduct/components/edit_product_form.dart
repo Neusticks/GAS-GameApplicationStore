@@ -484,7 +484,7 @@ class _EditProductFormState extends State<EditProductForm> {
         if (discountPriceFieldController.text.isEmpty) {
           return FIELD_REQUIRED_MSG;
         }
-        if(int.parse(discountPriceFieldController.text) > int.parse(originalPriceFieldController.text)){
+        if(double.parse(discountPriceFieldController.text) > double.parse(originalPriceFieldController.text)){
           return "Discount Price can't be higher than Original Price";
         }
         return null;
