@@ -111,6 +111,8 @@ class _Body extends State<Body> {
       validator: (value) {
         if (_genderController.text.isEmpty) {
           return kGenderNullError;
+        }else if(_genderController.text.toLowerCase() != "male" && _genderController.text.toLowerCase() != "female" && _genderController.text.toLowerCase() != "other" ){
+          return "Gender can only be Male, Female, or Other";
         }
         return null;
       },
@@ -131,6 +133,12 @@ class _Body extends State<Body> {
         _selectDate(context);
         FocusScope.of(context).requestFocus(new FocusNode());
       },
+      validator: (value) {
+        if(_DOBController.text.isEmpty){
+          return "Please Enter Your Date of Birth";
+        }return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
@@ -200,10 +208,8 @@ class _Body extends State<Body> {
         ),
       ),
       validator: (value) {
-        if (_emailController.text.isEmpty) {
-          return kEmailNullError;
-        } else if (!emailValidatorRegExp.hasMatch(_emailController.text)) {
-          return kInvalidEmailError;
+        if (_nameController.text.isEmpty) {
+          return kNamelNullError;
         }
         return null;
       },

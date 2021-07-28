@@ -33,11 +33,11 @@ const String kEmailNullError = "Please Enter Your Email";
 const String kInvalidEmailError = "Please Enter Valid Email";
 const String kGenderNullError = "Please Enter Your Gender";
 const String kUserNameNullError = "Please Enter User Name";
-const String kPassNullError = "Please Enter your password";
+const String kPassNullError = "Please Enter your Password";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";
-const String kNamelNullError = "Please Enter your name";
-const String kPhoneNumberNullError = "Please Enter your phone number";
+const String kNamelNullError = "Please Enter your Name";
+const String kPhoneNumberNullError = "Please Enter your Phone Number";
 const String kAddressNullError = "Please Enter your address";
 const String FIELD_REQUIRED_MSG = "This field is required";
 
