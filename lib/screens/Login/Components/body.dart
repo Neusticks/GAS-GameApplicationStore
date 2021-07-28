@@ -1,6 +1,8 @@
 import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
+import 'package:gas_gameappstore/components/forgot_password.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
+import 'package:gas_gameappstore/screens/ForgotPassword/forgot_password_screen.dart';
 import 'package:gas_gameappstore/screens/PilotProfile/profile_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:flutter/material.dart';
@@ -24,52 +26,6 @@ class _Body extends State<Body> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  // Future<UserCredential> signInWithGoogle() async {
-  //   // Trigger the authentication flow
-  //   final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
-
-  //   // Obtain the auth details from the request
-  //   final GoogleSignInAuthentication googleAuth =
-  //       await googleUser.authentication;
-
-  //   // Create a new credential
-  //   final credential = GoogleAuthProvider.credential(
-  //     accessToken: googleAuth.accessToken,
-  //     idToken: googleAuth.idToken,
-  //   );
-
-  //   // Once signed in, return the UserCredential
-  //   return await FirebaseAuth.instance.signInWithCredential(credential);
-  // }
-
-// Future<FirebaseUser> signInWithGoogle(SignInViewModel model) async {
-//   model.state = ViewState.Busy;
-//
-//   GoogleSignInAccount googleSignInAccount = await _googleSign.signIn();
-//
-//   GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
-//
-//   AuthCredential credential = GoogleAuthProvider().getCredential(
-//     accessToken: googleSignInAuthentication.accessToken,
-//     idToken: googleSignInAuthentication.idToken,
-//   );
-//
-//   AuthResult authResult = await _auth.signInWithCredential(credential);
-//
-//   _user = authResult.user;
-//
-//   assert(!_user.isAnonymous);
-//
-//   assert(await _user.getIdToken() != null);
-//
-//   FirebaseUser currentUser = await _auth.currentUser();
-//
-//   assert(_user.uid == currentUser.uid);
-//
-//   model.state = ViewState.Idle;
-//   print("User Name: ${_user.displayName}");
-//   print("User Email ${_user.email}");
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +56,19 @@ class _Body extends State<Body> {
               );
             },
           ),
+          SizedBox(height: size.height * 0.03),
+          ForgotPassword(
+            press: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return ForgotPasswordScreen();
+                  },
+                ),
+              );
+            },
+          )
         ],
       ),
     );
