@@ -3,6 +3,7 @@ import 'package:enum_to_string/enum_to_string.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
+import 'package:gas_gameappstore/screens/Chats/chat_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/services/database/pilot_request_database_helper.dart';
 import 'package:gas_gameappstore/size_config.dart';
@@ -32,6 +33,7 @@ class Body extends StatelessWidget {
               if (snapshot.hasData) {
                 PilotRequest requestData = snapshot.data;
                 String requestId = requestData.id;
+                String requestOwnerId = requestData.ownerId;
                 String requestUserName = requestData.userName;
                 String requestGameId = requestData.gameId;
                 String requestPass = requestData.gamePassword;
@@ -133,15 +135,7 @@ class Body extends StatelessWidget {
                       DefaultButton(
                         text: "Chat User",
                         press: () {
-
-                          final uploadFuture = assignRequestButtonCallback(requestId);
-                          showDialog(context: context, builder: (context){
-                            return FutureProgressDialog(
-                              uploadFuture,
-                              message: Text("Chat User"),
-                            );
-                          },
-                          );
+                          chatUserButtonCallback(requestOwnerId, context);
                         },
                       ),
                       SizedBox(height: getProportionScreenHeight(20)),
@@ -189,8 +183,12 @@ class Body extends StatelessWidget {
     await requestDocSnapshot.update({"assignPilot" : uid});
   }
 
-  Future<void> chatUserButtonCallback() async{
-
+  Future<void> chatUserButtonCallback(requestOwnerId, context) async{
+    final requestDocSnapshot = await FirebaseFirestore.instance.collection('users').doc(requestOwnerId).get();
+    final Map<String, dynamic> docFields = requestDocSnapshot.data();
+    String avatar = docFields['userProfilePicture'].toString();
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return ChatScreen(peerId: requestOwnerId, peerAvatar: avatar);
+    }));
   }
-  
 }

@@ -92,6 +92,9 @@ class AuthentificationService {
         if (userRole == "Pilot") {
           return "pilot";
         }
+        else if(userRole == "Admin"){
+          return "admin";
+        }
         if (userIsBan == "false") {
             return "true";
           }

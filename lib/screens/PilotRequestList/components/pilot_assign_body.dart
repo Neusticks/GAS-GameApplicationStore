@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/components/nothingtoshow_container.dart';
 import 'package:gas_gameappstore/models/PilotRequest.dart';
+import 'package:gas_gameappstore/screens/PilotAssignedRequestDetails/assigned_request_details.dart';
 
 import 'package:gas_gameappstore/screens/PilotRequestListDetails/pilot_request_details_screen.dart';
 import 'package:gas_gameappstore/services/data_streams/assign_request_stream.dart';
@@ -138,7 +139,7 @@ class _BodyState extends State<AssignBody>{
                   child: AssignPilotShortDetailCard(
                     requestId: pilot.id,
                     onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PilotRequestDetailsScreen(requestId: requestId),),);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AssignPilotRequestDetailsScreen(requestId: requestId),),);
                     },
                   ),
                 ),

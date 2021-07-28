@@ -2,6 +2,7 @@ import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/components/forgot_password.dart';
 import 'package:gas_gameappstore/constants.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
+import 'package:gas_gameappstore/screens/AdminProfile/admin_profile_screen.dart';
 import 'package:gas_gameappstore/screens/ForgotPassword/forgot_password_screen.dart';
 import 'package:gas_gameappstore/screens/PilotProfile/profile_screen.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
@@ -146,7 +147,7 @@ class _Body extends State<Body> {
             );
           },
         );
-        if (signInStatus == "true" || signInStatus == "pilot") {
+        if (signInStatus == "true" || signInStatus == "pilot" || signInStatus == "admin") {
           snackbarMessage = "Signed In Successfully";
         } 
         else {
@@ -173,6 +174,11 @@ class _Body extends State<Body> {
         else if (signInStatus == "pilot"){
           Navigator.push(context, MaterialPageRoute(builder: (context){
             return PilotProfileScreen();
+          }));
+        }
+        else if (signInStatus == "admin"){
+          Navigator.push(context, MaterialPageRoute(builder: (context){
+            return AdminProfileScreen();
           }));
         }
       }
