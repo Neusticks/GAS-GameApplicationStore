@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/components/nothingtoshow_container.dart';
 import 'package:gas_gameappstore/models/ReportedProblem.dart';
 import 'package:gas_gameappstore/models/ReportedUser.dart';
-import 'package:gas_gameappstore/screens/ManagePilotRequest/components/request_pilot_short_detail_card.dart';
 import 'package:gas_gameappstore/screens/ManageReport/components/problem_report_short_detail_card.dart';
 import 'package:gas_gameappstore/screens/ManageReport/components/user_report_short_detail_card.dart';
 import 'package:gas_gameappstore/screens/PilotRequestDetails/pilot_request_details_screen.dart';

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gas_gameappstore/screens/AdminProfile/admin_profile_screen.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 import 'package:gas_gameappstore/screens/PilotProfile/profile_screen.dart';
@@ -29,12 +30,15 @@ class _SplashScreenState extends State<SplashScreen> {
       if (user == null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      } else if(userDocRefSnapshot.data()["userRole"] != "Pilot"){
+      } else if(userDocRefSnapshot.data()["userRole"] == "Customer"){
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      }else{
+      }else if(userDocRefSnapshot.data()["userRole"] == "Pilot"){
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => PilotProfileScreen()));
+      }else{
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => AdminProfileScreen()));
       }
     });
     // Navigator.pushReplacement(
