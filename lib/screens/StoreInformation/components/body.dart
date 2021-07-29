@@ -19,11 +19,9 @@ class _Body extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
     var storeName, storeAddress, storeDesc;
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(vertical: 20),
-
       child: Column(
         children: [
           Text("Store Account", style: headingStyle),
@@ -44,34 +42,34 @@ class _Body extends State<Body> {
             }
           ),
           StreamBuilder<QueryDocumentSnapshot>(
-              stream: StoreDatabaseHelper().currentUserStoreDataStream,
-              builder: (context, snapshot){
-                if(snapshot.hasData && snapshot.data != null){
-                  Map<String, dynamic> docFields = snapshot.data.data();
-                  storeAddress = docFields["storeAddress"].toString();
-                }
-                return StoreInformationMenu(
-                  text: "Store Address: \n$storeAddress",
-                  press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-                    return ChangeStoreAddressScreen();
-                  })),
-                );
+            stream: StoreDatabaseHelper().currentUserStoreDataStream,
+            builder: (context, snapshot){
+              if(snapshot.hasData && snapshot.data != null){
+                Map<String, dynamic> docFields = snapshot.data.data();
+                storeAddress = docFields["storeAddress"].toString();
               }
+              return StoreInformationMenu(
+                text: "Store Address: \n$storeAddress",
+                press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ChangeStoreAddressScreen();
+                })),
+              );
+            }
           ),
           StreamBuilder<QueryDocumentSnapshot>(
-              stream: StoreDatabaseHelper().currentUserStoreDataStream,
-              builder: (context, snapshot){
-                if(snapshot.hasData && snapshot.data != null){
-                  Map<String, dynamic> docFields = snapshot.data.data();
-                  storeDesc = docFields["storeDescription"].toString();
-                }
-                return StoreInformationMenu(
-                  text: "Store Description: \n$storeDesc",
-                  press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-                    return ChangeStoreDescScreen();
-                  })),
-                );
+            stream: StoreDatabaseHelper().currentUserStoreDataStream,
+            builder: (context, snapshot){
+              if(snapshot.hasData && snapshot.data != null){
+                Map<String, dynamic> docFields = snapshot.data.data();
+                storeDesc = docFields["storeDescription"].toString();
               }
+              return StoreInformationMenu(
+                text: "Store Description: \n$storeDesc",
+                press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return ChangeStoreDescScreen();
+                })),
+              );
+            }
           ),
         ],
       ),

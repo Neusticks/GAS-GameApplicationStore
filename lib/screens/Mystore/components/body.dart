@@ -18,6 +18,10 @@ class Body extends StatefulWidget {
 class _Body extends State<Body> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  Future<void> refreshPage() {
+    return Future<void>.value();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

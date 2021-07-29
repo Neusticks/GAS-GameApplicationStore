@@ -4,6 +4,7 @@ import 'package:gas_gameappstore/services/authentification/authentification_serv
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 
 import '../../../size_config.dart';
 
@@ -88,12 +89,12 @@ class _ChangeDisplayNameFormState extends State<ChangeDisplayNameForm> {
   }
 
   Widget buildCurrentDisplayNameField() {
-    return StreamBuilder<User>(
-      stream: AuthentificationService().userChanges,
+    return StreamBuilder<DocumentSnapshot>(
+      stream: UserDatabaseHelper().currentUserDataStream,
       builder: (context, snapshot) {
         String displayName;
         if (snapshot.hasData && snapshot.data != null)
-          displayName = snapshot.data.displayName;
+          displayName = snapshot.data.get(UserDatabaseHelper.USER_NAME_KEY);
         final textField = TextFormField(
           controller: currentDisplayNameController,
           decoration: InputDecoration(

@@ -46,6 +46,16 @@ class _Body extends State<Body> {
     super.dispose();
   }
 
+  void resetTextField(){
+    _nameController.clear();
+    _emailController.clear();
+    _confirmPasswordController.clear();
+    _passwordController.clear();
+    _genderController.clear();
+    _DOBController.clear();
+    _phoneNumberController.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -332,7 +342,7 @@ class _Body extends State<Body> {
             content: Text(snackbarMessage),
           ),
         );
-        if (signUpStatus == true) {
+        if (signUpStatus == "true") {
           Navigator.pop(context);
         }
       }

@@ -60,19 +60,11 @@ class _ChangeStoreAddressFormState extends State<ChangeStoreAddressForm> {
                   );
                 },
               );
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Store Address updated")));
-              
             },
-          
           ),
-          
         ],
-        
       ),
-      
     );
-
     return form;
   }
 
@@ -131,6 +123,9 @@ class _ChangeStoreAddressFormState extends State<ChangeStoreAddressForm> {
       final storeDocSnapshot = FirebaseFirestore.instance.collection('stores').doc(storeId);
       await storeDocSnapshot.update({"storeAddress" : newStoreAddressController.text});
       print("Store Address updated to ${newStoreAddressController.text} ...");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Store Address updated")));
+      Navigator.pop(context);
     }
   }
 }
