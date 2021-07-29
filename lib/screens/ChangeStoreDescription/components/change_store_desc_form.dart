@@ -60,19 +60,11 @@ class _ChangeStoreDescFormState extends State<ChangeStoreDescForm> {
                   );
                 },
               );
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Store Description updated")));
-              
             },
-          
           ),
-          
         ],
-        
       ),
-      
     );
-
     return form;
   }
 
@@ -131,6 +123,9 @@ class _ChangeStoreDescFormState extends State<ChangeStoreDescForm> {
       final storeDocSnapshot = FirebaseFirestore.instance.collection('stores').doc(storeId);
       await storeDocSnapshot.update({"storeDescription" : newStoreDescController.text});
       print("Store Description updated to ${newStoreDescController.text} ...");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Store Description updated")));
+      Navigator.pop(context);
     }
   }
 }

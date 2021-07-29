@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gas_gameappstore/screens/Home/home_screen.dart';
 import 'package:gas_gameappstore/screens/Login/login_screen.dart';
+import 'package:gas_gameappstore/screens/PilotProfile/profile_screen.dart';
 import 'package:gas_gameappstore/screens/Welcome/Components/body.dart';
 import 'package:gas_gameappstore/size_config.dart';
 
@@ -20,13 +22,19 @@ class _SplashScreenState extends State<SplashScreen> {
   route() {
     FirebaseAuth.instance
         .authStateChanges()
-        .listen((User user) {
+        .listen((User user) async{
+          final userDocRef = await FirebaseFirestore.instance.collection("users").where(FieldPath.documentId, isEqualTo: user.uid).get();
+          final userDocRefSnapshot = userDocRef.docs.single;
+
       if (user == null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      } else {
+      } else if(userDocRefSnapshot.data()["userRole"] != "Pilot"){
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      }else{
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => PilotProfileScreen()));
       }
     });
     // Navigator.pushReplacement(

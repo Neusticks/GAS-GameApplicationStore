@@ -21,7 +21,7 @@ class Background extends StatelessWidget {
                 style: headingStyle,
               ),
               Text(
-                "Complete your details or register \nwith social media",
+                "Complete your details",
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: getProportionScreenHeight(30)),

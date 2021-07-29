@@ -17,7 +17,6 @@ class StoreInformationMenu extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Container(
         padding: EdgeInsets.all(20),
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
           decoration: BoxDecoration
           (
             color: Color(0xFFF5F6F9),
@@ -32,14 +31,8 @@ class StoreInformationMenu extends StatelessWidget {
         // onPressed: press,
         child: Row(
           children: [
-            // SvgPicture.asset(
-            //   icon,
-            //   color: kPrimaryColor,
-            //   width: 22,
-            // ),
             SizedBox(width: 20),
             Expanded(child: Text(text, style: TextStyle(fontSize: 20))),
-            // Icon(Icons.arrow_forward_ios),
             TextButton(
               onPressed: press, 
               child: Text('Change', style: TextStyle(color: Colors.orange, fontSize: 20))),

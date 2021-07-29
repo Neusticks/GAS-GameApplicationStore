@@ -190,11 +190,11 @@ class _BodyState extends State<Body> {
                     "Your Cart",
                     style: headingStyle,
                   ),
-                  SizedBox(height: getProportionScreenHeight(20)),
                   Text(
                     "Swipe RIGHT to Delete",
                     style: TextStyle(fontSize: 17),
                   ),
+                  SizedBox(height: getProportionScreenHeight(20)),
                   SizedBox(
                     height: SizeConfig.screenHeight * 0.75,
                     child: Center(
@@ -234,14 +234,46 @@ class _BodyState extends State<Body> {
                   bottomSheetController = Scaffold.of(context).showBottomSheet(
                     (context) {
                       return CheckoutCard(
-                        
                         onCheckoutPressed: checkoutButtonCallback,
                       );
                     },
                   );
                 },
               ),
-              SizedBox(height: getProportionScreenHeight(20)),
+              SizedBox(height: getProportionScreenHeight(15)),
+              DefaultButton(
+                text: "Empty Cart",
+                press: () async {
+                  await showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Empty Cart'),
+                        content: const Text('Are you sure you want to empty cart?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () async{
+                              await UserDatabaseHelper().emptyCart();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Cart has been emptied!"),
+                                ),
+                              );
+                              Navigator.pop(context, 'Yes');
+                            },
+                            child: const Text('Yes'),
+                          ),
+                          TextButton(
+                              onPressed: () async{
+                                Navigator.pop(context, 'No');
+                              },
+                              child: const Text('No'),
+                          ),
+                        ],
+                      )
+                  );
+                  await refreshPage();
+                }
+              ),
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.symmetric(vertical: 16),
@@ -381,26 +413,6 @@ class _BodyState extends State<Body> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // for (var i = 0; i <= index; i++)
-                //   new Checkbox(
-                //     value: checked[i],
-                //     onChanged: (bool value) {
-                //       setState(() {
-                //         if(Cart.ITEM_CART_CHECKED == 'true'){
-                //           checked[i] = true;
-                //         }
-                //         else{
-                //           checked[i] = false;
-                //         }
-                //         checked[i] = value;
-                //         UserDatabaseHelper().itemChecked(product.id, value);
-                //         getTotalAmount();
-                //       });
-                //     },
-                //     // tristate: i == 1,
-                //     // value: checked[i],
-                //     // activeColor: Color(0xFF6200EE),
-                //   ),
                 Expanded(
                   flex: 8,
                   child: ProductShortDetailCard(

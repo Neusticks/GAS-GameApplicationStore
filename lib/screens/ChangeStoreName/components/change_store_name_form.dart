@@ -60,19 +60,11 @@ class _ChangeStoreNameFormState extends State<ChangeStoreNameForm> {
                   );
                 },
               );
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Store Name updated")));
-              
-            },
-          
+            }
           ),
-          
         ],
-        
       ),
-      
     );
-
     return form;
   }
 
@@ -132,6 +124,9 @@ class _ChangeStoreNameFormState extends State<ChangeStoreNameForm> {
       final storeDocSnapshot = FirebaseFirestore.instance.collection('stores').doc(storeId);
       await storeDocSnapshot.update({"storeName" : newStoreNameController.text});
       print("Store Name updated to ${newStoreNameController.text} ...");
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Store Name updated")));
+      Navigator.pop(context);
     }
   }
 }
