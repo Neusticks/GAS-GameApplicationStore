@@ -464,7 +464,7 @@ class _EditProductFormState extends State<EditProductForm> {
       validator: (_) {
         if (originalPriceFieldController.text.isEmpty) {
           return FIELD_REQUIRED_MSG;
-        }
+        }else if(double.parse(originalPriceFieldController.text) < 1000) return "Price must be larger than 1000";
         return null;
       },
       autovalidateMode: AutovalidateMode.onUserInteraction,
