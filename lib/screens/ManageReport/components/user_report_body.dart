@@ -6,7 +6,6 @@ import 'package:gas_gameappstore/models/ReportedProblem.dart';
 import 'package:gas_gameappstore/models/ReportedUser.dart';
 import 'package:gas_gameappstore/screens/ManageReport/components/problem_report_short_detail_card.dart';
 import 'package:gas_gameappstore/screens/ManageReport/components/user_report_short_detail_card.dart';
-import 'package:gas_gameappstore/screens/PilotRequestDetails/pilot_request_details_screen.dart';
 import 'package:gas_gameappstore/screens/ReportUserDetail/report_user_detail_screen.dart';
 import 'package:gas_gameappstore/services/data_streams/reported_problem_stream.dart';
 import 'package:gas_gameappstore/services/data_streams/reported_user_stream.dart';

@@ -7,7 +7,7 @@
    <application
         android:label="GAS - Game Application Store"
         android:usesCleartextTraffic="true"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/logo_launcher_gas">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
