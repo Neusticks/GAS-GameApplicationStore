@@ -2,6 +2,7 @@ import 'package:gas_gameappstore/components/custom_suffix_icon.dart';
 import 'package:gas_gameappstore/components/default_button.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/credential_actions_exceptions.dart';
 import 'package:gas_gameappstore/exceptions/firebaseauth/messeged_firebaseauth_exception.dart';
+import 'package:gas_gameappstore/screens/Login/login_screen.dart';
 
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
 import 'package:gas_gameappstore/size_config.dart';
@@ -48,16 +49,25 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
             SizedBox(height: getProportionScreenHeight(40)),
             DefaultButton(
               text: "Change Email",
-              press: () {
-                final updateFuture = changeEmailButtonCallback();
-                showDialog(
+              press: () async{
+                await showDialog<String>(
                   context: context,
-                  builder: (context) {
-                    return FutureProgressDialog(
-                      updateFuture,
-                      message: Text("Updating Email"),
-                    );
-                  },
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Change Email'),
+                    content: const Text('Are you sure you want to change your email?\nPlease note that if you change your email, you will be log out from the application.'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: _changeEmail,
+                        child: const Text('Yes'),
+                      ),
+                      TextButton(
+                        onPressed: () async{
+                          Navigator.pop(context, 'No');
+                        },
+                        child: const Text('No'),
+                      ),
+                    ],
+                  )
                 );
               },
             ),
@@ -65,8 +75,20 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
         ),
       ),
     );
-
     return form;
+  }
+
+  Future<void> _changeEmail() async{
+    final updateFuture = changeEmailButtonCallback();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return FutureProgressDialog(
+          updateFuture,
+          message: Text("Updating Email"),
+        );
+      },
+    );
   }
 
   Widget buildPasswordFormField() {
@@ -156,6 +178,10 @@ class _ChangeEmailFormState extends State<ChangeEmailForm> {
           if (updationStatus == true) {
             snackbarMessage =
                 "Verification email sent. Please verify your new email";
+            await FirebaseAuth.instance.signOut();
+            return Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return LoginScreen();
+            }));
           } else {
             throw FirebaseCredentialActionAuthUnknownReasonFailureException(
                 message:
