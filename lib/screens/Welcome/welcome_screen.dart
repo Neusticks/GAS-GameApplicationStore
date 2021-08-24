@@ -24,21 +24,22 @@ class _SplashScreenState extends State<SplashScreen> {
     FirebaseAuth.instance
         .authStateChanges()
         .listen((User user) async{
-          final userDocRef = await FirebaseFirestore.instance.collection("users").where(FieldPath.documentId, isEqualTo: user.uid).get();
-          final userDocRefSnapshot = userDocRef.docs.single;
-
       if (user == null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginScreen()));
-      } else if(userDocRefSnapshot.data()["userRole"] == "Customer"){
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      }else if(userDocRefSnapshot.data()["userRole"] == "Pilot"){
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => PilotProfileScreen()));
-      }else{
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => AdminProfileScreen()));
+      } else{
+        final userDocRef = await FirebaseFirestore.instance.collection("users").where(FieldPath.documentId, isEqualTo: user.uid).get();
+        final userDocRefSnapshot = userDocRef.docs.single;
+        if(userDocRefSnapshot.data()["userRole"] == "Customer"){
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        }else if(userDocRefSnapshot.data()["userRole"] == "Pilot"){
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => PilotProfileScreen()));
+        }else{
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => AdminProfileScreen()));
+        }
       }
     });
     // Navigator.pushReplacement(
