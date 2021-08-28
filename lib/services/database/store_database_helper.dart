@@ -132,6 +132,25 @@ class StoreDatabaseHelper {
     return userDocSnapshot.data()[STORE_PICTURE_KEY];
   }
 
+  Future<List<String>> get incomingOrderedProduct async{
+    String uid = AuthentificationService().currentUser.uid;
+    final storeSnapshot = await firestore.collection(STORE_COLLECTION_NAME).where(STORE_OWNER_ID_KEY, isEqualTo: uid).get().then((value) => value.docs[0]);
+    final incomingRequestProductSnapshot = await storeSnapshot.reference.collection("incoming_request_product").where("user_id", isNotEqualTo: uid).get();
+    List incomingRequestProductList = List<String>();
+    for (final doc in incomingRequestProductSnapshot.docs) {
+      incomingRequestProductList.add(doc.id);
+    }
+    return incomingRequestProductList;
+  }
+
+  Future<OrderedProduct> getIncomingOrderedProductFromId(String Id) async{
+    String uid = AuthentificationService().currentUser.uid;
+    final storeSnapshot = await firestore.collection(STORE_COLLECTION_NAME).where(STORE_OWNER_ID_KEY, isEqualTo: uid).get().then((value) => value.docs[0]);
+    final doc = await storeSnapshot.reference.collection("incoming_request_product").doc(Id).get();
+    final orderedProduct = OrderedProduct.fromMap(doc.data(), id: doc.id);
+    return orderedProduct;
+  }
+
   Stream<QueryDocumentSnapshot> get currentUserStoreDataStream {
     String userId = AuthentificationService().currentUser.uid;
     return firestore
