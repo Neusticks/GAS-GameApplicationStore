@@ -22,81 +22,83 @@ class Body extends StatefulWidget {
 class _Body extends State<Body> {
   FirebaseAuth auth = FirebaseAuth.instance;
   
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      //padding: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        children: [
-          Text("Admin Profile", style: headingStyle),
-          SizedBox(height: 20),
-          AdminProfilePic(),
-          SizedBox(height: 20),
-          AdminProfileMenu(
-              text: "My Account",
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 50),
+        child: Column(
+          children: [
+            Text("Admin Profile", style: headingStyle),
+            SizedBox(height: 20),
+            AdminProfilePic(),
+            SizedBox(height: 20),
+            AdminProfileMenu(
+                text: "My Account",
+                icon: "assets/icons/User Icon.svg",
+                press: () =>
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return ProfileSettings();
+                    }))
+            ),
+
+            AdminProfileMenu(
+              text: "Manage Users Account",
               icon: "assets/icons/User Icon.svg",
               press: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return ProfileSettings();
-                  }))
-          ),
-
-          AdminProfileMenu(
-            text: "Manage Users Account", 
-            icon: "assets/icons/User Icon.svg",
-            press: () =>
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return ManageUserScreen();
-                })),
-          ),
-          AdminProfileMenu(
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return ManageUserScreen();
+                  })),
+            ),
+            AdminProfileMenu(
               text: "Register Pilot",
               icon: "assets/icons/User Icon.svg",
               press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
                 return RegisterPilotServiceScreen();
               })),
-          ),
-          // AdminProfileMenu(
-          //   text: "Manage Pilot Request",
-          //   icon: "assets/icons/Bell.svg",
-          //   press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-          //     return ManagePilotRequestScreen();
-          //   })),
-          // ),
-          AdminProfileMenu(
-            text: "Manage Report",
-            icon: "assets/icons/Question mark.svg",
-            press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
-              return ManageReportScreen();
-            })),
-          ),
-          AdminProfileMenu(
-            text: "Log Out",
-            icon: "assets/icons/Log out.svg",
-            press: () async{
-              await showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Logout'),
-                  content: const Text('Are you sure you want to logout?'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: _signOut,
-                      child: const Text('Yes'),
-                    ),
-                    TextButton(
-                      onPressed: () async{
-                        Navigator.pop(context, 'No');
-                      },
-                      child: const Text('No'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
+            ),
+            // AdminProfileMenu(
+            //   text: "Manage Pilot Request",
+            //   icon: "assets/icons/Bell.svg",
+            //   press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+            //     return ManagePilotRequestScreen();
+            //   })),
+            // ),
+            AdminProfileMenu(
+              text: "Manage Report",
+              icon: "assets/icons/Question mark.svg",
+              press: () => Navigator.push(context, MaterialPageRoute(builder: (context){
+                return ManageReportScreen();
+              })),
+            ),
+            AdminProfileMenu(
+              text: "Log Out",
+              icon: "assets/icons/Log out.svg",
+              press: () async{
+                await showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Logout'),
+                    content: const Text('Are you sure you want to logout?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: _signOut,
+                        child: const Text('Yes'),
+                      ),
+                      TextButton(
+                        onPressed: () async{
+                          Navigator.pop(context, 'No');
+                        },
+                        child: const Text('No'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

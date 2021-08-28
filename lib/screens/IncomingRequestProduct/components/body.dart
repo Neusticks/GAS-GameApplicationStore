@@ -7,8 +7,9 @@ import 'package:gas_gameappstore/models/Review.dart';
 import 'package:gas_gameappstore/screens/ProductDetails/product_details_screen.dart';
 import 'package:gas_gameappstore/screens/Transaction/components/product_review_dialog.dart';
 import 'package:gas_gameappstore/services/authentification/authentification_service.dart';
-import 'package:gas_gameappstore/services/data_streams/ordered_products_stream.dart';
+import 'package:gas_gameappstore/services/data_streams/incoming_ordered_products_stream.dart';
 import 'package:gas_gameappstore/services/database/product_database_helper.dart';
+import 'package:gas_gameappstore/services/database/store_database_helper.dart';
 import 'package:gas_gameappstore/services/database/user_database_helper.dart';
 import 'package:logger/logger.dart';
 
@@ -22,18 +23,18 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final OrderedProductsStream orderedProductsStream = OrderedProductsStream();
+  final IncomingOrderedProductsStream incomingRequestProduct = IncomingOrderedProductsStream();
 
   @override
   void initState() {
     super.initState();
-    orderedProductsStream.init();
+    incomingRequestProduct.init();
   }
 
   @override
   void dispose() {
     super.dispose();
-    orderedProductsStream.dispose();
+    incomingRequestProduct.dispose();
   }
 
   @override
@@ -70,13 +71,13 @@ class _BodyState extends State<Body> {
   }
 
   Future<void> refreshPage() {
-    orderedProductsStream.reload();
+    incomingRequestProduct.reload();
     return Future<void>.value();
   }
 
   Widget buildOrderedProductsList() {
     return StreamBuilder<List<String>>(
-      stream: orderedProductsStream.stream,
+      stream: incomingRequestProduct.stream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final orderedProductsIds = snapshot.data;
@@ -93,8 +94,8 @@ class _BodyState extends State<Body> {
             itemCount: orderedProductsIds.length,
             itemBuilder: (context, index) {
               return FutureBuilder<OrderedProduct>(
-                future: UserDatabaseHelper()
-                    .getOrderedProductFromId(orderedProductsIds[index]),
+                future: StoreDatabaseHelper()
+                    .getIncomingOrderedProductFromId(orderedProductsIds[index]),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     final orderedProduct = snapshot.data;
